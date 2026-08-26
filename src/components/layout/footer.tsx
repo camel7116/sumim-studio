@@ -75,11 +75,16 @@ export function Footer() {
         </div>
 
         <div className="mt-14 border-t border-line pt-8">
-          {/* TODO(미확정): 사업자등록 정보 확정 후 content/site.ts에 입력 */}
+          {/* 사업자 정보 — 값은 content/site.ts business. 비어 있는 항목은 건너뛴다. */}
           <p className="text-caption text-ink-secondary">
-            {site.business.registrationNumber
-              ? `사업자등록번호 ${site.business.registrationNumber}`
-              : "사업자 정보 준비 중"}
+            {[
+              site.business.representative && `대표 ${site.business.representative}`,
+              site.business.registrationNumber &&
+                `사업자등록번호 ${site.business.registrationNumber}`,
+              site.business.address,
+            ]
+              .filter(Boolean)
+              .join(" · ") || "사업자 정보 준비 중"}
           </p>
           <p className="text-caption mt-2 text-ink-secondary">
             © {new Date().getFullYear()} {site.nameEn}. All rights reserved.

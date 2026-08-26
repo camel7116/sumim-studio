@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 /**
  * 개인정보처리방침 (문서 §4.1)
- * TODO(미확정): 사업자등록 완료 후 사업자명·개인정보 보호책임자·연락처를 확정 정보로 교체.
- * TODO(미확정): 상담 폼 전송 서비스 확정 시 처리 위탁 항목 업데이트.
+ * ✅ 2026-08-26 확정: 사업자 스밈 스튜디오(799-09-03319, 대표 김미라) · 보호책임자 김재훈 010-7116-7776.
+ * ✅ 2026-08-26 §4 처리 위탁에 Web3Forms 공개(폼 전송 경유 서비스).
  */
 export default function PrivacyPage() {
   return (
@@ -22,9 +22,7 @@ export default function PrivacyPage() {
       <main id="main" className="page-enter bg-surface pt-[68px] lg:pt-20">
         <Container className="max-w-[760px] py-20 md:py-28">
           <h1 className="text-h1">개인정보처리방침</h1>
-          <p className="text-caption mt-4 text-ink-secondary">
-            시행일: 준비 중 (사업자등록 및 정책 확정 후 게시)
-          </p>
+          <p className="text-caption mt-4 text-ink-secondary">시행일: 2026년 8월 26일</p>
 
           <div className="text-body-m mt-12 space-y-10 text-ink-secondary [&_h2]:text-h3 [&_h2]:text-ink [&_h2]:mb-3">
             <section>
@@ -65,8 +63,9 @@ export default function PrivacyPage() {
               <h2>4. 개인정보의 제3자 제공 및 처리 위탁</h2>
               <p>
                 스밈 스튜디오는 이용자의 개인정보를 제3자에게 제공하지 않습니다. 상담
-                폼 전송을 위한 서비스 위탁이 확정되는 경우, 수탁자와 위탁 업무 내용을
-                이 문서에 공개합니다.
+                폼으로 입력하신 내용은 폼 전송 서비스 Web3Forms(Web3Forms LLC)를 통해
+                스밈 스튜디오 이메일로 전달되며, 해당 서비스는 전송 목적 외로 내용을
+                이용하지 않습니다.
               </p>
             </section>
 
@@ -80,9 +79,11 @@ export default function PrivacyPage() {
 
             <section>
               <h2>6. 개인정보 보호책임자</h2>
+              {/* ✅ 2026-08-26 사용자 확정 */}
               <p className="text-ink-secondary">
-                {/* TODO(미확정): 보호책임자 성명·연락처 확정 후 기재 */}
-                개인정보 보호책임자 및 연락처는 사업자 정보 확정 후 기재됩니다.
+                개인정보 보호책임자: 김재훈
+                <br />
+                연락처: 010-7116-7776
               </p>
             </section>
           </div>

@@ -38,13 +38,13 @@ export const site = {
    * ✅ **사업자등록번호 확정 (2026-08-26 사용자 제공)** — 상호 "스밈 스튜디오".
    * 푸터가 이 값이 있으면 "사업자등록번호 …", 없으면 "사업자 정보 준비 중"을 찍는다.
    *
-   * ⚠️ `representative`(대표자명)·`address`(사업장 주소)는 **아직 미확정**이라 null 그대로다.
-   *    `/privacy` 의 개인정보 보호책임자 항목도 이 둘이 정해져야 채울 수 있다.
+   * ✅ **대표자명·사업장 주소 확정 (2026-08-26 사용자 제공)**.
+   *    `/privacy` 의 개인정보 보호책임자(김재훈)도 같은 날 확정 — privacy/page.tsx 에 직접 기재.
    */
   business: {
     registrationNumber: "799-09-03319" as string | null,
-    representative: null as string | null,
-    address: null as string | null,
+    representative: "김미라" as string | null,
+    address: "부산 수영구 광서로 10번길 10" as string | null,
   },
 } as const;
 
