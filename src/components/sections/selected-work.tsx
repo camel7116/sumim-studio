@@ -76,7 +76,8 @@ export function SelectedWork() {
               전폭 4분할. `gap-px` 의 틈으로 그리드 배경(연한 회색 헤어라인 토큰)이 비쳐
               칸 사이 경계선이 된다 — 색은 밴드 토큰 `--color-line` 이라 팔레트를 따라간다.
             */}
-            <div className="work-quad grid w-full grid-cols-2 gap-px border-y border-line bg-line lg:grid-cols-4">
+            {/* 2026-08-26 사용자 지시 "한 줄에 2개씩" — 데스크톱도 2×2 (이전: lg:grid-cols-4) */}
+            <div className="work-quad grid w-full grid-cols-2 gap-px border-y border-line bg-line">
               {items.map((project) => (
                 <ProjectQuadCard key={project.slug} project={project} />
               ))}
