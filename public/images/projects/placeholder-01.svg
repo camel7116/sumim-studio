@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="프로젝트 커버 플레이스홀더">
+  <rect width="1200" height="900" fill="#F0F2F5"/>
+  <!-- 와이어프레임 문서 느낌의 절제된 구성 -->
+  <rect x="140" y="120" width="920" height="660" rx="14" fill="#FFFFFF" stroke="#DDE1E7"/>
+  <rect x="200" y="200" width="380" height="24" rx="4" fill="#DDE1E7"/>
+  <rect x="200" y="248" width="280" height="14" rx="4" fill="#E8EBEF"/>
+  <rect x="200" y="276" width="320" height="14" rx="4" fill="#E8EBEF"/>
+  <rect x="200" y="340" width="120" height="40" rx="20" fill="#414965" opacity="0.85"/>
+  <rect x="640" y="200" width="360" height="240" rx="8" fill="#F0F2F5" stroke="#DDE1E7"/>
+  <line x1="640" y1="280" x2="1000" y2="280" stroke="#DDE1E7"/>
+  <line x1="760" y1="200" x2="760" y2="440" stroke="#DDE1E7"/>
+  <rect x="200" y="480" width="800" height="1" fill="#DDE1E7"/>
+  <rect x="200" y="520" width="240" height="160" rx="8" fill="#F0F2F5" stroke="#DDE1E7"/>
+  <rect x="480" y="520" width="240" height="160" rx="8" fill="#F0F2F5" stroke="#DDE1E7"/>
+  <rect x="760" y="520" width="240" height="160" rx="8" fill="#F0F2F5" stroke="#DDE1E7"/>
+  <circle cx="212" cy="152" r="5" fill="#B96852" opacity="0.7"/>
+  <circle cx="232" cy="152" r="5" fill="#829487" opacity="0.6"/>
+  <circle cx="252" cy="152" r="5" fill="#414965" opacity="0.7"/>
+  <text x="600" y="836" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" fill="#848B97">Project cover — 실제 이미지로 교체 예정</text>
+</svg>

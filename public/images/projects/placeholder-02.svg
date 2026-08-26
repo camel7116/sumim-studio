@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="프로젝트 커버 플레이스홀더">
+  <rect width="1200" height="900" fill="#F0F2F5"/>
+  <!-- 모바일 화면 두 장이 겹친 구성 -->
+  <rect x="330" y="140" width="300" height="620" rx="20" fill="#FFFFFF" stroke="#DDE1E7"/>
+  <rect x="370" y="200" width="160" height="18" rx="4" fill="#DDE1E7"/>
+  <rect x="370" y="236" width="220" height="12" rx="4" fill="#E8EBEF"/>
+  <rect x="370" y="258" width="200" height="12" rx="4" fill="#E8EBEF"/>
+  <rect x="370" y="310" width="220" height="140" rx="8" fill="#F0F2F5" stroke="#DDE1E7"/>
+  <rect x="370" y="480" width="104" height="36" rx="18" fill="#B96852" opacity="0.85"/>
+  <rect x="370" y="560" width="220" height="1" fill="#DDE1E7"/>
+  <rect x="370" y="590" width="180" height="12" rx="4" fill="#E8EBEF"/>
+  <rect x="570" y="220" width="300" height="620" rx="20" fill="#FFFFFF" stroke="#C7CDD6"/>
+  <rect x="610" y="280" width="160" height="18" rx="4" fill="#DDE1E7"/>
+  <rect x="610" y="320" width="220" height="180" rx="8" fill="#F0F2F5" stroke="#DDE1E7"/>
+  <line x1="610" y1="380" x2="830" y2="380" stroke="#DDE1E7"/>
+  <rect x="610" y="530" width="220" height="12" rx="4" fill="#E8EBEF"/>
+  <rect x="610" y="552" width="180" height="12" rx="4" fill="#E8EBEF"/>
+  <circle cx="626" cy="620" r="5" fill="#414965" opacity="0.7"/>
+  <circle cx="646" cy="620" r="5" fill="#829487" opacity="0.6"/>
+  <text x="600" y="836" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" fill="#848B97">Project cover — 실제 이미지로 교체 예정</text>
+</svg>

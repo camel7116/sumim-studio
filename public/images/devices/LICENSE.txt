@@ -1,0 +1,27 @@
+iphone-17-pro-max.png
+=====================
+
+Source
+  https://www.webmobilefirst.com/en/mockups/apple-iphone-17-pro-max-2025/
+  (Mobile FIRST — webmobilefirst.com)
+
+License (as stated by the source, 2026-08-23)
+  "Personal and commercial use allowed, no attribution required,
+   modification and cropping allowed, resale of the file alone prohibited"
+
+Downloaded / added to this repo: 2026-08-23
+
+Notes
+  - 389 x 800 px, PNG-32. Both the outside of the device AND the screen area are
+    transparent; the Dynamic Island is opaque and belongs to the frame.
+  - Measured screen rect (alpha flood-fill, sub-pixel, in the 389x800 image):
+      x = 16.93, y = 13.73, width = 355.91, height = 772.94
+    (right edge 372.84, bottom edge 786.68)
+  - Measured screen corner: a continuous "squircle" corner, not a circular arc.
+    Its diagonal matches a circular radius of 52.4 px; 53 px is the largest
+    circular radius that still stays inside the real corner. We use 52 px.
+  - Consumed by `src/components/ui/phone-frame.tsx`. The switch that turns this
+    frame off again (back to the drawn CSS phones) is `deviceFrame` in
+    `src/content/site.ts`.
+  - Do not redistribute this file on its own (resale of the file alone is
+    prohibited); it ships only as part of the site.

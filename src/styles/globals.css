@@ -1,0 +1,3105 @@
+@import "tailwindcss";
+/* Pretendard Variable dynamic subset (self-host, /public/fonts/pretendard) */
+@import "./pretendard.css";
+
+/*
+  SUMIM Studio 디자인 토큰
+  기준 문서: SUMIM_DESIGN_BIBLE_PHASE1.md §5 (디자인 토큰)
+  Cold Precision 90% + Human Trace 10%
+*/
+/* =========================================================================
+   Cross-document View Transitions (문서 §11.3 "Nav: background and border transition"
+   범위의 페이지 전환 보강). CSS 전용 프로그레시브 인핸스먼트로, 미지원 브라우저는
+   이 블록 전체를 무시한다. Next App Router의 클라이언트 사이드 내비게이션(soft nav)
+   에서는 발동하지 않고, 하드 로드(직접 진입, no-JS, 오프라인 정적 번들)에서 동작한다.
+   ※ 문서 §11.5 금지 항목에 해당하지 않음(강제 스크롤 고정·3D 회전 없음, 거리 8~12px).
+   ========================================================================= */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: vt-out 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+@theme {
+  /* ---- Font ---- */
+  --font-sans: "Pretendard Variable", Pretendard, "Noto Sans KR", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* ---- Color ---- */
+  --color-canvas: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f0f2f5;
+
+  --color-ink: #111318; /* text primary */
+  --color-ink-secondary: #555b66;
+  --color-ink-muted: #848b97;
+  --color-line: #dde1e7;
+  --color-line-strong: #c7cdd6;
+
+  /* 2026-08-03 브랜드 컬러 A안(엠버 미드나이트) 확정:
+     Ember #C2410C(CTA) · Midnight #232D52(전문성·선) · Steel #7C8DB0(보조)
+     토큰 이름은 문서 체계를 유지하고 값만 재정의한다. */
+  --color-indigo: #232d52;
+  --color-indigo-dark: #1b2440;
+  --color-terracotta: #c2410c;
+  --color-terracotta-dark: #9a3412;
+  --color-sage: #7c8db0;
+  --color-sage-dark: #5a6a8e;
+
+  --color-focus: #3e4e7e;
+  --color-error: #b84242;
+  --color-success: #46735a;
+
+  /* CTA 전용 강조색 (2026-08-03 사용자 요청: 더 밝고 쨍한 주황)
+     ※ #EA580C은 흰 글자 대비 3.6:1로 AA(4.5:1) 미달 — 사용자 확인 필요.
+     AA를 지키는 최대 밝기 대안: #D2470B (4.5:1) */
+  --color-cta: #ea580c;
+  --color-cta-dark: #c2410c;
+
+  /* ---- Radius ---- */
+  --radius-xs: 4px;
+  --radius-s: 8px;
+  --radius-m: 14px;
+  --radius-l: 20px;
+  --radius-xl: 28px;
+
+  /* ---- Shadow (최소 사용: 모달, 모바일 메뉴, 이미지 호버 한정) ---- */
+  --shadow-soft: 0 12px 40px rgba(17, 19, 24, 0.07);
+  --shadow-hover: 0 20px 60px rgba(17, 19, 24, 0.1);
+
+  /* ---- Typography scale (Mobile → Desktop fluid) ---- */
+  --text-display-xl: clamp(2.75rem, 1.72rem + 4.4vw, 5rem); /* 44 → 80 */
+  --text-display-xl--line-height: 1.05;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 600;
+
+  --text-display-l: clamp(2.375rem, 1.9rem + 2.9vw, 4rem); /* 38 → 64 */
+  --text-display-l--line-height: 1.1;
+  --text-display-l--letter-spacing: -0.015em;
+  --text-display-l--font-weight: 600;
+
+  --text-h1: clamp(2rem, 1.7rem + 1.8vw, 3rem); /* 32 → 48 */
+  --text-h1--line-height: 1.18;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h1--font-weight: 600;
+
+  --text-h2: clamp(1.75rem, 1.6rem + 0.9vw, 2.25rem); /* 28 → 36 */
+  --text-h2--line-height: 1.25;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 600;
+
+  --text-h3: clamp(1.25rem, 1.18rem + 0.45vw, 1.5rem); /* 20 → 24 */
+  --text-h3--line-height: 1.35;
+  --text-h3--font-weight: 600;
+
+  --text-body-l: clamp(1.125rem, 1.09rem + 0.22vw, 1.25rem); /* 18 → 20 */
+  --text-body-l--line-height: 1.65;
+
+  --text-body-m: clamp(1rem, 0.99rem + 0.11vw, 1.0625rem); /* 16 → 17 */
+  --text-body-m--line-height: 1.65;
+
+  --text-label: clamp(0.8125rem, 0.8rem + 0.11vw, 0.875rem); /* 13 → 14 */
+  --text-label--line-height: 1.4;
+  --text-label--font-weight: 600;
+
+  --text-caption: clamp(0.75rem, 0.74rem + 0.11vw, 0.8125rem); /* 12 → 13 */
+  --text-caption--line-height: 1.5;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* 한국어 단어 중간 줄바꿈 방지 (문서 §12.4: 제목이 한 글자씩 줄바꿈되는 현상 금지) */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /*
+    모바일 하단 고정 CTA가 "보일 때만" 콘텐츠 하단 여백을 보정한다 (문서 §12.2).
+    --sticky-cta-h는 MobileStickyCta가 표시 상태일 때만 값을 채운다.
+    lg 이상에서는 바 자체가 렌더되지 않으므로 여백도 적용하지 않는다.
+  */
+  @media (max-width: 1023px) {
+    body {
+      padding-bottom: var(--sticky-cta-h, 0px);
+    }
+  }
+
+  ::selection {
+    background-color: var(--color-indigo);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* 영문 레이블: 자간 넓게 (문서 §5.2) */
+  .eyebrow {
+    font-size: var(--text-label);
+    line-height: var(--text-label--line-height);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* 버튼 화살표 (2026-08-03 사용자 요청): 주요 CTA 뒤에 → 를 붙이고
+     호버 시 4px 슬라이드 (흡수한 Arrow Slide 패턴과 동일한 리듬) */
+  .btn-arrow::after {
+    content: "→";
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 500;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-arrow:hover::after,
+  .btn-arrow:focus-visible::after {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-arrow::after {
+      transition: none;
+    }
+  }
+
+  
+
+  /* Skip link (접근성) */
+  .skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 100;
+    padding: 12px 20px;
+    background: var(--color-ink);
+    color: #fff;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 600;
+    transform: translateY(-200%);
+    transition: transform 180ms ease;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+
+  /* Above-the-fold 진입 애니메이션 (JS 불필요 → LCP 지연 없음) */
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .reveal-load {
+    animation: reveal-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--reveal-delay, 0s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-load {
+      animation: none;
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+     워드마크 글자별 진입 (2026-08-21)
+     사용자: "각 알파벳 오른쪽 면에 벽이 있다 생각하고, 그 벽에서 스윽 나오는 느낌".
+
+     글자마다 **자기 오른쪽 가장자리에 클립 경계(벽)** 를 두고 그 뒤에서 왼쪽으로 밀어낸다.
+     - `clip-path: inset()` 을 쓴다. `overflow:hidden` 은 inline-block 의 베이스라인을
+       "마지막 줄"에서 "마진 박스 아래변"으로 바꿔 글자를 세로로 밀어 버린다.
+     - 오른쪽만 −2%(글자 폭 기준) 여유를 두고 나머지 세 변은 크게 열어 둔다 —
+       위아래는 line-height 0.82 라 글자가 줄상자 밖으로 나오고, 왼쪽은 나가는 글자를
+       자르면 안 된다.
+     - LCP 요소라 JS 없이 keyframes + animation-delay 만 쓴다(§4).
+     ----------------------------------------------------------------------- */
+  @keyframes wordmark-wall {
+    from {
+      transform: translateX(120%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .wordmark-glyph {
+    display: inline-block;
+    clip-path: inset(-60% -2% -60% -400%);
+  }
+
+  .wordmark-glyph > span {
+    display: inline-block;
+    animation: wordmark-wall 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark-glyph > span {
+      animation: none;
+    }
+  }
+
+  /* -----------------------------------------------------------------------
+     워드마크 **스프레드** 진입 (2026-08-22 사용자 확정 — 2줄 워드마크와 한 세트)
+
+     🚨 **글자는 처음부터 최종 위치에 그대로 있다.** 움직이지도 일렁이지도 않고 필터도 없다
+        (중간안 `burst` — 글자가 미끄러져 나오고 물감 필터로 흔들림 — 은 사용자 지시로 폐기).
+     대신 **밴드 배경색 덮개**(`.wordmark-veil`)가 "!"·"i" 양옆 경계에서 바깥으로 걷힌다.
+
+     - 덮개는 `<svg>` 한 장이고, 걷히는 **불규칙 지그재그 전선**은 `hero.tsx` 가 서버에서
+       계산한 `<path d>` 를 SMIL `<animate>` 로 흘려보낸다(전진 + 꿈틀을 한 애니메이션에 구움).
+       ⇒ CSS 는 색·위치·페더만 맡는다. **JS 로 DOM 을 재지 않는다**(워드마크 = LCP 요소).
+     - 색은 반드시 `var(--color-canvas)` — 이 변수는 밴드 배경과 **같은 값**이라
+       팀/네이비 팔레트든 colorLab 주입이든 덮개가 배경을 그대로 따라간다(하드코딩 #000 금지).
+     - **1px 페더**: 획을 그리지 않고 SVG 자체를 `blur(0.6px)` — 기기 픽셀 기준이라
+       워드마크 크기가 몇이든 가장자리가 항상 ≈1px 로만 풀린다.
+     - `bottom` 여백은 아래 줄 "i" 의 점을 덮지 않기 위한 것이다(실측값, `hero.tsx` 주석).
+
+     🔁 위의 `.wordmark-glyph` / `@keyframes wordmark-wall` 은 **한 줄도 지우지 않았다** —
+        `site.ts` 의 `hero.wordmark.enter` 를 `"wall"` 로 되돌리면 그대로 동작한다.
+     ----------------------------------------------------------------------- */
+  .wordmark-line--spread {
+    position: relative;
+  }
+
+  /* wall 이 아닌 모드(wipe · spread)는 글자에 아무 애니메이션도 걸지 않는다 */
+  .wordmark-line--still .wordmark-shift,
+  .wordmark-line--still .wordmark-glyph > span {
+    animation: none;
+  }
+
+  /* -----------------------------------------------------------------------
+     워드마크 **3칸 박스 구조** (2026-08-23 사용자 확정)
+
+     한 줄 = `[좌측 박스][액센트 기둥][우측 박스]` 이고 **두 줄이 같은 칸 골격**을 쓴다.
+     칸 폭·칸 사이 간격·글자 오프셋은 전부 `hero.tsx` 가 실측 상수에서 계산해 인라인으로 준다.
+     여기서는 상자 성질만 정한다.
+
+     - `.wordmark-glyph`(= 칸) 는 **고정 폭**이고 안의 글자가 넘쳐도 자르지 않는다
+       🚨 그래서 `wall` 용 `clip-path` 를 **끈다** — 칸 폭은 잉크 폭이라 클립이 걸리면
+          `M`·`O` 의 오른쪽 획이 잘린다.
+     - `.wordmark-shift` 는 **진입 이동 전용 층**이다. 글자에 `scaleX` 가 걸려 있는데
+       같은 요소에 `translateX` 애니메이션을 주면 **transform 이 통째로 덮여 scaleX 가 날아간다**
+       (`animation-fill-mode: both` 라 끝나고도 안 돌아온다). 층을 나눠 둘이 안 부딪히게 한다.
+     - `.wordmark-fit` 이 실제 글자 — `transform-origin: left` 라 `scaleX` 를 걸어도
+       잉크 왼끝이 칸 왼쪽 변에 그대로 붙어 있다(오른끝만 목표 폭으로 움직인다).
+     ----------------------------------------------------------------------- */
+  .wordmark-line--box .wordmark-glyph {
+    clip-path: none;
+    vertical-align: baseline;
+  }
+
+  .wordmark-line--box .wordmark-shift {
+    display: inline-block;
+  }
+
+  .wordmark-line--box .wordmark-fit {
+    display: inline-block;
+    transform-origin: left center;
+    white-space: nowrap;
+  }
+
+  /* -----------------------------------------------------------------------
+     🔄 아래 줄 액센트 = **위 줄 "!" 를 세로로 뒤집은 것** (2026-08-23 사용자 지시
+     "히어로의 i부분은 !를 뒤집어서 만들어줘")
+
+     - 같은 `!` 글리프를 쓰므로 두 글자의 **획 굵기·폭이 완전히 같다**(정확한 거울상).
+     - 🚨 뒤집기 축은 줄 상자 중심이 아니라 **"!" 잉크의 세로 중심**이다. 그래야 뒤집은 뒤에도
+       세로 잉크 범위가 그대로라 **점 위끝 = 캡 높이 / 기둥 아래끝 = 베이스라인**이 된다.
+       축 값(`--flip-origin-y`)은 `hero.tsx` 가 실측 상수에서 계산해 인라인으로 내려보낸다.
+     - **층을 따로 두는 이유**: `.wordmark-fit` 에는 칸별 `scaleX` + `transform-origin: left center`,
+       `.wordmark-shift` 에는 진입 `translateX` 애니메이션이 걸린다. 같은 요소에 얹으면
+       transform 이 통째로 덮여 서로 지운다 — 그래서 글자 바로 바깥에 래퍼를 하나 더 둔다.
+       (그래서 `wipe`·`spread`·`wall`·`split` 어느 진입에서도 뒤집기가 살아 있다.)
+     - `site.ts` 의 `hero.wordmark.lines[1].accentFlipOf` 를 `null` 로 내리면 래퍼 자체가
+       렌더되지 않고 소문자 "i" 가 그대로 돌아온다.
+     ----------------------------------------------------------------------- */
+  .wordmark-flip {
+    display: inline-block;
+    transform: scaleY(-1);
+    transform-origin: 50% var(--flip-origin-y, 0.415em);
+  }
+
+  /* -----------------------------------------------------------------------
+     워드마크 **와이프** 진입 (2026-08-23 사용자 확정 — 기본값)
+
+     사용자: "퍼져 나가는 모양이 너무 어색하네. 그라데이션을 주고 배경을 덮은 채로
+     배경이 왼→오로 사라지게 하는 건 어때?"
+
+     워드마크 2줄 블록 전체를 덮는 **배경색 덮개 한 장**이 오른쪽으로 빠져나간다.
+     - 덮개 폭 = 블록 100% + 페더. 그래서 `translateX(100%)` 한 번이면 **정확히 블록 밖**이다
+       (시작은 `translateX(-페더)` 라 페더가 블록 왼쪽 바깥에 숨고 불투명부가 블록을 다 덮는다).
+     - 그라데이션은 **왼쪽 앞단에만** — 그 뒤는 완전 불투명이라 "덮개가 지나간다"로 읽힌다.
+       색은 `var(--color-canvas)`(= 밴드 배경과 같은 값)라 팔레트·colorLab 을 그대로 따라간다.
+     - `font-size` 를 다시 잡아 주는 이유: 래퍼는 크기를 정하지 않아서 여기서 em 이
+       본문 16px 로 계산돼 버린다. `var(--wm-size)` 를 걸어야 페더 em 이 워드마크 기준이 된다.
+     - 끝 키프레임에서 `visibility: hidden` — 블록 밖으로 나갔어도 확실히 죽인다
+       (`visibility` 는 구간 내내 visible 로 보간되고 100% 에서만 hidden 이 된다).
+     ----------------------------------------------------------------------- */
+  @keyframes wordmark-wipe {
+    from {
+      transform: translateX(calc(var(--wipe-feather, 0.63em) * -1));
+      visibility: visible;
+    }
+    to {
+      transform: translateX(100%);
+      visibility: hidden;
+    }
+  }
+
+  .wordmark-wipe {
+    position: absolute;
+    top: -0.06em;
+    bottom: -0.06em;
+    left: 0;
+    width: calc(100% + var(--wipe-feather, 0.63em));
+    pointer-events: none;
+    /* 🚨 색 그라데이션이 아니라 **마스크**로 앞단을 푼다 — `transparent → 밴드색` 으로
+       보간하면 투명 끝이 **투명 검정**이라 검정이 아닌 팔레트(navy 등)에서 앞단에
+       어두운 띠가 보인다(실측으로 확인). 면은 단색으로 두고 **알파만** 그라데이션하면
+       어떤 팔레트에서도 띠가 생기지 않는다.
+
+       🚨 그리고 스톱을 **2개(선형)로 두면 안 된다** — 알파 기울기가 램프 끝에서 갑자기 0 이
+       되는 **기울기 불연속**이라 사람 눈이 그 자리를 **세로 선(마하 밴드)** 으로 읽는다
+       (2026-08-23 실측: 램프 마지막 20px 평균 기울기가 그대로 유지되다 뚝 끊김).
+       그래서 **smoothstep 형태의 다단 스톱**으로 양 끝의 기울기를 0 으로 눕힌다.
+       퍼센트는 페더 총폭(0.63em) 기준이고 총폭·시간·이징은 그대로다. */
+    background-color: var(--color-canvas);
+    --wipe-f: var(--wipe-feather, 0.63em);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.03) calc(var(--wipe-f) * 0.1),
+      rgba(0, 0, 0, 0.16) calc(var(--wipe-f) * 0.25),
+      rgba(0, 0, 0, 0.5) calc(var(--wipe-f) * 0.5),
+      rgba(0, 0, 0, 0.84) calc(var(--wipe-f) * 0.75),
+      rgba(0, 0, 0, 0.97) calc(var(--wipe-f) * 0.9),
+      rgb(0, 0, 0) var(--wipe-f)
+    );
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0.03) calc(var(--wipe-f) * 0.1),
+      rgba(0, 0, 0, 0.16) calc(var(--wipe-f) * 0.25),
+      rgba(0, 0, 0, 0.5) calc(var(--wipe-f) * 0.5),
+      rgba(0, 0, 0, 0.84) calc(var(--wipe-f) * 0.75),
+      rgba(0, 0, 0, 0.97) calc(var(--wipe-f) * 0.9),
+      rgb(0, 0, 0) var(--wipe-f)
+    );
+    animation: wordmark-wipe var(--wipe-dur, 1.6s) ease-in-out both;
+  }
+
+  /* -----------------------------------------------------------------------
+     워드마크 **스플릿** 진입 (2026-08-23 사용자 확정 — 현재 기본값)
+
+     사용자: "그라데이션을 3분할 해서 i랑 ! 에서 양쪽으로 퍼져나가게 해줘.
+     그라데이션은 지그재그 모양으로 일렁거렸으면 좋겠어."
+
+     `wipe` 의 부드러운 페더 + `spread` 의 출발점·지그재그를 합쳤다.
+     - 덮개는 **좌·우 두 장뿐**이고 **액센트 기둥은 덮지 않는다** → "!"·"i" 가 t=0 부터 보인다.
+     - 앞단 모양은 SVG 지그재그 `<path>`(밴드색)이고, **페더는 CSS `blur()`** 로 낸다.
+       가우시안이라 전이가 자연히 S 커브 → **마하 밴드가 안 생긴다**(2026-08-23 교훈).
+     - **전진은 CSS `translateX`**, **꿈틀은 SVG SMIL `d` 모핑** 이라 둘이 독립이다.
+       (한 애니메이션에 섞으면 키프레임 수가 전진 부드러움과 꿈틀 주기를 동시에 결정해 버린다.)
+     - 덮개 폭이 자기 자신이라 `translateX(±100%)` 한 번이면 정확히 블록 밖으로 나간다.
+     🚨 덮개는 **위아래로 0.75em 넘겨** 둔다 — blur 가 덮개의 위·아래 변에도 먹기 때문에
+        블록에 딱 맞추면 글자 윗동이 미리 드러난다.
+     ----------------------------------------------------------------------- */
+  @keyframes wordmark-split-l {
+    from {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    to {
+      transform: translateX(-100%);
+      visibility: hidden;
+    }
+  }
+
+  @keyframes wordmark-split-r {
+    from {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    to {
+      transform: translateX(100%);
+      visibility: hidden;
+    }
+  }
+
+  .wordmark-split {
+    position: absolute;
+    top: -0.75em;
+    height: calc(100% + 1.5em);
+    pointer-events: none;
+    filter: blur(var(--split-feather, 0.16em));
+    animation-duration: var(--split-dur, 1.6s);
+    /* Phase 1(액센트 팝인)이 끝날 때까지 덮개는 가만히 있는다 */
+    animation-delay: var(--split-delay, 0s);
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+  }
+
+  /* -----------------------------------------------------------------------
+     Phase 1 — "!"·"i" 가 **자기 칸의 오른쪽 벽 뒤에서 스윽** 나온다 (2026-08-23 사용자 확정)
+     사용자: "그라데이션 적용 전에 했던 스윽 나오는 느낌으로 돌리고".
+
+     2026-08-21 `wall` 모드와 **같은 동작·같은 keyframes**(`wordmark-wall`)를 재사용한다.
+     글자를 자기 칸 오른쪽 가장자리의 클립 경계 뒤(`translateX(120%)`)에 두고 왼쪽으로 민다.
+     🚨 클립은 `overflow:hidden` 이 **아니라 `clip-path: inset()`** 이다 — `overflow` 를 주면
+        inline-block 의 베이스라인이 "마지막 줄"에서 "마진 박스 아래변"으로 바뀌어 글자가
+        세로로 밀린다(2026-08-21 실측 전례).
+     선택자를 (0,4,0) 으로 잡아 위의 `.wordmark-line--box .wordmark-glyph { clip-path: none }`
+     (0,2,0)과 `.wordmark-line--still .wordmark-shift { animation: none }`(0,2,0)을 이긴다.
+     ----------------------------------------------------------------------- */
+  .wordmark-line--box .wordmark-glyph.wordmark-slide {
+    /* 🚨 오른쪽 인셋이 **양수 1%** 다 — 2026-08-21 `wall` 의 `-2%`(칸 밖으로 2% 여유)를 그대로 쓰면
+       벽 뒤에 세워 둔 글자가 그 2% 틈(≈2.2px)으로 **비친다**(t=0.05s 실측 25px 검출).
+       칸 폭이 액센트 advance 라 잉크는 좌우로 각각 0.07em 씩 안쪽에 있어 1% 를 잘라도 안 닿는다. */
+    clip-path: inset(-60% 1% -60% -400%);
+  }
+
+  .wordmark-line--still .wordmark-glyph.wordmark-slide > .wordmark-shift {
+    animation: wordmark-wall var(--slide-dur, 0.7s) cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* -----------------------------------------------------------------------
+     🚫 **미사용 보존** — 중간안이던 "뿅"(scale 팝인). 2026-08-23 사용자 지시로 위의
+     "스윽"으로 되돌렸지만 keyframes 와 규칙은 지우지 않는다.
+     되살리려면 `hero.tsx` 에서 액센트 칸의 `.wordmark-fit` 에 `wordmark-pop` 클래스와
+     `--pop-x` / `--pop-y` / `--pop-dur` 를 다시 내려보내면 된다.
+     실측해 둔 원점(1536×745 · fs 365.32px · 줄상자 299.56px):
+       "!" 점 중심 252.5px = **84.29%** (잉크 덩어리 21~202 막대 / 223~282 점)
+       "i" 점 중심 33px   = **11.02%** (6~60 점 / 85~279 막대)
+       가로는 글리프 잉크 중심 — "!" 49.89% · "i" 50.41%
+     🚨 선택자는 반드시 `.wordmark-line--box .wordmark-fit.wordmark-pop` 이어야 한다 —
+        3칸 규칙의 `transform-origin: left center`(0,2,0)에 덮이기 때문이다.
+     ----------------------------------------------------------------------- */
+  @keyframes wordmark-pop {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .wordmark-line--box .wordmark-fit.wordmark-pop {
+    transform-origin: var(--pop-x, 50%) var(--pop-y, 50%);
+    animation: wordmark-pop var(--pop-dur, 0.42s) cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .wordmark-split--l {
+    animation-name: wordmark-split-l;
+  }
+
+  .wordmark-split--r {
+    animation-name: wordmark-split-r;
+  }
+
+  .wordmark-split-fill {
+    fill: var(--color-canvas);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark-split {
+      display: none;
+    }
+    /* Phase 1 슬라이드도 끄고 즉시 표시 — 🚨 위 슬라이드 규칙이 (0,4,0) 이라
+       기존 `.wordmark-glyph > span { animation: none }`(0,2,1)로는 안 꺼진다(실측). */
+    .wordmark-line--still .wordmark-glyph.wordmark-slide > .wordmark-shift {
+      animation: none;
+    }
+    .wordmark-line--box .wordmark-glyph.wordmark-slide {
+      clip-path: none;
+    }
+    /* (미사용 보존) 팝인도 끈다 */
+    .wordmark-line--box .wordmark-fit.wordmark-pop {
+      animation: none;
+    }
+  }
+
+  /* wipeKeepAccent: "!"·"i" 칸만 덮개 위 층으로 (위치는 그대로, z 축만 올린다) */
+  .wordmark-cell--above {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wordmark-wipe {
+      display: none;
+    }
+  }
+
+  .wordmark-veil {
+    position: absolute;
+    top: 0;
+    /* 🚨 `<svg>` 는 **대체 요소**라 viewBox 의 고유 비율(10:1)이 있다 —
+       `top/bottom` 만 주고 `height:auto` 로 두면 상자 높이가 아니라 **고유 높이**로 접혀
+       덮개가 글자 윗동만 가린다(첫 캡처에서 실제로 그렇게 나왔다). 높이를 명시한다.
+       0.035em 을 빼는 것은 아래 줄 "i" 의 점을 덮지 않기 위해서다(실측 여유 ≈0.04·F1). */
+    height: calc(100% - 0.035em);
+    pointer-events: none;
+    overflow: hidden;
+    filter: blur(0.6px);
+  }
+
+  .wordmark-veil-fill {
+    fill: var(--color-canvas);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* 덮개 없이 즉시 전부 표시 */
+    .wordmark-veil {
+      display: none;
+    }
+  }
+
+  /* Section reveal (문서 §11.3) — IntersectionObserver가 is-visible 부여 */
+  /* 숨김은 html.js 게이트 뒤에만 적용 → no-JS 환경에서는 콘텐츠가 그대로 보인다 */
+  .reveal {
+    transition:
+      opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html.js .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal,
+    html.js .reveal:not(.is-visible) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* =========================================================================
+     Reveal 방향 변형 (문서 §11.2 distance.medium 20 / large 36 범위 내)
+     .reveal와 함께 사용한다: <Reveal className="reveal-left"> → class="reveal reveal-left"
+     기본 .reveal(y 20)보다 선택자 특이도가 높아 transform만 덮어쓴다.
+     가로 이동은 md 이상에서만 적용한다. 모바일에서는 컨테이너 좌우 여백이 20px뿐이라
+     가로 스크롤이 생길 수 있고, 세로 리듬을 유지하는 편이 낫다. (문서 §12.4)
+     ========================================================================= */
+  @media (min-width: 768px) {
+    html.js .reveal.reveal-left:not(.is-visible) {
+      transform: translateX(-24px);
+    }
+
+    html.js .reveal.reveal-right:not(.is-visible) {
+      transform: translateX(24px);
+    }
+  }
+
+  html.js .reveal.reveal-scale:not(.is-visible) {
+    transform: scale(0.97);
+  }
+
+  /*
+     통통 튀어나오는 등장 (2026-08-18 사용자 요청 — 문제 섹션 카톡 말풍선).
+     끝에서 살짝 넘쳤다 제자리로 돌아오는 오버슈트 이징.
+     3D 회전은 쓰지 않으므로 문서 §11.5 금지 항목에 걸리지 않는다.
+  */
+  .reveal.reveal-pop {
+    transition:
+      opacity 0.32s ease-out,
+      transform 0.52s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  html.js .reveal.reveal-pop:not(.is-visible) {
+    transform: scale(0.86) translateY(14px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal.reveal-left:not(.is-visible),
+    html.js .reveal.reveal-right:not(.is-visible),
+    html.js .reveal.reveal-scale:not(.is-visible),
+    html.js .reveal.reveal-pop:not(.is-visible) {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* =========================================================================
+     라인 마스크 리빌 (문서 §11.3 Section reveal 확장)
+     "줄 단위"로만 올라온다. 글자 단위 등장은 문서 §11.5 금지 항목이므로 쓰지 않는다.
+
+     구조: <h2 class="mask-reveal">
+             <span class="mask-line"><span class="mask-inner">첫 줄</span></span>
+             ...
+           </h2>
+     - .mask-reveal      : 조상 .reveal의 is-visible에 연동 (형광펜과 동일한 게이트 방식)
+     - .mask-reveal-load : CSS 전용 진입 애니메이션 (LCP 요소용, JS/IO 불필요)
+     하강 여백(padding-bottom + 음수 margin)은 한글 받침/디센더가 잘리지 않게 한다.
+     ========================================================================= */
+  .mask-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.16em;
+    margin-bottom: -0.16em;
+  }
+
+  .mask-inner {
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--mask-delay, 0s);
+  }
+
+  /*
+    숨김은 html.js 게이트 + 조상 .reveal이 아직 보이지 않을 때만 적용한다.
+    → no-JS 환경, 그리고 .reveal 조상이 없는 경우에는 항상 그대로 보인다.
+  */
+  html.js .reveal:not(.is-visible) .mask-reveal .mask-inner,
+  html.js .reveal.mask-reveal:not(.is-visible) .mask-inner {
+    transform: translateY(130%);
+  }
+
+  @keyframes mask-rise {
+    from {
+      transform: translateY(130%);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  .mask-reveal-load .mask-inner {
+    animation: mask-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--mask-delay, 0s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mask-inner {
+      transition: none;
+    }
+
+    html.js .reveal:not(.is-visible) .mask-reveal .mask-inner,
+    html.js .reveal.mask-reveal:not(.is-visible) .mask-inner {
+      transform: none;
+    }
+
+    .mask-reveal-load .mask-inner {
+      animation: none;
+    }
+  }
+
+  /* =========================================================================
+     이미지 클립 리빌 (문서 §11.3 "Image reveal: clip 또는 opacity, 0.8s 이하")
+     좌 → 우로 clip-path가 열리며 내부가 1.06 → 1로 정착한다.
+     clip-path와 transform을 한 요소에 같이 두면 클립까지 함께 확대되므로
+     확대는 별도 자식(.clip-zoom)이 담당한다.
+     (.clip-zoom은 호버 확대를 쓰는 img와도 충돌하지 않도록 래퍼에만 적용)
+     ========================================================================= */
+  .clip-reveal {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .clip-zoom {
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html.js .reveal:not(.is-visible) .clip-reveal,
+  html.js .reveal.clip-reveal:not(.is-visible) {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  html.js .reveal:not(.is-visible) .clip-zoom {
+    transform: scale(1.06);
+  }
+
+  /* CSS 전용 변형: JS/IO를 기다리면 안 되는 상단 커버 이미지용 */
+  @keyframes clip-open {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes clip-zoom-settle {
+    from {
+      transform: scale(1.06);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  .clip-reveal-load {
+    animation: clip-open 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--reveal-delay, 0s);
+  }
+
+  .clip-reveal-load .clip-zoom {
+    animation: clip-zoom-settle 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--reveal-delay, 0s);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .clip-reveal,
+    .clip-zoom {
+      transition: none;
+    }
+
+    html.js .reveal:not(.is-visible) .clip-reveal,
+    html.js .reveal.clip-reveal:not(.is-visible) {
+      clip-path: inset(0 0 0 0);
+    }
+
+    html.js .reveal:not(.is-visible) .clip-zoom {
+      transform: none;
+    }
+
+    .clip-reveal-load,
+    .clip-reveal-load .clip-zoom {
+      animation: none;
+    }
+  }
+
+  /* =========================================================================
+     Process 스티키 컬럼의 현재 단계 번호 교체 (문서 §11.2 normal 0.32s)
+     React key 교체로 재생된다.
+     ========================================================================= */
+  @keyframes step-number-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .step-number-in {
+    animation: step-number-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step-number-in {
+      animation: none;
+    }
+  }
+
+  /* =========================================================================
+     페이지 진입 (문서 §11.2 distance.small 8)
+     하드 로드마다 본문이 아주 짧게 올라오며 들어온다. CSS 전용이라 JS가 필요 없고,
+     오프라인 정적 번들(문서 링크가 실제 문서 이동)에서도 페이지 전환처럼 보인다.
+     main 내부에 position:fixed 요소가 없으므로 transform 사용이 안전하다.
+     ========================================================================= */
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /*
+    fill-mode를 both → backwards 로 바꿨다 (2026-08-19).
+    both 는 애니메이션이 끝난 뒤에도 계속 "적용 중"으로 남아 <main>에 스태킹 컨텍스트를
+    만든다. 그러면 섹션 배경(::before, z-index -2)이 main 안에 갇혀서, main 바깥에 있는
+    파티클 캔버스(z-index -1)가 배경 아래로 밀려 밝은 밴드에서 점이 아예 안 보인다.
+    backwards 는 시작 전에만 적용되므로 끝나면 컨텍스트가 사라진다 — 등장 효과는 동일하다.
+  */
+  .page-enter {
+    animation: page-enter 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-enter {
+      animation: none;
+    }
+  }
+
+  /* =========================================================================
+     Text Link (문서 §7.2)
+     15px semibold ink + 16px 화살표.
+     hover/focus: 화살표 translateX(4px), 밑줄 width 0 → 100% (0.32s, 표준 ease)
+     .text-link-group: 이미 링크인 블록(카드형 링크) 안에서 같은 효과를 쓰기 위한 앵커.
+     ========================================================================= */
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+
+  .text-link-label {
+    position: relative;
+  }
+
+  .text-link-label::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 0;
+    background-color: currentColor;
+    transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .text-link-arrow {
+    flex: none;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* 이전 항목용: 좌우 반전된 화살표 */
+  .text-link-arrow-back {
+    transform: scaleX(-1);
+  }
+
+  .text-link:hover .text-link-label::after,
+  .text-link:focus-visible .text-link-label::after,
+  .text-link-group:hover .text-link-label::after,
+  .text-link-group:focus-visible .text-link-label::after {
+    width: 100%;
+  }
+
+  .text-link:hover .text-link-arrow,
+  .text-link:focus-visible .text-link-arrow,
+  .text-link-group:hover .text-link-arrow,
+  .text-link-group:focus-visible .text-link-arrow {
+    transform: translateX(4px);
+  }
+
+  .text-link:hover .text-link-arrow-back,
+  .text-link:focus-visible .text-link-arrow-back,
+  .text-link-group:hover .text-link-arrow-back,
+  .text-link-group:focus-visible .text-link-arrow-back {
+    transform: scaleX(-1) translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .text-link-label::after,
+    .text-link-arrow {
+      transition: none;
+    }
+  }
+
+  /* =========================================================================
+     Secondary 버튼 필 호버 (문서 §7.2 Secondary)
+     ink 배경이 왼쪽 → 오른쪽으로 scaleX(0 → 1) 차오르고 글자가 반전된다.
+     ========================================================================= */
+  .btn-fill {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .btn-fill::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    /* 2026-08-03 사용자 요청: 잉크(검정)가 아닌 딥네이비로 채움 */
+    background-color: var(--color-indigo);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .btn-fill:hover::before,
+  .btn-fill:focus-visible::before {
+    transform: scaleX(1);
+  }
+
+  /* 엠버 채움 변형 (2026-08-03): 투명 버튼이 호버 시 CTA 컬러로 차오른다 */
+  .btn-fill-cta::before {
+    background-color: var(--color-cta);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-fill::before {
+      transition: none;
+    }
+  }
+
+  /* =========================================================================
+     형광펜 하이라이트 (Reveal 진입 시 width 0 → 100%)
+     background-image는 단색 1개짜리(색상 정지점 없음)라 그라데이션이 아니다.
+     pseudo-element 대신 background를 쓰는 이유: 문구가 줄바꿈되어도 각 줄에
+     동일한 밑줄이 그어지도록 하기 위함(box-decoration-break: clone).
+     ========================================================================= */
+  .highlight-pen {
+    background-image: linear-gradient(
+      color-mix(in srgb, var(--color-terracotta) 22%, transparent),
+      color-mix(in srgb, var(--color-terracotta) 22%, transparent)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 90%;
+    background-size: 0% 45%;
+    transition: background-size 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .reveal.is-visible .highlight-pen,
+  html:not(.js) .highlight-pen {
+    background-size: 100% 45%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .highlight-pen {
+      transition: none;
+    }
+  }
+
+  /* =========================================================================
+     손그림 장식 (Client Problems 배너) — 마커로 그은 듯한 획이 그어진다.
+     path에 pathLength="1"을 주어 실제 길이와 무관하게 dasharray/dashoffset을
+     1로 정규화했다. 게이트는 .highlight-pen과 동일하게 조상 .reveal의
+     .is-visible이며, no-JS(html에 .js 없음)에서는 즉시 완성 상태로 남는다.
+     ========================================================================= */
+  .sketch-draw path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s;
+  }
+
+  /* 동그라미는 밑줄이 다 그어진 뒤에 이어서 그려진다 */
+  .sketch-draw-circle path {
+    transition-duration: 0.8s;
+    transition-delay: 0.9s;
+  }
+
+  .reveal.is-visible .sketch-draw path,
+  html:not(.js) .sketch-draw path {
+    stroke-dashoffset: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sketch-draw path {
+      transition: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  
+
+  /*
+    후기 무한 마키 (2026-08-08 사용자 요청)
+    트랙 안에 같은 목록을 2벌 넣고 -50%까지 이동시키면 이음매 없이 순환한다.
+    호버 시 정지, reduced-motion에서는 애니메이션을 끄고 가로 스크롤로 열람 가능.
+  */
+  @keyframes marquee-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee {
+    overflow: hidden;
+    /* 좌우 끝을 페이드시켜 잘린 카드가 자연스럽게 사라지게 한다 */
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black 6%,
+      black 94%,
+      transparent 100%
+    );
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-left 46s linear infinite;
+  }
+
+  /*
+    2026-08-19 사용자 요청 "리뷰 쪽 호버했을 때 멈추지 않게. 누르고 있을 때만 멈추거나
+    슬라이드해서 볼 수 있고, 떼면 바로 다시 무한루프": 호버·포커스 일시정지 규칙을 없애고
+    JS(rAF)가 트랙을 민다. CSS 애니메이션은 **no-JS 폴백**으로 남기고, JS 가 붙으면
+    .marquee-js 로 꺼진다.
+  */
+  .marquee-track.marquee-js {
+    animation: none;
+    will-change: transform;
+  }
+
+  .marquee-drag {
+    cursor: grab;
+  }
+
+  .marquee-drag.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .marquee-group {
+    display: flex;
+    gap: 1.5rem;
+    padding-inline: 0.75rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      overflow-x: auto;
+    }
+
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  /* =======================================================================
+     Q&A `style: "ticker"` — 대형 문장 티커 (2026-08-23 밤)
+
+     후기 마키의 **기계는 그대로** 쓴다: 같은 목록을 2벌 넣고 -50% 까지 밀면
+     이음매가 없다(`@keyframes marquee-left`). 다른 점은 셋뿐이다.
+       ① 아래 줄은 **반대 방향** → `marquee-right` 하나만 새로 둔다
+       ② **호버하면 멈춘다**(후기 마키는 사용자 지시로 "누를 때만" 이었지만,
+          이쪽은 읽는 문장이라 호버 정지가 맞다 — JS 없이 play-state 로만)
+       ③ 좌우 끝 mask 페이드를 쓰지 않는다 — **뷰포트 끝까지 꽉 차야** 한다
+     JS 가 전혀 없어 rAF·드래그·IO 도 없다(문장을 끌 이유가 없다).
+     ======================================================================= */
+  @keyframes marquee-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .ticker-row {
+    overflow: hidden;
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    /*
+      🚨 **속도(2026-08-23 밤, 사용자 "속도는 지금의 절반 이하로")**.
+      한 바퀴 시간이 아니라 **초당 픽셀**이 기준이다 — 문장을 4개에서 6개로 늘리면
+      트랙이 길어져 같은 40s 로도 오히려 빨라진다. 40s → **140s** 로 늘려
+      1440 기준 107.8px/s → 약 46px/s (43%) 가 됐다.
+      문장을 더 넣거나 빼면 이 값을 다시 재야 한다(px/s = 트랙폭 ÷ 2 ÷ duration).
+    */
+    animation: marquee-left var(--ticker-duration, 140s) linear infinite;
+  }
+
+  .ticker-track--reverse {
+    animation-name: marquee-right;
+  }
+
+  .ticker-row:hover .ticker-track {
+    animation-play-state: paused;
+  }
+
+  /*
+    문장을 끊는 액센트 글자.
+    🚨 색을 JSX 의 `text-cta` 유틸리티로 주면 **아래 줄 연회색 규칙이 절대 못 이긴다** —
+       Tailwind v4 의 utilities 레이어가 components 레이어보다 항상 우선이고, 레이어 순서는
+       특이도보다 먼저 비교되기 때문이다. 그래서 티커의 색은 전부 이 블록이 쥔다
+       (값은 여전히 밴드 토큰이라 팔레트·colorLab 을 그대로 따라간다).
+  */
+  .ticker-sep {
+    color: var(--color-cta);
+  }
+
+  /*
+    아래 줄 = **연한 회색 글자**.
+    🚨 처음엔 `-webkit-text-stroke` 윤곽선이었는데 **한글에서 지저분해 폐기**했다 —
+       획이 많아 속공간이 겹쳐 뭉개진다(라틴 알파벳과 다르다). 채운 연회색이 정답이다.
+    색은 밴드 토큰에서 파생하므로 팔레트·colorLab 을 그대로 따라간다
+    (하드코딩 회색을 쓰면 navy·커스텀 조합에서 배경과 붙어 버린다).
+  */
+  .ticker-soft {
+    color: color-mix(in srgb, var(--color-ink) 26%, var(--color-canvas));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+      transform: none;
+    }
+  }
+
+
+  
+
+
+}
+
+/* =========================================================================
+   Q&A 대화창 패널 (2026-08-19 사용자 요청 "카톡 섹션이 눈에 안 들어온다")
+
+   위쪽 헤어라인-only 규칙은 흰 밴드에서 면이 배경과 같아 말풍선이 사라져 보였다.
+   패널 모드에서는 **불투명한 mist 톤 패널**로 대화를 한 덩어리로 묶고, 질문은 흰 면 +
+   옅은 그림자, 답변은 진한 주황 틴트로 올려 배경·파티클과 분리한다.
+   Q&A 섹션은 항상 밝은 밴드라 색을 고정값으로 둔다.
+   (패널 이전의 헤어라인 말풍선 규칙 .chat-bubble 은 2026-08-21 정리 패스에서 아카이브로 갔다)
+   ⚠️ 패널에 transform/filter/opacity 금지 — 밴드 ::before(z-index -2) 층계가 깨진다.
+   ========================================================================= */
+.chat-panel {
+  background-color: #f1f2f4;
+  border: 1px solid #e3e5e9;
+}
+
+.chat-panel-bar {
+  border-bottom: 1px solid #e3e5e9;
+}
+
+.chat-panel-dot {
+  background-color: #c8ccd2;
+}
+
+.chat-panel-title {
+  color: #6b6f77;
+}
+
+.chat-q {
+  background-color: #ffffff;
+  border: 1px solid #e9ebef;
+  box-shadow: 0 2px 10px rgba(20, 23, 38, 0.06);
+}
+
+.chat-q-tail {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e9ebef;
+  border-left: 1px solid #e9ebef;
+}
+
+.chat-badge-q {
+  border: 1px solid #c8ccd2;
+  color: #55585f;
+}
+
+.chat-a {
+  background-color: #ffe6d6;
+  border: 1px solid rgba(234, 88, 12, 0.55);
+  box-shadow: 0 2px 10px rgba(20, 23, 38, 0.06);
+}
+
+.chat-a-tail {
+  background-color: #ffe6d6;
+  border-top: 1px solid rgba(234, 88, 12, 0.55);
+  border-right: 1px solid rgba(234, 88, 12, 0.55);
+}
+
+/* 패널 안은 항상 밝은 면이므로 글자색도 밝은 밴드 값으로 못 박는다 */
+.chat-q,
+.chat-a {
+  --color-ink: #14161a;
+  --color-ink-secondary: #55585f;
+  color: var(--color-ink);
+}
+
+
+#contact .contact-panel {
+  background-color: rgba(12, 14, 20, 0.85);
+}
+
+
+/*
+  포트폴리오 섹션 배경 격자 (2026-08-19 사용자 요청
+  "프로젝트 부분 배경 회색 그리드 추가. 100px 간격 1px 굵기 선 투명도 70%").
+  캔버스가 아니라 CSS 배경 — drift 파티클·물감 번짐보다 아래 층에 깔린다.
+  선 색은 회색(mist) 밴드 헤어라인 토큰 #c1c5cc 에 알파 0.7. "투명도 70%" 를
+  **선 불투명도 0.7** 로 읽었다. 반대(30%)를 뜻했다면 --grid-line 알파만 바꾸면 된다.
+  background-position: center 면 남는 여백이 좌우·상하 균등 —
+  히어로·CTA 격자의 "남는 여백 균등 분배" 규약과 같다.
+*/
+
+
+/*
+  2026-08-19 "프로젝트 제목 굵기 좀만 더 굵게" + "'보이는 디자인과 / 작동하는 구조를 함께
+  만듭니다.' 이 부분도 포함해서" — 카드 제목(h3, project-card 의 font-bold!)과 **같은 결론**으로
+  섹션 헤딩도 600 → 700. 24px·48px 둘 다 캡처에서 뭉개지지 않아 후광 강화 대신 굵기를 택했다.
+  다른 섹션 헤딩은 그대로.
+*/
+#work h2 {
+  font-weight: 700;
+}
+
+/*
+  목업 호버 자동 스크롤 (2026-08-19) — transition-none 만 걸면 호버 순간 맨 아래로 **점프**한다.
+  움직임을 줄이는 설정에서는 위치까지 고정한다.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .mockup-scroll {
+    object-position: 50% 0% !important;
+    transition: none !important;
+  }
+}
+
+
+/* ---- 밴드 배경: 섹션이 직접 칠한다 ---- */
+html[data-visual="banded"] [data-band="paper"] {
+  background-color: #ffffff;
+}
+
+html[data-visual="banded"] [data-band="mist"] {
+  background-color: #f0f3f8; /* 3차: 연회청 (구 #f1f2f4) */
+}
+
+html[data-visual="banded"] [data-band="void"] {
+  background-color: #141d33; /* 3차: 딥 네이비 (구 #0b0d12) */
+}
+
+/* ---- 밝은 밴드 토큰 ---- */
+html[data-visual="banded"] [data-band="paper"],
+html[data-visual="banded"] [data-band="mist"] {
+  /* 3차: 무채색 → 네이비를 아주 옅게 섞은 쿨 그레이 (연회청 밴드와 같은 계열) */
+  --color-ink: #141a26;
+  --color-ink-secondary: #4e5563;
+  --color-ink-muted: #828a99;
+  --color-line: #e2e6ee;
+  --color-line-strong: #c6ccd8;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f4f6fa;
+  --color-canvas: #ffffff;
+  --color-indigo: #232d52;
+  color: var(--color-ink);
+}
+
+html[data-visual="banded"] [data-band="mist"] {
+  --color-line: #dbe0ea;
+  --color-line-strong: #c0c7d6;
+  --color-surface-subtle: #e6ebf3;
+  --color-canvas: #f0f3f8;
+}
+
+/* ---- 딥 네이비 밴드 토큰 (히어로 · 브릿지 · Final CTA · 푸터) ---- */
+html[data-visual="banded"] [data-band="void"] {
+  --color-ink: #ffffff;
+  --color-ink-secondary: #a8b1c4; /* 3차: 네이비 위에서 읽히는 쿨 그레이 (대비 6.0:1) */
+  --color-ink-muted: #808a9e;
+  --color-line: rgba(255, 255, 255, 0.14);
+  --color-line-strong: rgba(255, 255, 255, 0.26);
+  --color-surface: #1d2740; /* 3차: 네이비보다 한 단계 밝은 면 */
+  --color-surface-subtle: #26314c;
+  --color-canvas: #141d33;
+  --color-indigo: #46558a;
+  --color-focus: #8fa2d6;
+  color-scheme: dark;
+  color: var(--color-ink);
+}
+
+/* 밴드 안의 카드·패널: 유틸리티가 밴드 토큰을 따라가게 (셸 블록이 박아둔 값 무력화) */
+html[data-visual="banded"] [data-band] .bg-surface {
+  background-color: var(--color-surface);
+}
+
+html[data-visual="banded"] [data-band] .bg-surface-subtle {
+  background-color: var(--color-surface-subtle);
+}
+
+html[data-visual="banded"] [data-band] .bg-canvas {
+  background-color: var(--color-canvas);
+}
+
+/* 다크 전용으로 박아둔 흰 글자를 밝은 밴드에서는 잉크로 되돌린다 */
+html[data-visual="banded"] [data-band="paper"] .text-white,
+html[data-visual="banded"] [data-band="mist"] .text-white {
+  color: var(--color-ink);
+}
+
+/* 검정 밴드에는 그림자를 두지 않는다 (떠 있는 느낌을 깨뜨린다) */
+html[data-visual="banded"] [data-band="void"] .shadow-soft {
+  box-shadow: none;
+}
+
+/* =========================================================================
+   banded — 고정 네비의 밴드 반전
+
+   셸과 같은 훅(data-nav-band, Navigation 이 rAF 로 재계산)을 쓰되 방향이 반대다.
+   banded 는 기본 토큰이 **밝은 값**이라 밝은 밴드에서는 손댈 것이 없고,
+   검정 밴드 위에서만 바와 글자를 뒤집는다.
+   (header 에 data-band 를 쓰면 안 되는 규칙은 그대로 — data-nav-band 만 쓴다)
+   ========================================================================= */
+html[data-visual="banded"] .site-nav[data-nav-band="dark"] {
+  --color-ink: #ffffff;
+  --color-ink-secondary: rgba(255, 255, 255, 0.75);
+  --color-line: rgba(255, 255, 255, 0.14);
+  --color-line-strong: rgba(255, 255, 255, 0.26);
+  color: var(--color-ink);
+}
+
+html[data-visual="banded"] .site-nav[data-nav-band="dark"].bg-white\/85 {
+  /* 3차: 밴드와 같은 딥 네이비 (구 rgba(11,13,18,.85)) */
+  background-color: rgba(20, 29, 51, 0.85);
+}
+
+/*
+  모바일 메뉴 패널은 흰 면(bg-surface)이라 위 반전 토큰을 그대로 물려받으면
+  흰 배경 + 흰 글자가 된다. 패널 안에서만 밝은 토큰으로 되돌린다.
+  (메뉴가 열리면 Navigation 이 data-nav-band 를 강제로 "dark" 로 둔다)
+*/
+html[data-visual="banded"] #mobile-menu {
+  --color-ink: #141a26;
+  --color-ink-secondary: #4e5563;
+  --color-line: #e2e6ee;
+  --color-surface: #ffffff;
+  color: var(--color-ink);
+}
+
+/* =========================================================================
+   banded — Final CTA 폼 패널
+   검정 밴드 위 **진한 회색 면 + 헤어라인**. 배경 장식이 없으므로 셸 때처럼
+   건물 선을 가리기 위한 스크림(.cta-scrim)은 쓰지 않는다(컴포넌트에서 렌더 자체를 뺐다).
+   ========================================================================= */
+html[data-visual="banded"] #contact .contact-panel {
+  background-color: #1a2338; /* 3차: 네이비 밴드보다 반 단계 밝은 면 (구 #15181e) */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 폼 입력창은 패널보다 한 단계 밝은 면 + 또렷한 헤어라인 */
+html[data-visual="banded"] #contact .contact-panel :is(input, select, textarea) {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+html[data-visual="banded"] #contact .contact-panel :is(input, select, textarea)::placeholder {
+  color: #7d828c;
+}
+
+/* =========================================================================
+   banded 2차 (2026-08-20) — 나머지 섹션 다듬기
+   ========================================================================= */
+
+/*
+  타이포 리듬 — 섹션 헤딩을 전 섹션 같은 스케일로 못 박는다(히어로 h1 은 제외).
+  크기는 이미 전부 `text-h1`(clamp 32→48) 로 같았고, 굵기만 어긋나 있었다:
+  기본 600 인데 `#work h2` 만 700 이었다. banded 에서는 **전부 700**.
+  색은 밴드 토큰이 이미 맡는다 — 검정 밴드 위 흰색 / 밝은 밴드 위 잉크.
+  (셸의 [data-band] h1,h2 { font-weight: 400 } 규칙은 2026-08-21 정리 패스에서 아카이브로 갔다)
+*/
+html[data-visual="banded"] [data-band] h2 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+/*
+  Q&A 대화창 패널 — 흰 밴드 위 대비 확보 (2026-08-20).
+  기본 `.chat-panel` 은 #f1f2f4 라 회색 밴드에서는 잘 맞았지만, banded 에서 Q&A 가
+  **흰 밴드**로 오면서 면과 배경 차이가 6/255 밖에 안 남아 패널이 잘 안 잡혔다.
+  면을 한 단계 올리고(#f5f6f8) 아주 옅은 그림자로 판을 띄운다. 말풍선 그림자는 그대로.
+*/
+html[data-visual="banded"] .chat-panel {
+  /* 3차: mist 가 연회청으로 바뀌면서 패널도 같은 계열로 (구 #f5f6f8 / #e3e5e9) */
+  background-color: #f4f7fb;
+  border-color: #e2e7f0;
+  box-shadow: 0 8px 32px rgba(20, 29, 51, 0.07);
+}
+
+/* =========================================================================
+   banded 3차 (2026-08-20) — 수능선배 스타일 이식
+
+   ① 딥 네이비 / 연회청 밴드 (위 토큰 블록에서 값만 교체)
+   ② 하단 고정 상담 바 (components/ui/sticky-consult-bar.tsx)
+   ③ 히어로 실사 복귀 (components/sections/hero.tsx)
+   ④ 브릿지 밴드 (components/sections/statement-band.tsx)
+   ⑤ 카드 언어 통일 — 아래 .card-surface
+   ========================================================================= */
+
+/*
+  카드 언어 — **흰 면 · 부드러운 그림자 · 직각(라운드 0)**.
+  약속·서비스·후기 카드가 이 클래스를 함께 쓴다.
+
+  🚨 2026-08-21 사용자 지시 **"박스들 라운드 전부 제거"** 로 라운드 16px → **0** 이 됐다.
+     (그날 오전 후기 카드만 `rounded-none!` 로 덮던 것을 클래스 자체로 승격 — 이제 그 훅은 없다.)
+     **직각은 카드 박스에만** 적용한다: 안쪽 pill 배지(.trade-badge · 서비스 칩)와 체크 원형
+     아이콘은 그대로 둔다. 모달·폼 패널·Q&A 대화창 등 **남은 라운드는 팀 확인 대기**다.
+*/
+html[data-visual="banded"] .card-surface {
+  border-radius: 0;
+  background-color: #ffffff;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 6px 24px rgba(20, 29, 51, 0.06);
+}
+
+/* 후기 카드 하단 업종 라벨 — 주황 테두리 배지 (내용은 placeholder 그대로) */
+html[data-visual="banded"] .trade-badge {
+  display: inline-block;
+  margin-top: 3px;
+  border: 1px solid rgba(234, 88, 12, 0.4);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11.5px;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ea580c;
+}
+
+/* 상담 바 안에서는 배지가 flex 정렬을 따르므로 위 여백을 쓰지 않는다 */
+html[data-visual="banded"] .sticky-consult-bar .trade-badge {
+  margin-top: 0;
+}
+
+/*
+  하단 고정 상담 바 — 흰 면 + 상단 그림자. 1024px 미만에서는 컴포넌트가 렌더 자체를 하지 않는다
+  (모바일은 기존 MobileStickyCta 담당).
+*/
+.sticky-consult-bar {
+  background-color: #ffffff;
+  border-top: 1px solid #e2e6ee;
+  box-shadow: 0 -8px 28px rgba(20, 29, 51, 0.1);
+}
+
+/*
+  바가 "보일 때만" 본문 하단 여백을 보정한다 — 푸터 마지막 줄이 바에 가리지 않게.
+  --consult-bar-h 는 컴포넌트가 표시 상태일 때만 값을 채운다(숨김이면 0px).
+  1024px 미만에서는 바 자체가 렌더되지 않으므로 여백도 없다(그쪽은 --sticky-cta-h 담당).
+*/
+@media (min-width: 1024px) {
+  body {
+    padding-bottom: var(--consult-bar-h, 0px);
+  }
+}
+
+/* =========================================================================
+   BANDED — 팀 팔레트 (2026-08-21, 김미라 안: 검정 #000000 · 라임 #EAF6AD · 바이올렛 #6338EE)
+
+   🚨 **위 banded 블록은 한 줄도 건드리지 않았다.** 저쪽이 3차(수능선배)의
+   네이비·주황 세트 그대로이고, 이 블록이 `[data-palette="team"]` 일 때만 덮어쓴다.
+   `site.ts` 의 `bandedPalette` 를 `"navy"` 로 되돌리면 이 블록이 통째로 안 걸려
+   예전 화면이 그대로 나온다 (layout.tsx 가 <html data-palette> 를 내려보낸다).
+
+   규칙은 그대로다 — **유채색은 바이올렛 하나**뿐이고 CTA·강조·틱에서만 구두점으로 쓴다.
+   라임은 "밝은 밴드"의 자리를 대신할 뿐 액센트가 아니다.
+
+   대비 실측(WCAG, 아래 값은 캡처 스크립트로 검증):
+   | 밴드 | 배경 | 잉크 | 보조 | 액센트 |
+   |---|---|---|---|---|
+   | void  | #000000 | #ffffff 21.0 | #a0a0a0 8.0 | #6338EE 3.3 (큰 글자·그래픽 전용) |
+   | paper | #ffffff | #101010 19.2 | #4d4d4d 8.4 | #6338EE 6.3 |
+   | mist  | #EAF6AD | #101208 17.8 | #4a4f38 7.4 | #6338EE 5.5 |
+   ⚠️ 바이올렛은 **검정 위에서 3.3:1** 이라 본문 크기 글자에 쓰면 AA 미달이다.
+      검정 밴드에서 액센트는 워드마크 "!"(초대형)·3px 틱·버튼 면처럼 3:1 로 충분한
+      자리에만 쓴다(현재 코드가 그렇다). 본문 강조가 필요해지면 밝은 밴드로 옮기거나
+      `--color-cta-on-dark`(#9b7dff, 6.0:1)를 새로 파생시켜야 한다.
+   ========================================================================= */
+html[data-visual="banded"][data-palette="team"] {
+  /* 액센트 — 전역(네비·상담 바 등 밴드 밖 요소까지 같이 바뀐다) */
+  --color-cta: #6338ee;
+  --color-cta-dark: #4a28b8;
+  --color-focus: #6338ee;
+}
+
+html[data-visual="banded"][data-palette="team"] body {
+  background-color: #ffffff;
+}
+
+/* ---- 밴드 배경 ---- */
+html[data-visual="banded"][data-palette="team"] [data-band="paper"] {
+  background-color: #ffffff;
+}
+
+html[data-visual="banded"][data-palette="team"] [data-band="mist"] {
+  background-color: #eaf6ad; /* 라임 */
+}
+
+html[data-visual="banded"][data-palette="team"] [data-band="void"] {
+  background-color: #000000; /* 검정 */
+}
+
+/* ---- 흰 밴드 토큰 — 중성 회색 (네이비 기 없음) ---- */
+html[data-visual="banded"][data-palette="team"] [data-band="paper"] {
+  --color-ink: #101010;
+  --color-ink-secondary: #4d4d4d;
+  --color-ink-muted: #757575;
+  --color-line: #e5e5e5;
+  --color-line-strong: #cccccc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f5f5f5;
+  --color-canvas: #ffffff;
+  --color-indigo: #6338ee;
+  color: var(--color-ink);
+}
+
+/* ---- 라임 밴드 토큰 — 라임과 어울리는 딥 올리브 (대비 4.5:1 이상) ---- */
+html[data-visual="banded"][data-palette="team"] [data-band="mist"] {
+  --color-ink: #101208;
+  --color-ink-secondary: #4a4f38;
+  --color-ink-muted: #6b6f57;
+  --color-line: #d3e18f;
+  --color-line-strong: #bccd70;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #dfeda2;
+  --color-canvas: #eaf6ad;
+  --color-indigo: #4a28b8;
+  color: var(--color-ink);
+}
+
+/* ---- 검정 밴드 토큰 — 중성 회색 보조 글자 ---- */
+html[data-visual="banded"][data-palette="team"] [data-band="void"] {
+  --color-ink: #ffffff;
+  --color-ink-secondary: #a0a0a0; /* 검정 위 8.0:1 */
+  --color-ink-muted: #7d7d7d; /* 검정 위 5.1:1 */
+  --color-line: rgba(255, 255, 255, 0.14);
+  --color-line-strong: rgba(255, 255, 255, 0.26);
+  --color-surface: #101010; /* 카드 면 */
+  --color-surface-subtle: #181818;
+  --color-canvas: #000000;
+  --color-indigo: #8f6dff;
+  --color-focus: #9b7dff;
+  color-scheme: dark;
+  color: var(--color-ink);
+}
+
+/* ---- 액센트 버튼 호버 — 컴포넌트에 #F0650F 가 박혀 있어 CSS 로 덮는다 ----
+   (bg-cta/border-cta 를 가진 링크·버튼만 노려 outlineCta 같은 보더 버튼은 건드리지 않는다) */
+html[data-visual="banded"][data-palette="team"] :is(a, button).bg-cta:hover,
+html[data-visual="banded"][data-palette="team"] :is(a, button).border-cta:hover {
+  background-color: #7a52f2;
+  border-color: #7a52f2;
+}
+
+/* ---- 네비 dark 바 ---- */
+html[data-visual="banded"][data-palette="team"] .site-nav[data-nav-band="dark"].bg-white\/85 {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+html[data-visual="banded"][data-palette="team"] #mobile-menu {
+  --color-ink: #101010;
+  --color-ink-secondary: #4d4d4d;
+  --color-line: #e5e5e5;
+  --color-surface: #ffffff;
+  color: var(--color-ink);
+}
+
+/* ---- Final CTA 폼 패널 — 검정 밴드 위 한 단계 밝은 면 ---- */
+html[data-visual="banded"][data-palette="team"] #contact .contact-panel {
+  background-color: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html[data-visual="banded"][data-palette="team"] #contact .contact-panel :is(input, select, textarea)::placeholder {
+  color: #808080;
+}
+
+/* ---- Q&A 대화창 — 중성 패널 + 바이올렛 옅은 틴트 답변 ---- */
+html[data-visual="banded"][data-palette="team"] .chat-panel {
+  background-color: #f5f5f6;
+  border-color: #e6e6e8;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+}
+
+html[data-visual="banded"][data-palette="team"] .chat-panel-title {
+  color: #6e6e6e;
+}
+
+html[data-visual="banded"][data-palette="team"] .chat-q {
+  background-color: #ffffff;
+  border-color: #e6e6e8;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+html[data-visual="banded"][data-palette="team"] .chat-q-tail {
+  background-color: #ffffff;
+  border-bottom-color: #e6e6e8;
+  border-left-color: #e6e6e8;
+}
+
+html[data-visual="banded"][data-palette="team"] .chat-badge-q {
+  border-color: #cccccc;
+  color: #4d4d4d;
+}
+
+/* 주황 틴트(#ffe6d6) → 바이올렛 옅은 틴트. 글자는 아래 --color-ink 규칙이 잡는다 */
+html[data-visual="banded"][data-palette="team"] .chat-a {
+  background-color: #ece5ff;
+  border-color: rgba(99, 56, 238, 0.45);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+html[data-visual="banded"][data-palette="team"] .chat-a-tail {
+  background-color: #ece5ff;
+  border-top-color: rgba(99, 56, 238, 0.45);
+  border-right-color: rgba(99, 56, 238, 0.45);
+}
+
+html[data-visual="banded"][data-palette="team"] :is(.chat-q, .chat-a) {
+  --color-ink: #101010;
+  --color-ink-secondary: #4d4d4d;
+  color: var(--color-ink);
+}
+
+/* ---- 카드 · 배지 · 상담 바 ---- */
+html[data-visual="banded"][data-palette="team"] .card-surface {
+  background-color: #ffffff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+html[data-visual="banded"][data-palette="team"] .trade-badge {
+  border-color: rgba(99, 56, 238, 0.45);
+  color: #6338ee;
+}
+
+html[data-visual="banded"][data-palette="team"] .sticky-consult-bar {
+  background-color: #ffffff;
+  border-top-color: #e5e5e5;
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.14);
+}
+
+/* 상담 바 "빠른 상담" 버튼에 네이비 계열 색이 박혀 있다(border-[#c6ccd8] / text-[#141a26]) */
+html[data-visual="banded"][data-palette="team"] .sticky-consult-bar .border-\[\#c6ccd8\] {
+  border-color: #cccccc;
+}
+
+html[data-visual="banded"][data-palette="team"] .sticky-consult-bar .text-\[\#141a26\] {
+  color: #101010;
+}
+
+/* ---- 검정 밴드 위 **액센트 글자**만 밝은 바이올렛으로 파생 ----
+   🚨 브랜드 바이올렛 #6338EE 는 검정 위에서 **3.33:1** 이라 본문 크기 글자에 쓰면 AA 미달이다
+   (라벨 "예약 없이 바로" · 포지션 밴드 스탯 라벨 등이 여기 해당). 배경·보더는 그대로 두고
+   `.text-cta` 만 **#9b7dff (6.77:1)** 로 바꾼다 — 버튼 면을 밝히면 흰 글자 대비가 2.9:1 로
+   깨지므로 `--color-cta` 자체는 건드리지 않는다.
+   예외: 워드마크 "!" 는 459px 짜리 초대형 글자라 3:1 기준(큰 글자·그래픽)을 이미 넘고,
+   버튼과 같은 브랜드 색이어야 한 화면에서 두 가지 바이올렛으로 보이지 않는다. */
+html[data-visual="banded"][data-palette="team"] [data-band="void"] .text-cta {
+  color: #9b7dff;
+}
+
+html[data-visual="banded"][data-palette="team"] [data-band="void"] .wordmark-glyph .text-cta {
+  color: var(--color-cta);
+}
+
+/* ---- 미스트 밴드 위 **액센트 글자** — `accentOnMist` 파생 (2026-08-22) ----
+   colorLab 의 `compose()` 가 만드는 것과 **같은 규칙**을 기본 팔레트 CSS 에도 박아 둔다:
+   미스트 배경 위 액센트 글자가 4.5 미만이면 명도를 1.5씩 눌러 확보한 값.
+
+   🚨 **team 은 파생 결과가 원색과 같다** — 라임 `#eaf6ad` 위 바이올렛 `#6338ee` 가 이미
+      **5.49:1** 이라 한 스텝도 내려가지 않는다. 그래서 이 줄은 **화면을 바꾸지 않는다**
+      (픽셀 비교로 확인). 팔레트를 바꿨을 때 규칙이 조용히 사라지지 않도록 명시해 둔다.
+   ⚠️ 한 단계 진해진 밴드(`.band-deep`, 0,6,1)는 아래쪽 규칙이 계속 이긴다 — 그쪽은
+      배경이 더 어두워져 `--color-cta` 를 20% 눌러 따로 계산한다. */
+/* 기본(navy) 팔레트 — 연회청 `#f0f3f8` 위 주황 `#ea580c` 는 **3.20:1** 로 미달이라
+   `#c0460c`(**4.58:1**)로 눌린다. 지금 활성 팔레트가 team 이라 화면에는 영향이 없고,
+   `bandedPalette = "navy"` 로 되돌릴 때 대비가 함께 따라온다. */
+html[data-visual="banded"] [data-band="mist"] .text-cta {
+  color: #c0460c;
+}
+
+/* team 은 위 기본값을 덮는다(특이도 0,4,1 > 0,3,1 이라 순서와 무관). */
+html[data-visual="banded"][data-palette="team"] [data-band="mist"] .text-cta {
+  color: #6338ee;
+}
+
+/* =========================================================================
+   BANDED — 라벤더 팔레트 (2026-08-23 사용자 결정: 라임 밴드가 겉돈다 → 라벤더로)
+
+   🚨 **위 team 블록은 한 줄도 건드리지 않았다.** 이 블록은 `[data-palette="lavender"]`
+   일 때만 걸리고, `site.ts` 의 `bandedPalette` 를 `"team"` 으로 돌리면 라임이 그대로
+   복귀한다(`"navy"` 면 둘 다 안 걸려 기본 banded 블록 = 수능선배 세트).
+
+   team 블록을 **그대로 복사하고 미스트 계열만 갈아 끼운 것**이다 —
+   검정 `#000000` · 흰 `#ffffff` · 액센트 바이올렛 `#6338EE` · CTA/카톡 색은 전부 동일.
+   달라진 것은 미스트 밴드가 라임 `#EAF6AD` → **라벤더 `#ECE8FB`**(액센트 바이올렛의
+   옅은 틴트, hue 252.6°)이고 한 단계 진한 밴드가 **`#D9D2F7`** 라는 점뿐이다.
+   그래서 화면의 유채색 축이 **바이올렛 하나로** 모인다(라임은 별개의 색상축이었다).
+
+   미스트 위 파생 토큰은 team 이 라임에 쓴 것과 **같은 방법**(밴드 hue 를 유지한 채
+   명도만 내린 값)으로 다시 뽑았고, 전부 WCAG AA 4.5:1 이상이다.
+
+   대비 실측 (WCAG, `lib/palette.ts` 와 같은 계산):
+   | 밴드      | 배경      | 잉크              | 보조              | muted             | 액센트 |
+   |---|---|---|---|---|---|
+   | void      | #000000 | #ffffff **21.0**  | #a0a0a0 **8.03**  | #7d7d7d **5.10**  | #6338EE 3.33 (큰 글자·그래픽 전용) |
+   | paper     | #ffffff | #101010 **19.03** | #4d4d4d **8.45**  | #757575 **4.61**  | #6338EE **6.30** |
+   | mist      | #ECE8FB | #0c0915 **16.43** | #4a4168 **7.79**  | #5c5575 **5.81**  | #6338EE **5.25** |
+   | mist·deep | #D9D2F7 | #0c0915 **13.62** | #4a4168 **6.46**  | #5c5575 **4.82**  | #4f2dbe **5.92** |
+   흰 글자 on 바이올렛 버튼 **6.30:1**.
+   ⚠️ 검정 위 바이올렛은 team 과 똑같이 **3.33:1** 이라 `.text-cta` 만 `#9b7dff` 로 파생한다.
+   ========================================================================= */
+html[data-visual="banded"][data-palette="lavender"] {
+  /* 액센트 — team 과 완전히 같은 값(바꾸지 않는다) */
+  --color-cta: #6338ee;
+  --color-cta-dark: #4a28b8;
+  --color-focus: #6338ee;
+}
+
+html[data-visual="banded"][data-palette="lavender"] body {
+  background-color: #ffffff;
+}
+
+/* ---- 밴드 배경 ---- */
+html[data-visual="banded"][data-palette="lavender"] [data-band="paper"] {
+  background-color: #ffffff;
+}
+
+html[data-visual="banded"][data-palette="lavender"] [data-band="mist"] {
+  background-color: #ece8fb; /* 라벤더 */
+}
+
+html[data-visual="banded"][data-palette="lavender"] [data-band="void"] {
+  background-color: #000000; /* 검정 */
+}
+
+/* ---- 흰 밴드 토큰 — 중성 회색 (team 과 동일) ---- */
+html[data-visual="banded"][data-palette="lavender"] [data-band="paper"] {
+  --color-ink: #101010;
+  --color-ink-secondary: #4d4d4d;
+  --color-ink-muted: #757575;
+  --color-line: #e5e5e5;
+  --color-line-strong: #cccccc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f5f5f5;
+  --color-canvas: #ffffff;
+  --color-indigo: #6338ee;
+  color: var(--color-ink);
+}
+
+/* ---- 라벤더 밴드 토큰 — 밴드 hue(252.6°)를 유지한 딥 바이올렛 그레이 ----
+   team 의 딥 올리브(#101208 / #4a4f38 / #6b6f57)와 **같은 방법**으로 뽑았다.
+   muted 는 team 이 라임에서 4.53(진한 밴드에서는 3.37 로 미달)이었던 것과 달리
+   **진한 밴드에서도 4.82** 라 두 배경 모두 AA 를 넘긴다. */
+html[data-visual="banded"][data-palette="lavender"] [data-band="mist"] {
+  --color-ink: #0c0915; /* 라벤더 위 16.43:1 · 진한 라벤더 위 13.62:1 */
+  --color-ink-secondary: #4a4168; /* 7.79 / 6.46 */
+  --color-ink-muted: #5c5575; /* 5.81 / 4.82 */
+  --color-line: #d2c9f6;
+  --color-line-strong: #bdaff1;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #ddd6f8;
+  --color-canvas: #ece8fb;
+  --color-indigo: #4a28b8;
+  color: var(--color-ink);
+}
+
+/* ---- 검정 밴드 토큰 — team 과 동일 ---- */
+html[data-visual="banded"][data-palette="lavender"] [data-band="void"] {
+  --color-ink: #ffffff;
+  --color-ink-secondary: #a0a0a0; /* 검정 위 8.0:1 */
+  --color-ink-muted: #7d7d7d; /* 검정 위 5.1:1 */
+  --color-line: rgba(255, 255, 255, 0.14);
+  --color-line-strong: rgba(255, 255, 255, 0.26);
+  --color-surface: #101010;
+  --color-surface-subtle: #181818;
+  --color-canvas: #000000;
+  --color-indigo: #8f6dff;
+  --color-focus: #9b7dff;
+  color-scheme: dark;
+  color: var(--color-ink);
+}
+
+/* ---- 액센트 버튼 호버 (team 과 동일) ---- */
+html[data-visual="banded"][data-palette="lavender"] :is(a, button).bg-cta:hover,
+html[data-visual="banded"][data-palette="lavender"] :is(a, button).border-cta:hover {
+  background-color: #7a52f2;
+  border-color: #7a52f2;
+}
+
+/* ---- 네비 dark 바 ---- */
+html[data-visual="banded"][data-palette="lavender"] .site-nav[data-nav-band="dark"].bg-white\/85 {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+html[data-visual="banded"][data-palette="lavender"] #mobile-menu {
+  --color-ink: #101010;
+  --color-ink-secondary: #4d4d4d;
+  --color-line: #e5e5e5;
+  --color-surface: #ffffff;
+  color: var(--color-ink);
+}
+
+/* ---- Final CTA 폼 패널 ---- */
+html[data-visual="banded"][data-palette="lavender"] #contact .contact-panel {
+  background-color: #101010;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html[data-visual="banded"][data-palette="lavender"] #contact .contact-panel :is(input, select, textarea)::placeholder {
+  color: #808080;
+}
+
+/* ---- Q&A 대화창 — team 과 동일(답변 틴트가 이미 바이올렛 계열) ---- */
+html[data-visual="banded"][data-palette="lavender"] .chat-panel {
+  background-color: #f5f5f6;
+  border-color: #e6e6e8;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+}
+
+html[data-visual="banded"][data-palette="lavender"] .chat-panel-title {
+  color: #6e6e6e;
+}
+
+html[data-visual="banded"][data-palette="lavender"] .chat-q {
+  background-color: #ffffff;
+  border-color: #e6e6e8;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+html[data-visual="banded"][data-palette="lavender"] .chat-q-tail {
+  background-color: #ffffff;
+  border-bottom-color: #e6e6e8;
+  border-left-color: #e6e6e8;
+}
+
+html[data-visual="banded"][data-palette="lavender"] .chat-badge-q {
+  border-color: #cccccc;
+  color: #4d4d4d;
+}
+
+html[data-visual="banded"][data-palette="lavender"] .chat-a {
+  background-color: #ece5ff;
+  border-color: rgba(99, 56, 238, 0.45);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+html[data-visual="banded"][data-palette="lavender"] .chat-a-tail {
+  background-color: #ece5ff;
+  border-top-color: rgba(99, 56, 238, 0.45);
+  border-right-color: rgba(99, 56, 238, 0.45);
+}
+
+html[data-visual="banded"][data-palette="lavender"] :is(.chat-q, .chat-a) {
+  --color-ink: #101010;
+  --color-ink-secondary: #4d4d4d;
+  color: var(--color-ink);
+}
+
+/* ---- 카드 · 배지 · 상담 바 (team 과 동일) ---- */
+html[data-visual="banded"][data-palette="lavender"] .card-surface {
+  background-color: #ffffff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+html[data-visual="banded"][data-palette="lavender"] .trade-badge {
+  border-color: rgba(99, 56, 238, 0.45);
+  color: #6338ee;
+}
+
+html[data-visual="banded"][data-palette="lavender"] .sticky-consult-bar {
+  background-color: #ffffff;
+  border-top-color: #e5e5e5;
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.14);
+}
+
+html[data-visual="banded"][data-palette="lavender"] .sticky-consult-bar .border-\[\#c6ccd8\] {
+  border-color: #cccccc;
+}
+
+html[data-visual="banded"][data-palette="lavender"] .sticky-consult-bar .text-\[\#141a26\] {
+  color: #101010;
+}
+
+/* ---- 검정 밴드 위 액센트 **글자** — team 과 같은 파생(#9b7dff, 6.77:1) ----
+   워드마크 "!" 만 브랜드색으로 되돌린다(초대형 글자라 3:1 기준을 이미 넘는다). */
+html[data-visual="banded"][data-palette="lavender"] [data-band="void"] .text-cta {
+  color: #9b7dff;
+}
+
+html[data-visual="banded"][data-palette="lavender"] [data-band="void"] .wordmark-glyph .text-cta {
+  color: var(--color-cta);
+}
+
+/* ---- 라벤더 밴드 위 액센트 **글자** ----
+   🚨 이 규칙이 없으면 위쪽 기본(navy) 규칙의 **주황 `#c0460c`** 이 그대로 걸린다.
+   라벤더 `#ece8fb` 위 바이올렛 `#6338ee` 는 **5.25:1** 이라 `accentOnMist` 파생이
+   한 스텝도 내려가지 않는다(파생 결과 = 원색). team 과 같은 상황이다. */
+html[data-visual="banded"][data-palette="lavender"] [data-band="mist"] .text-cta {
+  color: #6338ee;
+}
+
+/* =========================================================================
+   프로젝트 모달 (2026-08-21 원페이지) — 살짝 페이드 + 스케일 등장
+   `prefers-reduced-motion` 이면 애니메이션 없이 즉시 표시한다.
+   ========================================================================= */
+@keyframes project-modal-dim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes project-modal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.project-modal {
+  animation: project-modal-dim 0.2s ease-out both;
+}
+
+.project-modal-panel {
+  animation: project-modal-pop 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-modal,
+  .project-modal-panel {
+    animation: none;
+  }
+}
+
+/* =========================================================================
+   브릿지 폰 등장 (2026-08-21)
+   사용자: "휴대폰 두 대도 처음 화면에 나타날 때 양쪽에서 모여 들어오든".
+   섹션이 처음 뷰포트에 들어올 때 **한 번만** — 앞 폰은 왼쪽에서, 뒤 폰은 오른쪽에서 모인다.
+
+   🚨 transform 을 CSS 로 잡지 않는다. 등장이 끝나면 마우스 3D 틸트가 같은 요소의
+   `style.transform` 을 직접 쓰기 때문에(statement-band.tsx) 여기서 transform 을 애니메이션하면
+   서로 덮어쓴다. 그래서 **부모 래퍼**(`.bridge-phone-in`)가 이동을 맡고 폰 자신은 회전만 맡는다.
+   ========================================================================= */
+@keyframes bridge-phone-gather-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-90px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes bridge-phone-gather-right {
+  from {
+    opacity: 0;
+    transform: translate3d(110px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 등장 전에는 숨겨 둔다 — 섹션이 화면에 들어오면 .is-in 이 붙는다 */
+.bridge-phone-in {
+  opacity: 0;
+}
+
+.bridge-phone-in.is-in {
+  animation: var(--bridge-gather) 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--bridge-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bridge-phone-in,
+  .bridge-phone-in.is-in {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* =========================================================================
+   병합 후기 섹션 — 한 단계 진한 밴드 (2026-08-21 사용자 "리뷰 배경 진하게")
+   -------------------------------------------------------------------------
+   포지션 선언 + 스탯 + 후기 마키를 합친 섹션(components/sections/testimonial-marquee.tsx)
+   에만 붙는다. 밴드는 mist 그대로이고 **배경만** 그 밴드의 잉크를 14% 섞어 눌러,
+   흰 카드가 더 도드라진다.
+
+   🚨 검정(void)으로 올리는 안은 **버렸다** — 실측에서 `.card-surface` 는 흰 면인데
+      카드 안 글자가 `--color-ink`(void 에서 흰색)라 **흰 위 흰 글자로 사라졌다**
+      (캡처 `merged-void.png`). 카드 안에서만 밴드 토큰을 뒤집는 예외를 만드느니
+      밝은 밴드를 유지하는 편이 안전하다.
+
+   값을 고정 hex 로 박지 않고 `color-mix` 로 **그 팔레트의 mist 에서 파생**시켰다 —
+   팀 팔레트(라임)든 navy 든 colorLab 실험 조합이든 항상 "한 단계 진한 같은 색"이 된다.
+   선택자에 `.band-deep` 를 두 번 쓴 것은 colorLab 이 주입하는
+   `html:root[data-visual="banded"][data-palette] [data-band="mist"]`(0,4,1) 를
+   확실히 이기기 위해서다(주입 스타일은 순서가 보장되지 않는다).
+   ========================================================================= */
+html:root[data-visual="banded"] [data-band="mist"].band-deep.band-deep {
+  background-color: color-mix(in srgb, var(--color-canvas) 86%, var(--color-ink));
+}
+
+/*
+  진해진 밴드 위의 **액센트 글자**만 한 단계 눌러 대비를 되찾는다.
+  실측: 원래 라임(#eaf6ad) 위 바이올렛 5.49:1 → 진한 밴드에서 **4.09:1** 로 떨어졌다
+  (스탯 라벨이 12~13px 작은 글자라 AA 4.5 미달). 팔레트별 hex 를 새로 만들지 않고
+  `--color-cta` 를 20% 어둡게 섞어 **어떤 팔레트에서도 같은 만큼** 눌린다(실측 5.4:1).
+  면(`bg-cta`)·테두리는 건드리지 않는다 — 3px 틱·버튼 면은 큰 요소라 이미 충분하다.
+*/
+html:root[data-visual="banded"] [data-band="mist"].band-deep.band-deep .text-cta {
+  /* 기본(navy) — 진한 연회청 `#d2d4da` 위에서 `color-mix(… 80%, #000)` 은 **3.55:1** 로
+     미달이라 `accentOnMist` 와 같은 규칙(명도 −1.5 반복)으로 뺀 `#9d370b`(**4.75:1**)를 쓴다.
+     (2026-08-22 — 팔레트별 실측값. 활성 팔레트가 team 이라 지금 화면에는 영향 없음) */
+  color: #9d370b;
+}
+
+/* 🚨 **team 은 기존 `color-mix` 를 그대로 유지한다** — 진한 라임 `#ccd799` 위에서
+   이미 **5.55:1**(실측)로 통과하고, 값을 바꾸면 화면이 달라진다. 위 규칙(0,6,1)을
+   `[data-palette="team"]` 한 겹으로 이긴다(0,7,1). */
+html:root[data-visual="banded"][data-palette="team"] [data-band="mist"].band-deep.band-deep .text-cta {
+  color: color-mix(in srgb, var(--color-cta) 80%, #000000);
+}
+
+/* 🚨 **라벤더에서는 `.band-deep` 이 무효다** (2026-08-23 사용자 확정 — "팀이 고른 시안이
+   보여 준 밝은 라벤더 그대로"). 리뷰/약속 밴드를 **평평한 미스트 `#ECE8FB` 로** 칠한다.
+
+   `var(--color-canvas)` 를 쓰는 이유 — 하드코딩 `#ece8fb` 보다 두 가지가 낫다:
+   ① 바로 위 `[data-band="mist"]` 토큰 블록의 캔버스 값 **한 곳만** 고치면 따라온다.
+   ② colorLab 이 주입하는 `[data-band="mist"]` 규칙이 `--color-canvas` 를 갈아 끼우므로
+      **실험 조합에서도 리뷰 밴드가 그 조합의 미스트를 그대로** 따라간다(주입 CSS 를
+      따로 손댈 필요가 없다).
+   `.band-deep` 클래스 자체는 지운 게 아니라서 `bandedPalette` 를 `"team"` 으로 돌리면
+   이 규칙이 안 걸려 **라임의 한 단계 진한 밴드(`#cbd696`)가 그대로 복귀**한다.
+   ⚠️ 되돌릴 값 — 한 단계 진한 라벤더가 다시 필요해지면 `#D9D2F7` 이다(초안에서 쓰던 값).
+      지금은 사이트에서 `.band-deep` 을 쓰는 곳이 리뷰 섹션 하나뿐이라 죽은 토큰을 두지 않는다. */
+html:root[data-visual="banded"][data-palette="lavender"] [data-band="mist"].band-deep.band-deep {
+  background-color: var(--color-canvas);
+}
+
+/* 밴드가 평평한 미스트가 됐으니 액센트 글자도 **평평한 미스트와 같은 원색**을 쓴다
+   (`#6338ee` on `#ece8fb` = **5.25:1**). 진한 배경용으로 눌렀던 `#4f2dbe` 는 이제 불필요.
+   🚨 이 규칙을 지우면 안 된다 — 없으면 기본(navy)용 주황 `#9d370b` 이 그대로 걸린다. */
+html:root[data-visual="banded"][data-palette="lavender"] [data-band="mist"].band-deep.band-deep .text-cta {
+  color: #6338ee;
+}
+
+/* =========================================================================
+   카카오톡 버튼 — **브랜드색 고정** (2026-08-21 사용자 확정
+   "카카오톡 상담 버튼은 항상 카카오톡 색상으로 고정")
+   -------------------------------------------------------------------------
+   하단 고정 상담 바와 Final CTA 의 카톡 버튼이 함께 쓴다.
+
+   🚨 **액센트 토큰(--color-cta)을 쓰지 않는다** — 팔레트를 navy 로 바꾸든 colorLab 으로
+      실험하든 **이 버튼만은 변하지 않아야** 하기 때문이다. colorLab 이 주입하는 규칙은
+      `:is(a, button).bg-cta` 를 노리므로 이 버튼에서 `bg-cta` 클래스를 빼는 것만으로
+      전환 대상에서 빠진다(그래서 클래스 하나로 색을 직접 박는다).
+   - 클래스를 **두 번 써서**(0,2,0) 같은 자리의 Tailwind 유틸리티(0,1,0)를 순서와 무관하게 이긴다.
+   - 흰 상담 바 위에서는 옐로 면이 배경과 1.33:1 밖에 안 돼 경계가 흐리다 →
+     **옅은 보더 한 겹**(검정 8%)으로만 잡는다(그림자·테두리색 추가 없음).
+   ========================================================================= */
+.btn-kakao.btn-kakao {
+  background-color: #fae100; /* 카카오 옐로 */
+  color: #3b1e1e; /* 카카오 브라운 — 옐로 위 11.39:1 */
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.btn-kakao.btn-kakao:hover {
+  background-color: #ffeb3f; /* 살짝 밝아지며 떠오르는 기존 CTA 호버 결과 같은 결 */
+}
+
+/* 카드형(Final CTA)에서 제목 아래 부제 — 브라운의 옅은 단계 */
+.btn-kakao.btn-kakao .kakao-note {
+  color: rgba(59, 30, 30, 0.75);
+}
+
+/* =========================================================================
+   시안 ① — 히어로 **세로 예산** `--hero-reserve` (2026-08-23 오후)
+   -------------------------------------------------------------------------
+   `hero.tsx` 의 워드마크 크기 식은
+     `min(29.9vw, max(40px, calc((100svh − var(--hero-reserve)) / 1.6287)))`
+   이다. 분모 1.6287(= 0.82 + 0.82 + 줄간격)과 3칸 박스 골격은 **손대지 않았고**,
+   워드마크 아래에 붙는 선언문 블록의 높이만큼 **분자에서 미리 빼는** 방식이다.
+
+   | 값 | 어디에 쓰나 | 계산 |
+   |---|---|---|
+   | **150px** | `statementPlacement: "none"` = 2026-08-23 오전 값 | 섹션 패딩 144 + 여유 6 |
+   | **230px** | `"below"` · ≥1024px | 144(패딩 80+16+16+32) + 문장 여백 8 + [사실+CTA] 행 68 + 여유 10 |
+   | **300px** | `"below"` · <1024px | 132(패딩 68+16+16+32) + 8 + 세로 스택 ≈132 + 여유 28 |
+
+   🆕 **2026-08-24 저녁** — 워드마크 아래 큰 선언문 한 줄이 생기면서 두 값을 다시 잡았다.
+   🚨 **문장 높이는 여기 들어 있지 않다.** 문장 글자 크기가 `--wm-size × 0.240017` 이라
+      워드마크에 **비례**하므로 `hero.tsx` 의 분모 `WORDMARK_BOX_COEF` 에 **0.82 → 1.060017**
+      로 더했다(고정 px 로 빼면 세로가 좁은 화면에서 식이 발산한다).
+      예전 280/340 은 선언문 3줄(≈116px 고정)이 있던 2026-08-23 값이다.
+
+   실측 산식 — 총 세로 = 152 + 1.6287F + 블록H, `1.6287F = 100svh − reserve` 이므로
+   **reserve ≥ 152 + 블록H** 면 첫 화면에 들어간다.
+     · 1536×745 : F 288.6 → 152 + 465 + 116 = **733 ≤ 745** ✅
+     · 1440×900 : F 380.7 → 152 + 620 + 116 = **888 ≤ 900** ✅
+     · 390×844  : 폭(29.9vw)이 크기를 잡아 F 116.6 → 총 ≈563 ≤ 844 ✅ (워드마크 크기 불변)
+   ⚠️ 히어로 패딩이나 선언문 글자 크기를 바꾸면 이 세 값을 다시 계산할 것.
+   ========================================================================= */
+[data-hero-statement] {
+  --hero-reserve: 150px;
+}
+
+/* 🆕 **2026-08-24 v9** — 선언문이 작아지고(비례항은 `WORDMARK_BOX_COEF` 로 감) CTA 2개가 빠져
+   고정 px 예산이 크게 줄었다.
+     ≥1024 : 패딩 144(80+16+16+32) + 문장 위 여백 18 + 메타 여백 8 + 메타 줄 17 + 여유 13 = **200**
+     <1024 : 패딩 132(68+16+16+32) + 18 + 8 + 17 + 15 = **190**
+   (2026-08-24 오후의 230/300 은 초대형 문장 + [메타 + CTA 2개] 행이 있던 값이다.) */
+@media (min-width: 1024px) {
+  [data-hero-statement="below"] {
+    --hero-reserve: 200px;
+  }
+}
+
+@media (max-width: 1023px) {
+  [data-hero-statement="below"] {
+    --hero-reserve: 190px;
+  }
+}
+
+/* =========================================================================
+   시안 ③-d — 본문 글자 단계 `typeScale` (2026-08-23 오후)
+   -------------------------------------------------------------------------
+   `layout.tsx` 가 `<html data-type="large">` 를 내려보낸다. `site.ts` 의
+   `typeScale` 을 `"default"` 로 바꾸면 이 블록이 걸리지 않아 **2026-08-23 오전 값**
+   (유동 clamp)으로 그대로 돌아간다.
+
+   🚨 **워드마크·섹션 헤딩은 건드리지 않는다** — `--text-display-*` · `--text-h1~h3` 는
+      그대로다. 여기서 덮는 것은 **본문·라벨·작은 글씨 토큰 3개**뿐이고, 유동 clamp 의
+      아래쪽(모바일) 값을 위쪽(데스크톱) 값으로 고정하는 형태라 데스크톱은 픽셀이 안 바뀐다.
+   ℹ️ 지시서의 "FAQ 질문 18px"·"본문 16px" 은 현행이 이미 충족한다
+      (FAQ 질문 = `text-h3` 최소 20px · `--text-body-m` 최소 16px). 줄이지 않는다.
+   ========================================================================= */
+html[data-type="large"] {
+  /* 본문 17px 고정 (기본: clamp 16 → 17) */
+  --text-body-m: 1.0625rem;
+  /* 작은 글씨 13px 고정 (기본: clamp 12 → 13) */
+  --text-caption: 0.8125rem;
+  /* 라벨 14px 고정 (기본: clamp 13 → 14) */
+  --text-label: 0.875rem;
+}
+
+/* 서비스 카드 체크 항목 — 13.5px → 15px (`service-card-item` 은 이 규칙 전용 훅) */
+html[data-type="large"] .service-card-item {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* =========================================================================
+   🌊 글자 파도 ① `displace` 모드 (2026-08-24 오전) — 🚫 **지금 기본값이 아닙니다**
+
+   사용자 "파도가 안 보여" → 아래 `.wordmark-wavefill`(글자 안쪽 물결)로 교체됐습니다.
+   `site.ts` 의 `letterWave: "displace"` 로만 살아납니다. 한 줄도 지우지 않았습니다.
+
+   액센트를 뺀 좌·우 칸 글자에만 아주 약한 액체 왜곡이 **상시** 흐릅니다.
+   필터 자체는 `hero.tsx` 의 `WaveDefs` 가 그리고, 여기서는 **어느 크기 필터를 쓸지**만 고릅니다.
+   🚨 `feDisplacementMap` 의 `scale` 은 **px** 이라 글자 크기에 비례하지 않습니다 —
+      워드마크가 1536에서 470px · 390에서 120px 이라 한 값으로는 한쪽이 과해집니다.
+      그래서 폭 구간으로 두 벌(7px / 2px)을 두고 여기서 갈아 끼웁니다(둘 다 글자 크기의 1.5% 대).
+   ⚠️ `prefers-reduced-motion` 이면 필터를 통째로 끕니다(진입 애니메이션과 같은 규칙).
+   ========================================================================= */
+.wordmark-wave {
+  filter: url(#wm-wave-sm);
+}
+
+@media (min-width: 1024px) {
+  .wordmark-wave {
+    filter: url(#wm-wave-lg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-wave {
+    filter: none;
+  }
+}
+/* =========================================================================
+   🌊 글자 파도 ② `wordmark-wavefill` — **글자 안이 물에 잠긴다** (2026-08-24 오후 · 현재 기본)
+
+   사용자 피드백 2건이 이 구성을 만들었습니다.
+   ① **"파도가 안 보여. 글자 안에서 파도치게 해주면 될 것 같아."**
+      → `displace`(외곽선 밀기)는 인지가 안 됐습니다(0.5s 픽셀 변화 0.62%).
+   ② **"파도가 너무 지렁이 같이 얇다."**
+      → 1차 시안(가는 곡선 띠 3겹이 글자 속을 지나감)은 **폐기**했습니다. 지금은
+        **"물결치는 윗면 + 아래로 꽉 찬 면"** 세 겹이 서로 다른 수위로 겹쳐,
+        정지 프레임에서 **글자 아래쪽이 물에 잠겨 있고 수면이 출렁이는** 그림입니다.
+        (레퍼런스 `지안영어/과제-이미지/10-파도출렁임.html` 의 `…L1200,200 L0,200 Z` 채운 수면
+        + `background-position` 드리프트 + bob 구성을 **글자 내부에 이식**한 것입니다.)
+
+   구현은 지시서의 후보 **(a) CSS 전용** — `background-clip: text` + 수면 SVG data-URI 다중 배경
+   + `background-position` 키프레임. **필터 0개**입니다((b) SVG clipPath 는 쓸 필요가 없었습니다).
+
+   🚨 **`background-clip: text` 는 칸(`.wordmark-glyph`)에 겁니다** — 글자 자체(`.wordmark-fit`)가
+      아니라 칸입니다. 칸은 폭이 고정(잉크 폭)이고 `transform` 이 없어 배경 좌표가 안정적이고,
+      `background-clip: text` 는 **자손 글자까지 클립 대상**이라 결과가 같습니다.
+      ⚠️ two-line 로 되돌리면 `.wordmark-fit` 에 `scaleX` 가 붙습니다 — 되돌린 뒤 캡처로 확인하세요.
+   🚨 **바탕 잉크는 `background-color: var(--color-ink)`** 입니다(하드코딩 금지) — 팔레트·colorLab
+      을 그대로 따라갑니다. 물만 SVG 안에 **검정 알파**로 박혀 있는데, 히어로는 언제나
+      `data-band="void"`(어두운 밴드 = 잉크 흰색)라 "흰 글자 안 어두운 물"이 항상 성립합니다.
+
+   🆕 **2026-08-24 저녁 — 물 색을 CTA 보라로** (사용자 "히어로 I 흰색으로 바꾸고 파도를 기존 I
+      색상으로 변경해보자"). 🚨 **data-URI SVG 안에는 CSS 변수를 못 씁니다.** 그래서 SVG 는
+      **회색조 그대로 두고**(검정 알파 = 물의 깊이), 맨 위에 `var(--color-cta)` 한 겹을 깔아
+      **`background-blend-mode: color`** 로 색만 입힙니다.
+        `color` 블렌드 = `SetLum(소스, Lum(백드롭))` — **색상·채도는 소스(CTA), 명도는 백드롭**.
+        · 물이 없는 곳(백드롭 = 순백 잉크, Lum 1) → SetLum(보라, 1) = **정확히 흰색**
+          (ClipColor 가 흰으로 수렴 — `[data-band="void"]` 잉크가 `#ffffff` 라 성립).
+        · 물이 깊을수록 백드롭이 어두워져 **점점 진한 보라**가 됩니다.
+      ⇒ SVG 는 하드코딩인데도 **색은 100% `--color-cta` 를 따라갑니다**(팔레트·colorLab 전환
+        실측 확인 — `hero-final-palette-navy.png`).
+      🔁 **검정 물로 되돌리려면** `background-blend-mode` 줄과 첫 번째 `linear-gradient` 층,
+         그리고 `background-size/position/repeat` 의 **첫 항목만** 지우면 2026-08-24 오후로 복귀합니다.
+
+   ── 알파(= 물 깊이) ──
+   흰 글자 안에서 보라가 **또렷이 보여야** 해서 오후 값(2.6~4%)에서 크게 올렸습니다. 겹별 비율
+   (앞 1 : 중간 0.825 : 뒤 0.65)은 그대로 두고 앞 겹 최대 알파로 세 후보를 같은 구도로 비교:
+   `hero-final-wave-a35.png`(.35/.29/.23) · `a55`(.55/.45/.36) · `a75`(.75/.62/.49).
+   **a35 채택** — 가장 깊은 곳의 백드롭 명도가 **0.355** 로 `#6338EE` 자신의 명도(0.349)와
+   거의 같아 **바닥이 CTA 원색 그대로** 나옵니다(a55 는 0.158·a75 는 0.048 로 검게 죽어
+   "보라"가 아니라 "검정 얼룩"으로 읽힙니다 — 캡처 비교).
+   🚨 **칸마다 배경 원점이 달라 물결이 액센트 기둥에서 끊깁니다** — `hero.tsx` 가 칸별로
+      `--wm-wave-org`(줄 왼끝 기준 칸 x, 음수 em)를 넣어 위상을 이어 붙입니다.
+
+   ── 타일 구조 ──
+   viewBox `0 0 120 100` · `preserveAspectRatio="none"` · **세로는 세 겹 다 `1.4em`**.
+   수면 중심선은 타일의 **30/100 지점**이고 그 **아래는 타일 바닥(100)까지 꽉 찬 면**입니다.
+   타일이 칸 상자(0.82em)보다 훨씬 길어 어떤 수위에서도 **아래쪽이 비지 않습니다**
+   (그래서 `background-repeat` 는 **`repeat-x` 뿐** — 세로로 타일링하면 수면이 여러 개 생깁니다).
+
+   | 겹 | 파장 | 진폭(타일 단위 → em) | 드리프트 | 방향 | bob | 수위(캡 기준) | 알파 |
+   |---|---|---|---|---|---|---|---|
+   | 1 (앞) | 1.4em | 8 → 0.112em | 16s | ← | 5.4s | 아래 **55%** | .35 |
+   | 2 (중간) | 2.0em | 13 → 0.182em | 10s | → | 4.2s | 아래 **70%** | .29 |
+   | 3 (뒤) | 2.8em | 16 → 0.224em | 12s | ← | 3.4s | 아래 **88%** | .23 |
+
+   🚨 **겹 사이 수위 간격이 캡 높이의 15%p · 20%p** 입니다 — 사용자 "파도별 높이 차이가 더 나면
+      좋겠어". 뒤로 갈수록 **수위는 높고 진폭은 크고 색은 옅어** 원근이 읽힙니다. 겹칠수록
+      어두워지므로 아래에서 위로 **3단(전부/둘/하나)** 으로 밝아지는 층이 생깁니다.
+
+   파장은 **글자 폭(≈0.63~0.88em)의 1.6~4.4배** 라 잔물결이 아니라 **큰 너울**입니다.
+   세 겹이 겹쳐 바닥으로 갈수록 어두워집니다 — 합쳐진 최대 어둠 **약 9.6%**
+   (`1−(1−.040)(1−.033)(1−.026)`). **6 / 10 / 15% 세 후보를 같은 구도로 캡처 비교**해 고른 값입니다
+   (`hero-wavefill2-c{6,10,15}.png`). 수위는 먼저 **평균 35 / 50 / 65% 세 후보**(`hero-wavefill2-w{35,50,65}.png`)로 50% 를 고른 뒤,
+   사용자 "높이 차이" 지시로 **겹 간격 조합 두 후보**(`hero-wavefill2-lv{A,B}.png` — A 25/40/60 ·
+   B 18/40/68)를 다시 비교해 **A** 를 채택했습니다(B 는 앞 겹이 바닥에 깔려 층이 둘로만 읽힘).
+
+   ── 수위 상수 `--wm-wave-y{1,2,3}` ── (🆕 2026-08-24 2차: 55 / 70 / 88%)
+   칸 상자 위 변에서 베이스라인까지 **0.7644em**, 캡 높이 **0.7075em**(둘 다 이전 픽셀 스캔값),
+   타일 수면이 타일 위에서 **0.42em**(= 30/100 × 1.4em) 이므로
+   `y = 0.7644 − p × 0.7075 − 0.42` (p = 캡 아래에서부터의 수위 비율).
+
+   🚨 **움직임은 `@property` 로 등록한 길이 변수 6개**로 냅니다 — `background-position` 한 속성에
+      세 겹이 같이 들어 있어 겹마다 다른 duration 을 줄 방법이 이것뿐입니다(등록하지 않은 커스텀
+      속성은 보간이 안 되고 **툭툭 끊깁니다**).
+   🚨 **`animation-timing-function` 이 전부 `steps(…)`** 입니다 — 여섯 애니메이션의 스텝 길이를
+      **모두 50ms 로 맞춰**(16s/320 · 5.4s/108 · 10s/200 · 4.2s/84 · 12s/240 · 3.4s/68) 같은 순간에
+      한 번만 다시 그리게 했습니다. 60Hz 로 그리면 잉크 폭 전체(1470×390px)를 매 프레임 다시
+      칠해 **메인스레드 16.7% → 12.7%** 로 내려갑니다(실측). 한 스텝의 이동량은 가장 빠른 겹도
+      **3.6px**(F 468px 기준)이라 눈에는 연속으로 보입니다.
+      ⚠️ 스텝 길이가 어긋나면 초당 갱신 횟수가 오히려 늘어납니다 — duration 을 고치면
+      step 수도 `duration / 0.05` 로 함께 고치세요.
+   ⚠️ `prefers-reduced-motion` 이면 **물은 남기고 흐름만 정지**합니다.
+   ========================================================================= */
+@property --wm-wv1x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --wm-wv1y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --wm-wv2x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --wm-wv2y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --wm-wv3x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --wm-wv3y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.wordmark-wavefill {
+  /* 칸이 줄 왼끝에서 떨어진 만큼 배경을 뒤로 미는 값 (hero.tsx 가 인라인으로 준다) */
+  --wm-wave-org: 0em;
+  /* 수위 — 위 주석의 식으로 뽑은 값.
+     🆕 **2026-08-24 2차** 사용자 "히어로의 파도도 높이를 올려줘. 흰 부분이 적게 나오도록"
+        → 앞 25/중 40/뒤 60% ⇒ **앞 55 / 중 70 / 뒤 88%**(후보 비교표는 위 절 참고).
+        겹 사이 간격(15%p / 18%p)은 그대로라 원근은 유지된다. */
+  --wm-wave-y1: -0.04473em;
+  --wm-wave-y2: -0.15085em;
+  --wm-wave-y3: -0.2782em;
+
+  background-color: var(--color-ink);
+  background-image:
+    /* ⓪ 색 층 — 아래 회색 물결에 CTA 색만 입힌다(`background-blend-mode: color`) */
+    linear-gradient(var(--color-cta), var(--color-cta)),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100' preserveAspectRatio='none'><path fill='%23000' fill-opacity='0.35' d='M-120 30c15-8 45-8 60 0s45 8 60 0 45-8 60 0 45 8 60 0 45-8 60 0 45 8 60 0L240 100L-120 100Z'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100' preserveAspectRatio='none'><path fill='%23000' fill-opacity='0.29' d='M-120 30c15-13 45-13 60 0s45 13 60 0 45-13 60 0 45 13 60 0 45-13 60 0 45 13 60 0L240 100L-120 100Z'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100' preserveAspectRatio='none'><path fill='%23000' fill-opacity='0.23' d='M-120 30c15-16 45-16 60 0s45 16 60 0 45-16 60 0 45 16 60 0 45-16 60 0 45 16 60 0L240 100L-120 100Z'/></svg>");
+  background-size:
+    100% 100%,
+    1.4em 1.4em,
+    2em 1.4em,
+    2.8em 1.4em;
+  background-position:
+    0 0,
+    calc(var(--wm-wv1x) + var(--wm-wave-org)) calc(var(--wm-wv1y) + var(--wm-wave-y1)),
+    calc(var(--wm-wv2x) + var(--wm-wave-org)) calc(var(--wm-wv2y) + var(--wm-wave-y2)),
+    calc(var(--wm-wv3x) + var(--wm-wave-org)) calc(var(--wm-wv3y) + var(--wm-wave-y3));
+  /* 🚨 세로 반복 금지 — 타일이 상자보다 길어 아래는 이미 꽉 차 있고, 세로로 깔면 수면이 여러 겹 생긴다 */
+  background-repeat: no-repeat, repeat-x, repeat-x, repeat-x;
+  /* 🎨 색 층만 `color` — 물결 세 겹은 평범하게 겹친다(회색조 깊이) */
+  background-blend-mode: color, normal, normal, normal;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation:
+    wm-wavefill-x1 16s infinite,
+    wm-wavefill-y1 5.4s infinite alternate,
+    wm-wavefill-x2 10s infinite,
+    wm-wavefill-y2 4.2s infinite alternate,
+    wm-wavefill-x3 12s infinite,
+    wm-wavefill-y3 3.4s infinite alternate;
+  /* 여섯 개 전부 **스텝 50ms** — 같은 순간에 한 번만 다시 그린다(위 주석 참고) */
+  animation-timing-function:
+    steps(320), steps(108), steps(200), steps(84), steps(240), steps(68);
+}
+
+/* 드리프트 — 정확히 **한 파장**만큼 이동하므로 이음매가 없습니다(레퍼런스와 같은 방식).
+   1·3 겹은 왼쪽(음수), 2 겹은 오른쪽(양수)으로 흘러 방향이 엇갈립니다. */
+@keyframes wm-wavefill-x1 {
+  from {
+    --wm-wv1x: 0em;
+  }
+  to {
+    --wm-wv1x: -1.4em;
+  }
+}
+@keyframes wm-wavefill-x2 {
+  from {
+    --wm-wv2x: 0em;
+  }
+  to {
+    --wm-wv2x: 2em;
+  }
+}
+@keyframes wm-wavefill-x3 {
+  from {
+    --wm-wv3x: 0em;
+  }
+  to {
+    --wm-wv3x: -2.8em;
+  }
+}
+
+/* bob — 수위가 아주 조금 오르내립니다(`alternate` 라 왕복). 드리프트와 주기가 서로소에 가까워
+   세 겹이 같은 배치로 다시 만나기까지 아주 오래 걸립니다 = 반복이 눈에 안 띕니다. */
+@keyframes wm-wavefill-y1 {
+  from {
+    --wm-wv1y: -0.03em;
+  }
+  to {
+    --wm-wv1y: 0.03em;
+  }
+}
+@keyframes wm-wavefill-y2 {
+  from {
+    --wm-wv2y: 0.024em;
+  }
+  to {
+    --wm-wv2y: -0.024em;
+  }
+}
+@keyframes wm-wavefill-y3 {
+  from {
+    --wm-wv3y: -0.018em;
+  }
+  to {
+    --wm-wv3y: 0.018em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 물은 남기고 흐름만 멈춥니다 */
+  .wordmark-wavefill {
+    animation: none;
+  }
+}
+
+/* =========================================================================
+   🎬 **인트로 시퀀스** `enter: "intro"` (2026-08-24 · 현재 기본값)
+
+   사용자: **"홈페이지 입장할 때 검은 화면에서 '매출이 나는 홈페이지를 만듭니다.' 이 멘트가
+   저 파도 치는 물결이 점점 상승하는 느낌으로 화면 정중앙에 글씨가 나타났다가
+   지금 히어로 섹션 위치로 내려가고, 스밈의 I 도 다른 알파벳들이랑 같이 나타났으면 좋겠어."**
+
+   ── 층 구조 ──────────────────────────────────────────────────────────────
+   | 요소 | 하는 일 |
+   |---|---|
+   | `.hero-intro-h1` | 진짜 `h1`. **Phase B 이동**(`translateY` 하나)만 맡는다 |
+   | `.hero-intro-text` | 그 안의 진짜 흰 문장. 물이 다 차오른 뒤 **페이드인** |
+   | `.hero-intro-layer` | 복제본 담는 층. `position:absolute` 라 **레이아웃 영향 0** |
+   | `.hero-intro-water` | 복제 글자. **CTA 색 글자 + 물결 3겹 마스크**, 수위가 아래→위로 |
+   | `.hero-intro-cover` | 워드마크를 Phase A·B 동안 통째로 가리는 **밴드색 판** |
+
+   🚨 **물을 "칠"이 아니라 "마스크"로 낸다.** `.wordmark-wavefill` 이 쓰는
+      `background-clip:text` + `background-blend-mode:color` 방식은 **물이 없는 곳이 흰색**이라
+      (백드롭 잉크가 순백 → `SetLum(보라,1)` = 흰색) 차오르기 전에도 글자가 다 보인다.
+      인트로는 반대로 **차오르기 전에는 아무것도 안 보여야** 하므로,
+      글자색을 `var(--color-cta)` 로 두고 **물 모양을 마스크**로 씌운다 —
+      물이 없는 곳은 마스크 알파 0 = 완전 투명 = 검은 밴드 그대로다.
+      마스크 3겹은 `mask-composite` 기본값(`add`)으로 합쳐져
+      **깊을수록 진하고 마루 근처는 옅은** 3단이 생긴다(합성 알파 최대 0.886).
+      색은 `var(--color-cta)` 라 팔레트·colorLab 을 그대로 따라간다(SVG 안에는 흰 알파뿐).
+
+   🚨 **진짜 워드마크에는 손을 대지 않는다.** 칸마다 `background-clip:text` 가 걸려 있어
+      opacity 애니메이션을 얹으면 크롬이 층을 따로 합성해 글자를 못 잡는 사고가 있었다
+      (2026-08-24 저녁 "SUM M" 사건). 그래서 가리기는 **위에 덮는 판**(`.hero-intro-cover`)으로 한다.
+
+   🚨 **최종 상태가 픽셀 동일해야 한다** — 복제본·덮개는 마지막 키프레임에서
+      `visibility: hidden` 으로 죽고(= `.wordmark-wipe` 와 같은 방식), `h1` 의 최종 transform 은
+      `none` 이다. 문서 흐름·문서 높이는 처음부터 끝까지 안 변한다(전부 `absolute` + `transform`).
+
+   ⚠️ 타이밍 상수는 **전부 `hero.tsx`** 에 있고 `<section>` 인라인 변수로 내려온다
+      (`--intro-rise-*` · `--intro-tint-*` · `--intro-move-*` · `--intro-wm-*`).
+      여기 있는 `var(...)` 폴백 값은 그 상수들의 현재 값과 같게 유지할 것.
+   ========================================================================= */
+
+/* 수위(물 높이). 🚨 등록하지 않으면 보간이 안 되고 **50% 지점에서 툭 튄다** — `--wm-wv*` 와 같은 이유.
+   🚨 `initial-value` 는 반드시 **계산 독립적인 단위**여야 한다 — `2em` 으로 뒀더니 `@property` 규칙
+      자체가 무효가 되어 등록이 안 됐고, 차오름이 중간에 한 번 툭 뛰는 계단이 됐다(실측 확인).
+      키프레임 쪽 `em` 은 요소 글자 크기로 계산되므로 문제없다. */
+@property --hero-rise {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* -------------------------------------------------------------------------
+   Phase B 이동량 `--hero-intro-lift`
+   유도식은 `hero.tsx` 의 "Phase B 이동량" 주석 참고:
+     lift = −P_t/2 + 22px + S/2 − 0.41·F
+   `S`(메타+CTA 행 높이)만 레이아웃 실측 상수다.
+   ⚠️ 히어로 패딩(`pt-[68px] lg:pt-20`)이나 메타 블록 구성을 바꾸면 두 값을 다시 잴 것.
+   ------------------------------------------------------------------------- */
+[data-hero-statement] {
+  /* 🆕 v9 문장 배율 — 🚨 **구간마다 다르다**. 390 에서 워드마크가 F=120px 뿐이라
+     lg 와 같은 0.075 를 쓰면 문장이 **9px** 로 읽히지 않는다(실측) → <1024 는 **0.115**.
+     중앙 배율도 같은 비율로 올려 **확대 배율 k = center / ratio ≈ 2.13** 이 두 구간에서 같다. */
+  --hero-headline-ratio: 0.115;
+  --hero-headline-center: 0.2453;
+  /* 히어로 padding-top */
+  --hero-pad-top: 68px;
+  /* 메타 한 줄 + CTA 2개 블록의 높이 S (실측: 세로 스택) */
+  --hero-intro-block: 120.5px;
+}
+
+@media (min-width: 1024px) {
+  [data-hero-statement] {
+    --hero-headline-ratio: 0.075;
+    --hero-headline-center: 0.16;
+    --hero-pad-top: 80px;
+    /* 실측: 좌 메타 / 우 CTA 한 행 */
+    --hero-intro-block: 52px;
+  }
+}
+
+.hero-intro-h1 {
+  /* 🚨 `--wm-size` 는 워드마크 래퍼에서 상속된다 — 그래서 이 변수를 `h1` 에서 계산해야 한다
+     (섹션에 선언하면 그 자리에서 `var(--wm-size)` 가 없어 폴백으로 떨어진다).
+     🆕 v9: 상수항은 `hero.tsx` 의 `INTRO_LIFT_CONST_PX` 가 `--hero-intro-c` 로 내려준다. */
+  --hero-intro-lift: calc(
+    var(--hero-intro-c, 19.5px) - var(--hero-pad-top) / 2 - 0.41 * var(--wm-size)
+  );
+  /* 🚨 오른끝 정렬이라 **오른쪽 변**을 축으로 잡는다 — 배율 1(최종)에서 오른끝이 제자리에 남는다 */
+  transform-origin: right center;
+  animation: hero-intro-drop var(--intro-move-dur, 0.9s) cubic-bezier(0.65, 0, 0.3, 1)
+    var(--intro-move-delay, 1.8s) both;
+}
+
+@keyframes hero-intro-drop {
+  from {
+    /* 화면 정중앙 · 크게 → 제자리 · 제 크기 (v9: `scale` 이 붙었다) */
+    /* 가로 이동 = −(래퍼 폭의 절반) + (확대된 문장 잉크 폭의 절반)
+       = −(3.1124218 − 0.0131)/2 + 12.9675 × center / 2   ← 전부 숫자라 calc 로 바로 계산된다
+       확대 배율 k = center / ratio (두 구간에서 ≈2.13 으로 같다) */
+    transform: translate(
+        calc(var(--wm-size) * (-1.5496609 + 12.9675 * var(--hero-headline-center) / 2)),
+        var(--hero-intro-lift)
+      )
+      scale(calc(var(--hero-headline-center) / var(--hero-headline-ratio)));
+  }
+  to {
+    /* 🚨 최종은 반드시 `none` — 인트로 전 화면과 픽셀 동일해야 한다 */
+    transform: none;
+  }
+}
+
+/* 진짜 흰 문장 — 보라 복제본과 교대한다(= 사용자가 말한 "보라 → 흰색") */
+.hero-intro-text {
+  animation: hero-intro-text-in var(--intro-tint-dur, 0.4s) ease-out
+    var(--intro-tint-delay, 1.55s) both;
+}
+
+/* 🚨 **`opacity` 가 아니라 `color` 로 켠다** — opacity 애니메이션은 크롬이 그 요소를 **따로 합성**해
+   글자 안티에일리어싱이 서브픽셀(LCD) → 그레이스케일로 바뀌고, 애니메이션이 끝난 뒤에도
+   `enter: "split"` 빌드와 **문장 글자 가장자리가 전부 달라진다**(실측 diff 1,540px · 최대 279/765).
+   `color` 는 합성 층을 만들지 않아 최종 렌더가 **완전히 같다**(실측 diff 0). */
+@keyframes hero-intro-text-in {
+  from {
+    color: transparent;
+  }
+  to {
+    color: var(--color-ink);
+  }
+}
+
+/* 복제본을 담는 층 — 레이아웃에 끼어들지 않는다 */
+.hero-intro-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Phase A·B 동안 워드마크를 통째로 가리는 밴드색 판 (font-size 는 인라인으로 `--wm-size`) */
+.hero-intro-cover {
+  position: absolute;
+  top: -0.08em;
+  right: -0.6em;
+  bottom: -0.08em;
+  left: -0.6em;
+  background-color: var(--color-canvas);
+  pointer-events: none;
+  animation: hero-intro-cover-out var(--intro-cover-dur, 0.35s) ease-out
+    var(--intro-cover-delay, 2.3s) both;
+}
+
+@keyframes hero-intro-cover-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   🌊 **Phase C-1 (a) `flow` — 물이 왼쪽에서 밀려 들어온다** (2026-08-24 4차)
+
+   사용자: **"파도치는 모양대로 나올 순 없는걸까? 처음에 파도모양만 나오다가 — 흰 부분 차오르기"**
+   3차의 "평면 덮개 페이드 아웃"은 물이 **그냥 뿅** 나타나 보였다. 등장 자체를 **움직임**으로 만든다.
+
+   평면 덮개에 **가로 그라데이션 마스크**를 씌우고 그 경계를 왼→오로 지나가게 한다.
+   덮개가 지나간 자리에서 물이 드러나는데, **위 경계는 수면 덮개(`.hero-intro-crest`)** 라
+   드러나는 순간부터 **물결 파형 그대로**이고 그 파형이 상시 드리프트로 흐르고 있다
+   ⇒ "물이 밀려 들어와 찬다"로 읽히고, **정지 프레임에서도 물결 윤곽이 보인다**.
+
+   🚨 `--hero-flow` 는 **`<length-percentage>`** 로 등록한다 — 이동 끝을 상자 폭(100%)으로
+      잡아야 워드마크 크기·뷰포트와 무관하게 항상 끝까지 지나간다(px/em 으로 박으면 어긋난다).
+   페더 **0.5em** = 워드마크 잉크 폭(3.11em)의 16% — 더 좁으면 칼로 자른 듯하고,
+   더 넓으면 밀려오는 방향감이 사라진다(2026-08-23 `wipe` 절의 같은 교훈).
+   ------------------------------------------------------------------------- */
+@property --hero-flow {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+/* 🔁 `flow` 방식(2026-08-24 4차) — 5차 "바닥부터 상승" 지시로 기본에서 내려왔다. 코드 보존 */
+.hero-intro-cover--flow {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent calc(var(--hero-flow) - 0.28em),
+    #000 var(--hero-flow)
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent calc(var(--hero-flow) - 0.28em),
+    #000 var(--hero-flow)
+  );
+  /* 🚨 `opacity` 페이드(3차)를 **덮어쓴다** — 두 방식이 겹치면 밀려오는 동안 전체가 옅어진다 */
+  animation: hero-intro-flow var(--intro-cover-dur, 0.6s) cubic-bezier(0.25, 0.6, 0.35, 1)
+    var(--intro-cover-delay, 2.15s) both;
+}
+
+@keyframes hero-intro-flow {
+  from {
+    --hero-flow: 0%;
+  }
+  to {
+    /* 100% + 페더 만큼 더 가야 오른쪽 끝까지 완전히 빠진다 */
+    --hero-flow: 118%;
+    visibility: hidden;
+  }
+}
+
+
+/* -------------------------------------------------------------------------
+   🌊 **수면 모양 덮개** `.hero-intro-crest` — Phase C 를 두 걸음으로 (2026-08-24 3차)
+
+   사용자: **"히어로의 스밈 처음 생길 때도 색이 차오르지 말고, 글자 내에서 파도 모양이 먼저
+   보이고 비어 있는 부분이 흰 색상으로 차오르게 해줘."**
+
+   ⇒ **진짜 워드마크에는 여전히 아무것도 걸지 않는다.** 밴드색 덮개 **두 장**의 걷히는 순서로만
+     만든다 — 그래서 최종 상태가 **구조적으로 픽셀 동일**하고 복제본도 필요 없다.
+
+   | 시각 | `.hero-intro-cover`(평면) | `.hero-intro-crest`(수면 모양) | 화면 |
+   |---|---|---|---|
+   | ~2.30s | 불투명 | 불투명(수면 위만) | 워드마크 전부 검정 |
+   | 2.30 → 2.65s | **페이드 아웃** | 그대로 | **수면 아래 = 물 부분만** 스르륵 나타남 |
+   | 2.60 → 3.35s | 없음 | **아래→위로 물러남** | 빈 자리가 **흰색으로 차오름** |
+   | 3.35s~ | 없음 | 없음(`visibility: hidden`) | 최종 워드마크 |
+
+   ── 마스크 **한 겹** (2026-08-25 · 지시 "그라데이션은 아예 지우자") ──
+   물결 타일의 **상하 반전판**(물결 **위쪽**이 불투명) 하나뿐이다. 그라데이션 스톱이 **0개**이고
+   알파는 1 뿐이며, 계단 방지용 `feGaussianBlur stdDeviation="0.5"`(= 0.5/240 × 4.8em = **0.01em**)만 있다.
+   `.wordmark-wavefill` 의 **앞 겹과 같은 파형·같은 위상**이라(파장 1.4em · 진폭 0.112em
+   = 5.6/240 × 4.8em · 드리프트/bob 도 같은 `--wm-wv1x` / `--wm-wv1y` 키프레임) 덮개가 걷힌 자리와
+   최종 화면 사이에 **파형이 튀지 않는다**.
+   🚨 위치 상수
+     세로 `var(--wm-wv1y) + var(--hero-front) − 2.4em`
+          (`--hero-front` = 덮개 상자 위 변 기준 **전선 y** · 2.4em = 타일 위 변에서 수면까지)
+     가로 `var(--wm-wv1x) + 0.5869em` = 덮개 왼쪽 넘침 0.6 − 워드마크 광학 보정 0.0131
+
+   ── 🚨 **한 번에 등속으로 올라간다** (2026-08-25 · 사용자 "보라색 차고 잠깐 멈추고 흰색 차는 게
+      어색하다. 보라색이랑 같은 속도로 흰색이 차오르면") ──
+   앞 판은 [물 복제본 상승] → [흰색 앞단 상승] **두 애니메이션을 딜레이로 이어 붙여** 경계에서
+   멈춤이 보였다. 지금은 **전선 변수 하나(`--hero-front`)** 가 잉크 바닥에서 꼭대기까지
+   `linear` 로 한 번에 올라가고, 드러나는 것이 **진짜 워드마크**라
+     · 전선이 55% 수위 **아래**면 드러난 자리가 물(보라)이고
+     · 55% 수위를 **지나면** 그 위가 흰색이다
+   → "보라 → 정지 → 흰색" 2막이 아니라 **하나의 상승**이고, 55% 지점에 정지 프레임이 없다.
+   덤으로 인트로 전용 파형이 사라져 **파도 크기가 최종 상시 파도와 정의상 같다**.
+   ------------------------------------------------------------------------- */
+@property --hero-white {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.hero-intro-crest {
+  position: absolute;
+  top: -0.08em;
+  right: -0.6em;
+  bottom: -0.08em;
+  left: -0.6em;
+  background-color: var(--color-canvas);
+  pointer-events: none;
+  /* 🚨 마스크는 **한 겹**이다 — 물결 타일의 상하 반전판(물결 **위쪽**이 불투명).
+     그라데이션 스톱이 하나도 없고(지시 "그라데이션은 아예 지우자") 알파는 1 뿐이며,
+     계단 방지용 `feGaussianBlur stdDeviation="0.5"`(= 0.5/240 × 4.8em = **0.01em**)만 있다. */
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 240' preserveAspectRatio='none'><defs><filter id='b' filterUnits='userSpaceOnUse' x='-130' y='-40' width='380' height='260'><feGaussianBlur stdDeviation='0.5'/></filter></defs><path fill='%23fff' filter='url(%23b)' d='M-120 120c15-5.6 45-5.6 60 0s45 5.6 60 0 45-5.6 60 0 45 5.6 60 0 45-5.6 60 0 45 5.6 60 0L240 0L-120 0Z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 240' preserveAspectRatio='none'><defs><filter id='b' filterUnits='userSpaceOnUse' x='-130' y='-40' width='380' height='260'><feGaussianBlur stdDeviation='0.5'/></filter></defs><path fill='%23fff' filter='url(%23b)' d='M-120 120c15-5.6 45-5.6 60 0s45 5.6 60 0 45-5.6 60 0 45 5.6 60 0 45-5.6 60 0 45 5.6 60 0L240 0L-120 0Z'/></svg>");
+  -webkit-mask-size: 1.4em 4.8em;
+  mask-size: 1.4em 4.8em;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  /* 🚨 `− 2.4em` = 타일 위 변에서 수면까지. `--hero-front` 가 **덮개 상자 위 변 기준 전선 y** 다.
+     가로 `+ 0.5869em` = 덮개 왼쪽 넘침 0.6 − 워드마크 광학 보정 0.0131 → 상시 파도와 **같은 위상**. */
+  -webkit-mask-position: calc(var(--wm-wv1x) + 0.5869em)
+    calc(var(--wm-wv1y) + var(--hero-front) - 2.4em);
+  mask-position: calc(var(--wm-wv1x) + 0.5869em)
+    calc(var(--wm-wv1y) + var(--hero-front) - 2.4em);
+  /* 🚨 이징이 **`linear`** 다 — 지시 "보라색이랑 같은 속도로 흰색이 차오르면".
+     전선이 글자 바닥에서 꼭대기까지 **한 번에 등속**으로 올라가고, 55% 수위를 지나는 순간부터
+     그 위가 흰색으로 채워진다(드러나는 것이 **진짜 워드마크**라 자동으로 그렇게 된다). */
+  animation-name: hero-intro-front-rise, wm-wavefill-x1, wm-wavefill-y1;
+  animation-duration: var(--intro-wm-phase-dur, 1.3s), 16s, 5.4s;
+  animation-delay: var(--intro-wm-delay, 2.15s), 0s, 0s;
+  animation-timing-function: linear, steps(320), steps(108);
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+@property --hero-front {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* 전선 — 잉크 바닥 아래(0.98em)에서 잉크 꼭대기 위(−0.06em)까지 **1.04em 을 등속**으로.
+   덮개 상자 좌표라 잉크는 0.127 ~ 0.855em 이고, 물결 마루(±0.112em)와 blur 여유를 뺀 값이다.
+   ⚠️ 최종 상시 파도(`.wordmark-wavefill`)의 앞 겹 수위는 이 좌표계에서 **0.4554em** —
+      전선이 그 지점을 지날 때가 "물 → 흰색"이 바뀌는 순간이고, **정지 구간이 없다**. */
+@keyframes hero-intro-front-rise {
+  from {
+    --hero-front: 0.98em;
+  }
+  to {
+    --hero-front: -0.06em;
+    /* 마스크가 비어 페인트는 이미 0 이지만 합성 층까지 확실히 죽인다 */
+    visibility: hidden;
+  }
+}
+
+/* 🔁 아래 두 변수·키프레임은 `INTRO_WM_MODE: "water"` 와 `INTRO_C1_MODE: "swell"` 이 쓴다(보존) */
+@property --hero-crest {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+/* 수면 — 잉크 바닥 아래(0.90em)에서 최종 수위(0)까지. 46% = C-1(0.6s) / 전체(1.3s) */
+@keyframes hero-intro-crest-rise {
+  0% {
+    --hero-crest: 0.9em;
+  }
+  46% {
+    --hero-crest: 0em;
+  }
+  100% {
+    --hero-crest: 0em;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   🌊 **Phase C-1 (b) `swell` — 수면이 한 번 크게 넘실하고 안착** (보조)
+
+   물이 최종 수위보다 **0.34em 낮게** 시작해 수면이 최종보다 **0.12em 위까지 넘쳤다가**
+   되돌아와 안착한다. 평면 덮개는 0.18s 만에 사라지고 나머지는 **수면의 상하 운동**이다.
+   ⚠️ `--hero-white`(C-2 앞단) 시작값을 **0.95em** 으로 내려야 한다 — 넘실 중 수면이
+      0.675 + 마루 0.112 = **0.787em** 까지 내려가는데, 3차 값 0.78em 이면 그 위를 잘라
+      물결 모양이 직선으로 뭉개진다. 대신 보이지 않는 앞 구간을 키프레임 22% 로 압축한다.
+   ------------------------------------------------------------------------- */
+@property --hero-swell {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.hero-intro-crest--swell {
+  --hero-swell-anim: hero-intro-swell;
+  --hero-white-anim: hero-intro-white-rise-swell;
+}
+
+@keyframes hero-intro-swell-none {
+  from {
+    --hero-swell: 0px;
+  }
+  to {
+    --hero-swell: 0px;
+  }
+}
+
+@keyframes hero-intro-swell {
+  0% {
+    --hero-swell: 0.34em;
+  }
+  42% {
+    --hero-swell: -0.12em;
+  }
+  72% {
+    --hero-swell: 0.05em;
+  }
+  100% {
+    --hero-swell: 0em;
+  }
+}
+
+@keyframes hero-intro-white-rise-swell {
+  0% {
+    --hero-white: 0.95em;
+  }
+  22% {
+    --hero-white: 0.74em;
+  }
+  100% {
+    --hero-white: -0.02em;
+  }
+}
+
+/* 흰색 앞단 — C-2 에서만 돈다. 시작 0.62em 은 수면 마루(0.4554 + 0.112 = 0.567em)보다 **아래**라
+   출발 순간에 물결 모양이 잘리지 않는다. */
+@keyframes hero-intro-white-rise {
+  from {
+    --hero-white: 0.62em;
+  }
+  to {
+    --hero-white: -0.02em;
+    /* 마스크가 비어 페인트는 이미 0 이지만 합성 층까지 확실히 죽인다 */
+    visibility: hidden;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   🌊 차오르는 물 — 복제 글자에 씌우는 **물결 마스크** (2026-08-24 2차 · 사용자 피드백)
+   🔁 아래는 `INTRO_WM_MODE: "water"`(1차 방식) 와 **문장(Phase A)** 이 쓴다.
+      워드마크 기본 방식은 위 `.hero-intro-crest` 절이다.
+
+   1차(마스크 3겹 · 각 겹 **단색 알파** .62/.50/.40)는 사용자 지적 두 가지를 낳았다.
+   ① **"차오르는 동안 텍스트 윤곽이 살짝 보인다"**
+   ② **"파도는 그라데이션 줘서 자연스럽게. 지금 선들이 있어서 눈에 잘 안 들어온다"**
+
+   🚨 **① 원인 = 마스크 타일의 "위 변"이 잉크를 가로지르고 있었다** (픽셀로 규명).
+      t=0.8s 프레임을 행 단위로 스캔하니 물 위쪽에 **정확히 3줄**만 밝은 행이 있었고
+      그 y 가 세 겹의 `mask-position-y`(= 타일 위 변) 와 **1px 오차 없이 일치**했다
+      (실측 y 337 / 356 / 364, 최대 밝기 **3 / 4 / 5** — 255 기준).
+      `.hero-intro-water` 만 끄면 0 이 되므로 진짜 `h1`·덮개·안티에일리어싱이 아니라
+      **마스크 타일 자신**이다. 타일 위 변에서 리샘플링 알파가 완전히 0 이 되지 않아
+      **1px 짜리 아주 옅은 가로선**이 남고, 그 선이 글자를 지나가 "윤곽"으로 읽혔다.
+      ⇒ **해결: 타일 위 변을 잉크 밖으로 밀어낸다.** 타일 세로를 1.4em → **4.8em** 으로 키우고
+        수면을 타일 **위에서 2.4em** 지점에 둔다. 수위가 가장 낮을 때(=시작)도 타일 위 변이
+        `rise − 2.4em` = **−0.85em**(상자 위 변보다 위)이라 **어떤 순간에도 잉크와 안 만난다**.
+        아래 변도 마찬가지다(수면에서 2.4em 아래 = 잉크 맨 아래보다 항상 더 아래).
+
+   🚨 **② 원인 = 겹마다 알파가 단색이라 겹 경계가 계단(선)** 이었다. 셋을 함께 건다.
+        ⓐ 겹을 **3 → 2** 로 줄인다(경계 하나 감소 — 지시에서 허용).
+        ⓑ 🆕 **2026-08-24 5차 — 그라데이션은 전부 뺐다.** 사용자 "그라데이션 줘도 여전히 어색"
+           → 물은 **균일한 불투명 색**이고 수면 경계는 **또렷한 파형**이다. 층 구분은
+           **겹별 알파**만으로 낸다: **앞 겹 1.0 / 뒤 겹 0.5**. 두 겹이 겹치는 몸통은
+           알파 1(원색 그대로)이고, 앞 겹 마루와 뒤 겹 마루 사이만 0.5 로 한 단 옅다.
+        ⓒ 계단(에일리어싱) 방지용 **`feGaussianBlur stdDeviation="0.5"`(0.01em)** 만 남겼다 —
+           지시 상한 0.03em 안이고 "그라데이션으로 흐려지는" 느낌은 나지 않는다.
+
+   ── 타일 구조 ──
+   viewBox `0 0 120 240` · `preserveAspectRatio="none"` · **세로 4.8em** ·
+   수면 중심선 **y=120**(타일 위에서 2.4em) · 아래는 240 까지 꽉 참(수면 아래 2.4em).
+   진폭(단위) = em × 50 → 앞 겹 **6.5(0.13em)** · 뒤 겹 **13(0.26em)**.
+
+   | 겹 | 파장 | 진폭 | 수위 | 드리프트 | bob |
+   |---|---|---|---|---|---|
+   | 앞 | 1.4em | 0.13em | 기준 | 16s ← | 5.4s |
+   | 뒤 | 2.8em | 0.26em | 기준 −0.16em | 12s ← | 3.4s |
+
+   🚨 **파장을 1.4em / 2.8em 그대로 두는 이유** — 드리프트 키프레임(`wm-wavefill-x1`/`x3`)이
+      `.wordmark-wavefill` 과 공용이고 **정확히 한 파장**을 움직여 이음매를 없앤다.
+      파장을 바꾸면 그 키프레임을 따로 만들어야 한다(= 상시 파도와 값이 갈린다).
+
+   ── 색 (2026-08-24 2차, 사용자 "색상도 좀 더 밝게 해서 검은 화면에서 잘 보이게") ──
+   `--color-cta`(#6338EE) 는 검정 위 대비가 **3.33:1** 뿐이라 어둡다.
+   하드코딩하지 않고 **밴드 잉크(흰색) 쪽으로 섞어** 명도만 올린다:
+     `color-mix(in srgb, var(--color-cta) 65%, var(--color-ink))`
+   `[data-band="void"]` 에서 `--color-ink` 가 `#ffffff` 라 결과는
+   **#9a7ef4 · 검정 대비 6.63:1** (기존 팔레트가 어두운 면용으로 파생하는 `accentOnDark`
+   #9b7dff 6.77:1 과 사실상 같은 자리다). 팔레트·colorLab 을 바꾸면 두 변수를 그대로 따라간다.
+   ⚠️ **최종 상태(진짜 워드마크의 상시 파도·흰 문장)는 이 값과 무관하다** — 인트로 복제본 전용이다.
+
+   좌우 드리프트·bob 은 `.wordmark-wavefill` 의 키프레임을 **그대로 재사용**한다
+   (`iteration-count: 1` — 인트로가 끝나면 더 돌 필요가 없다).
+   ------------------------------------------------------------------------- */
+.hero-intro-water {
+  /* 섞는 비율만 바꾸면 밝기가 조절된다 (100% = 원색 CTA 3.33:1 · 80% 4.86:1 · 65% 6.63:1 · 50% 8.89:1) */
+  --hero-water-mix: 65%;
+  color: color-mix(in srgb, var(--color-cta) var(--hero-water-mix), var(--color-ink));
+  -webkit-mask-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 240' preserveAspectRatio='none'><defs><filter id='b' filterUnits='userSpaceOnUse' x='-130' y='60' width='380' height='220'><feGaussianBlur stdDeviation='0.5'/></filter></defs><path fill='%23fff' fill-opacity='1' filter='url(%23b)' d='M-120 120c15-6.5 45-6.5 60 0s45 6.5 60 0 45-6.5 60 0 45 6.5 60 0 45-6.5 60 0 45 6.5 60 0L240 240L-120 240Z'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 240' preserveAspectRatio='none'><defs><filter id='b' filterUnits='userSpaceOnUse' x='-130' y='60' width='380' height='220'><feGaussianBlur stdDeviation='0.5'/></filter></defs><path fill='%23fff' fill-opacity='0.5' filter='url(%23b)' d='M-120 120c15-13 45-13 60 0s45 13 60 0 45-13 60 0 45 13 60 0 45-13 60 0 45 13 60 0L240 240L-120 240Z'/></svg>");
+  mask-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 240' preserveAspectRatio='none'><defs><filter id='b' filterUnits='userSpaceOnUse' x='-130' y='60' width='380' height='220'><feGaussianBlur stdDeviation='0.5'/></filter></defs><path fill='%23fff' fill-opacity='1' filter='url(%23b)' d='M-120 120c15-6.5 45-6.5 60 0s45 6.5 60 0 45-6.5 60 0 45 6.5 60 0 45-6.5 60 0 45 6.5 60 0L240 240L-120 240Z'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 240' preserveAspectRatio='none'><defs><filter id='b' filterUnits='userSpaceOnUse' x='-130' y='60' width='380' height='220'><feGaussianBlur stdDeviation='0.5'/></filter></defs><path fill='%23fff' fill-opacity='0.5' filter='url(%23b)' d='M-120 120c15-13 45-13 60 0s45 13 60 0 45-13 60 0 45 13 60 0 45-13 60 0 45 13 60 0L240 240L-120 240Z'/></svg>");
+  -webkit-mask-size:
+    1.4em 4.8em,
+    2.8em 4.8em;
+  mask-size:
+    1.4em 4.8em,
+    2.8em 4.8em;
+  /* 🚨 세로 반복 금지 — 타일이 수면 아래 2.4em 까지 꽉 차 있고, 세로로 깔면 수면이 여러 개 생긴다 */
+  -webkit-mask-repeat: repeat-x, repeat-x;
+  mask-repeat: repeat-x, repeat-x;
+  /* `− 2.4em` = 타일 위 변에서 수면까지 · 뒤 겹은 `− 0.16em` 만큼 수위가 높다 */
+  -webkit-mask-position:
+    var(--wm-wv1x) calc(var(--hero-rise) + var(--wm-wv1y) - 2.4em),
+    var(--wm-wv3x) calc(var(--hero-rise) + var(--wm-wv3y) - 2.56em);
+  mask-position:
+    var(--wm-wv1x) calc(var(--hero-rise) + var(--wm-wv1y) - 2.4em),
+    var(--wm-wv3x) calc(var(--hero-rise) + var(--wm-wv3y) - 2.56em);
+  animation-name:
+    var(--hero-rise-anim), hero-intro-water-out, wm-wavefill-x1, wm-wavefill-y1, wm-wavefill-x3,
+    wm-wavefill-y3;
+  animation-duration: var(--hero-water-dur), var(--intro-tint-dur, 0.4s), 16s, 5.4s, 12s, 3.4s;
+  animation-delay: var(--hero-water-delay), var(--hero-water-out-delay), 0s, 0s, 0s, 0s;
+  /* 🚨 차오름 이징은 **ease-in-out 계열**이다 — 앞이 빠른 `ease-out` 계열(첫 시도
+     `cubic-bezier(.33,0,.25,1)`)은 0.43 지점에서 이미 진행률 0.72 라 캡처가 **거의 다 찬 상태**로
+     나왔다(수면이 훅 지나가고 뒤가 죽는다). 드리프트·bob 은 `.wordmark-wavefill` 과 같은 50ms 스텝 */
+  animation-timing-function:
+    cubic-bezier(0.4, 0, 0.6, 1), ease-in, steps(320), steps(108), steps(240), steps(68);
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+/* 문장(`h1`, `line-height: 1`) — 베이스라인 0.88em · 한글 캡 ≈0.72em → 잉크 0.16 ~ 0.88em */
+.hero-intro-water--text {
+  --hero-rise-anim: hero-intro-rise-text;
+  --hero-water-dur: var(--intro-rise-dur, 1.5s);
+  --hero-water-delay: var(--intro-rise-delay, 0.15s);
+  --hero-water-out-delay: var(--intro-tint-delay, 1.55s);
+}
+
+/* 워드마크(`leading-[0.82]`) — 베이스라인 0.7644em · 캡 0.7075em → 잉크 0.0569 ~ ≈0.775em */
+/* 🚨 **문장과 완전히 같은 물이다** — `.hero-intro-water` 의 타일·알파·색·드리프트·이징을
+   그대로 물려받고 여기서는 **시간과 도달 수위만** 다르게 준다(사용자 "첫 인트로 등장 부분처럼
+   SUMIM 도 똑같이 파도 적용해줘"). 크기 기준이 `--wm-size` 라 파장·진폭도 글자에 비례한다. */
+.hero-intro-water--wm {
+  --hero-rise-anim: hero-intro-rise-wm;
+  --hero-water-dur: var(--intro-wm-wave-in, 0.6s);
+  --hero-water-delay: var(--intro-wm-delay, 2.15s);
+  --hero-water-out-delay: var(--intro-wm-out-delay, 2.75s);
+}
+
+/* -------------------------------------------------------------------------
+   🚨 **수위 범위는 "수면 기준선"이 아니라 "마루/골"로 잡아야 한다** (1차 캡처 실패에서 배운 것)
+
+   기준선만 보고 잡았더니 t=0 프레임에서 워드마크 아래쪽이 이미 보라로 비쳤다 —
+   파도는 기준선 ± **진폭**으로 출렁이고 bob·blur 도 얹히기 때문이다. 2겹 판 기준:
+     진폭 = 0.13 / 0.26em · bob = 0.03 / 0.018em · 수위 차 = 0 / −0.16em · blur 3σ ≈ 0.08em
+   ⇒ 가장 높이 올라오는 골 ≈ 기준선 − (0.16 + 0.26 + 0.018 + 0.08) = 기준선 − **0.52em**
+   ⇒ 알파 1 이 되는 깊이 ≈ 기준선 + (0.13 + 0.03 + 0.80) = 기준선 + **0.96em**
+      (0.80em = 그라데이션이 알파 1 에 닿는 깊이 — 위 타일 설명 참고)
+
+   잉크 세로 범위(픽셀 스캔 · 1536 · 상자 위 변 기준 em):
+     문장 `h1`   **0.047 ~ 0.950em** → from ≥ 0.95 + 0.52 = 1.47 · to ≤ 0.047 − 0.96 = −0.913
+     워드마크    **0.047 ~ 0.775em** → from ≥ 1.295 · to ≤ −0.913
+   여유를 조금 더 얹어 아래 값을 쓴다. ⚠️ 바꾸면 **t=0.16s 가 완전 검정**인지,
+   **다 찬 프레임에 빈 곳이 없는지** 두 캡처로 반드시 확인할 것.
+   ------------------------------------------------------------------------- */
+/* 🆕 5차: 그라데이션을 빼서 **수면 바로 아래가 이미 알파 1** 이다 → 예전처럼 0.8em 을 더 내려갈
+   필요가 없어 이동 폭이 2.50 → **1.61em** 으로 줄었다(같은 시간에 수면이 더 또렷하게 지나간다).
+     from ≥ 잉크아래 0.95 + (수위차 0.16 + 진폭 0.26 + bob 0.018 + blur 0.01) = 1.398
+     to   ≤ 잉크위 0.047 − (진폭 0.13 + bob 0.03 + blur 0.01) = −0.123 */
+@keyframes hero-intro-rise-text {
+  from {
+    --hero-rise: 1.45em;
+  }
+  to {
+    --hero-rise: -0.16em;
+  }
+}
+
+/* 🚨 워드마크는 **끝까지 잠기지 않는다** — 교대 시점에 수면이 튀지 않도록
+   상시 파도(`.wordmark-wavefill`)의 **앞 겹 수위와 같은 자리**에서 멈춘다.
+   앞 겹 55% ⇒ 수면 = 0.7644 − 0.55 × 0.7075 = **0.3754em**(상자 위 변 기준). */
+/* 워드마크는 **끝까지 잠기지 않는다** — 상시 파도(`.wordmark-wavefill`)의 **앞 겹 수위와 같은 자리**
+   에서 멈춘 뒤 C-2 흰색 상승으로 이어진다. 앞 겹 55% ⇒ 0.7644 − 0.55 × 0.7075 = **0.3754em**.
+   from 은 잉크 바닥(0.775) + (수위차 0.16 + 진폭 0.26 + bob 0.018 + blur 0.01) = 1.223 보다 아래. */
+@keyframes hero-intro-rise-wm {
+  from {
+    --hero-rise: 1.3em;
+  }
+  to {
+    --hero-rise: 0.3754em;
+  }
+}
+
+@keyframes hero-intro-water-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    /* 🚨 여기서 확실히 죽인다 — 안 그러면 최종 화면에 투명한 복제본이 남아 페인트를 계속 먹는다 */
+    visibility: hidden;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   🕶 **인트로 동안 상단 고정 네비 숨김** (2026-08-24)
+
+   사용자: **"첫 문장 등장 화면에서는 헤더도 가려졌으면 좋겠어"**
+
+   🚨 **`:has()` 로 페이지 범위를 좁힌다** — 네비는 루트 레이아웃에 있어 `/contact` 등에도 뜨는데,
+      `data-hero-intro="on"` 은 **히어로가 `enter: "intro"` 일 때만** 붙는다. 다른 `enter` 모드나
+      히어로가 없는 페이지에서는 이 규칙이 아예 안 걸린다.
+   🚨 **덮개로 가리지 않는다** — 네비가 `fixed z-50` 이라 덮으려면 층을 더 올려야 하고 그러면
+      클릭 히트영역·스크롤까지 막힌다. 투명도만 다루고, 투명한 동안은 `pointer-events: none` 이라
+      **안 보이는 버튼이 클릭을 먹지 않는다**.
+   ⚠️ 값은 `hero.tsx` 의 `INTRO_NAV_DELAY` / `INTRO_NAV_DUR` 와 **손으로 맞춰야** 한다
+      (네비가 히어로의 자손이 아니라 인라인 변수를 물려받을 수 없다).
+   ⚠️ 인트로가 끝나면 `opacity: 1` 이라 **평소와 완전히 동일**하다 — 스크롤 시 밴드 반전,
+      모바일 햄버거, 하단 상담 바 로직에 아무 영향이 없다.
+   ------------------------------------------------------------------------- */
+body:has([data-hero-intro="on"]) .site-nav {
+  animation: hero-intro-nav-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.85s both;
+}
+
+@keyframes hero-intro-nav-in {
+  from {
+    opacity: 0;
+    pointer-events: none;
+  }
+  to {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 네비는 숨기지 않는다 — 즉시 표시 */
+  body:has([data-hero-intro="on"]) .site-nav {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 인트로 없이 **최종 상태 즉시 표시** */
+  .hero-intro-water,
+  .hero-intro-cover,
+  .hero-intro-crest {
+    display: none;
+  }
+
+  .hero-intro-h1,
+  .hero-intro-text {
+    animation: none;
+  }
+}
