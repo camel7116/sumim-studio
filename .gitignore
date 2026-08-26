@@ -25,3 +25,6 @@ next-env.d.ts
 
 # custom prod build dir
 /.next-prod/
+
+.vercel
+.env*

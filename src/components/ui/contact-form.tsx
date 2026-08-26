@@ -25,7 +25,12 @@ type ContactFormState = {
  * 무료 플랜은 서버(IP) 호출을 막고 브라우저 제출만 허용하므로 클라이언트에서 전송한다.
  * 이 키는 "폼 수신 주소 지정용"으로 공개를 전제로 설계된 값이라 번들 노출이 안전하다.
  */
-const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+// 🚨 2026-08-26: 배포(sumimstudio.co.kr)에서 환경변수 미설정으로 키가 비어
+// "전송 생략 → /thanks" 폴백을 타는 사고가 있었다(사용자 실제 문의 유실).
+// 위 주석대로 공개 전제 키라 코드 폴백으로 박아 환경변수 없이도 항상 전송된다.
+// (Vercel 에 NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY 를 넣으면 그 값이 우선한다)
+const WEB3FORMS_ACCESS_KEY =
+  process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "14da2a47-28fc-46af-90d5-c093caaae28d";
 
 const inputClass =
   "w-full rounded-[12px] border border-line-strong bg-surface px-4 py-3 text-body-m text-ink placeholder:text-ink-secondary focus-visible:border-focus";

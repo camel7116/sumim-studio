@@ -112,7 +112,14 @@ export function TestimonialMarquee() {
           🚨 셋 다 **`lg` 미만 전용**입니다 — `lg:items-end` · `lg:text-left` · `lg:justify-start`
              로 데스크톱 상단 2단(좌 헤딩 / 우 스탯, 아랫단 정렬)은 **한 픽셀도 안 바뀝니다**.
         */}
-        <Reveal className="flex flex-wrap items-center justify-center gap-x-3 lg:flex-nowrap lg:items-end lg:justify-between lg:gap-12">
+        {/*
+          🚨 `gap-x` 는 **모바일에서 헤딩과 스탯 사이 간격**이다 (2026-08-26 사용자 "제목이랑
+          티오 부분 너무 붙어있다"). 375px 실측으로 `gap-x-3`(12px) 이었고 헤딩 끝 185 ↔
+          스탯 시작 197 이라 두 덩어리가 붙어 보였다 → **`gap-x-5`(20px)**.
+          ⚠️ 더 벌리면 [헤딩+스탯] 덩어리가 넓어져 좌우 여백이 그만큼 줄고, 결국 헤딩이
+             한 줄 더 접힌다(375 기준 여유가 30px 대뿐이다). `lg:gap-12` 는 그대로.
+        */}
+        <Reveal className="flex flex-wrap items-center justify-center gap-x-5 lg:flex-nowrap lg:items-end lg:justify-between lg:gap-12">
           <div className="min-w-0 text-center lg:max-w-[640px] lg:flex-none lg:text-left">
             {/*
               🔀 2026-08-23 중복 제거 — 마키를 감춘 동안 이 밴드가 말하는 것은 사실상 **약속**이라

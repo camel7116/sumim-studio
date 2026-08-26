@@ -127,7 +127,9 @@ export const offer = {
   unified: true,
 
   /** 네비 우측 액센트 버튼 */
-  navCta: "무료 진단",
+  // 2026-08-26 사용자 지시 "헤더의 무료 진단 버튼은 상담하기로" — 헤더 버튼만 바꾼다.
+  // (브릿지·Process·폼 버튼은 아래 `bridgeCta`·`processCta`·`formSubmit` 그대로 "무료 진단" 계열)
+  navCta: "상담하기",
   navCtaOriginal: "프로젝트 문의",
 
   /** 브릿지 밴드 안쪽 인라인 CTA */

@@ -137,7 +137,8 @@ export const projects: Project[] = [
   },
   {
     slug: "jian-english",
-    name: "지안영어",
+    // 2026-08-26 사용자 확정 — 표기 "지안영어" → "지안영어교습소" (slug·라우트는 유지)
+    name: "지안영어교습소",
     category: "Web + Content",
     industry: "영어 교습소 · 교육",
     // 초안(팀 검토) — 근거: 핵심 메시지 "내신과 정시는 전혀 다르게 공부해야 합니다" +
@@ -164,6 +165,39 @@ export const projects: Project[] = [
       "히어로 타이핑 · 밑줄 모션 구현",
       "수강 후기 무한 슬라이드 (드래그 조작 지원)",
       "파일 하나로 전달 가능한 단일 파일 구성",
+    ],
+    resultVerified: false,
+    isPlaceholder: false,
+  },
+  {
+    // 2026-08-26 사용자 지시로 4번째 칸에 추가. 캡처 3종·임베드는 같은 날 준비돼 있던 것을 연결.
+    slug: "kyunghee-garden",
+    name: "경희정원한의원",
+    category: "Web Design",
+    industry: "한의원 · 의료",
+    // 초안(팀 검토) — 근거: 시안 v6 의 핵심 구조 "경희정원의 7가지 회복 설계 영역"
+    // (암 회복 진료를 7가지 영역으로 풀어 보여주는 구성). 새 사실·성과를 만들지 않았습니다.
+    perspective: "암 회복 진료가 신뢰로 읽히도록",
+    summary:
+      "암 회복 진료에 특화한 한의원. 치료 중부터 치료 이후까지 이어지는 회복 진료를 7가지 설계 영역으로 정리한 홈페이지 시안을 제작했습니다.",
+    services: ["Web Experience", "Content Structure"],
+    coverImage: "/images/projects/kyunghee.jpg",
+    // logo 없음 — 호버 오버레이는 이름 텍스트로 폴백(project-quad-card 규칙)
+    embedSrc: "/embeds/kyunghee-garden.html",
+    fullImage: { src: "/images/projects/kyunghee-full.jpg", width: 1440, height: 8662 },
+    mobileImage: { src: "/images/projects/kyunghee-mobile.jpg", width: 1560, height: 8400 },
+    year: "2026",
+    overview:
+      "경희정원한의원은 암 치료 중부터 치료 이후까지를 다루는 회복 진료 중심의 한의원입니다. 수백 가지 정보 앞에서 길을 잃기 쉬운 환자와 보호자가 진료의 구조를 한눈에 이해할 수 있도록 화면을 설계했습니다.",
+    problem:
+      "암 회복 진료는 설명할 내용이 많고 무거워, 나열형 병원 홈페이지로는 신뢰가 쌓이기 전에 읽기를 포기하게 됩니다.",
+    solution:
+      "회복 진료를 7가지 설계 영역으로 구조화해 순서대로 읽히게 하고, 검사수치 변화 등 근거 중심의 화면 흐름으로 신뢰를 먼저 세웠습니다.",
+    scope: [
+      "진료 철학과 화면 구조 설계",
+      "회복 진료 7가지 영역 콘텐츠 구조화",
+      "비급여 진료비용·처음 오시는 분 안내 페이지",
+      "예약·문의 동선 설계",
     ],
     resultVerified: false,
     isPlaceholder: false,

@@ -43,7 +43,10 @@ const TILTS = ["left", "center", "right"] as const;
  *      바깥 좌우 변은 뷰포트 끝이라 선을 두지 않고, 위아래만 `border-y` 로 닫는다.
  */
 export function SelectedWork() {
-  const items = projects.slice(0, 3);
+  // quad 는 4칸이라 4건까지, cards3 는 3열 리듬 유지를 위해 3건까지(2026-08-19 결정 그대로).
+  // 2026-08-26 경희정원한의원이 4번째로 들어오며 quad 의 "준비 중" 자리표시가 밀려났다 —
+  // 프로젝트가 4건 미만일 때만 placeholder 가 남은 칸을 채운다.
+  const items = projects.slice(0, WORK_LAYOUT === "quad" ? 4 : 3);
 
   return (
     <Section
@@ -77,10 +80,12 @@ export function SelectedWork() {
               {items.map((project) => (
                 <ProjectQuadCard key={project.slug} project={project} />
               ))}
-              <WorkQuadPlaceholder
-                title={selectedWork.placeholderCell.title}
-                note={selectedWork.placeholderCell.note}
-              />
+              {items.length < 4 && (
+                <WorkQuadPlaceholder
+                  title={selectedWork.placeholderCell.title}
+                  note={selectedWork.placeholderCell.note}
+                />
+              )}
             </div>
           </Reveal>
           {/* 프로젝트 모달 — 카드 클릭·해시 딥링크를 받아 이 안에서 상세를 연다 (원페이지 동선) */}
