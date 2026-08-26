@@ -79,8 +79,9 @@ export function SelectedWork() {
             {/* 2026-08-26 사용자 지시 "한 줄에 2개씩" — 데스크톱도 2×2 (이전: lg:grid-cols-4)
                 같은 날 "중간 회색선 없애줘" — 칸 사이 1px 경계(gap-px + bg-line) 제거.
                 되돌리려면 className 에 `gap-px bg-line` 을 다시 넣으면 된다. */}
-            {/* 2026-08-26 "가로 1500px 안으로" — 전폭 → 최대 1500px 중앙 정렬 */}
-            <div className="work-quad mx-auto grid w-full max-w-[1500px] grid-cols-2 border-y border-line">
+            {/* 2026-08-26 "가로 1500px 안으로" — 전폭 → 최대 1500px 중앙 정렬.
+                "회색선 다 지워줘" — 칸 사이(gap-px+bg-line)에 이어 위아래 border-y 까지 제거. */}
+            <div className="work-quad mx-auto grid w-full max-w-[1500px] grid-cols-2">
               {items.map((project) => (
                 <ProjectQuadCard key={project.slug} project={project} />
               ))}

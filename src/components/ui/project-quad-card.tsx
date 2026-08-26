@@ -217,15 +217,30 @@ function FlatHoverInfo({ project }: { project: Project }) {
   );
 }
 
-/** 호버 중 화면이 훑고 내려가는 규칙 — 모니터 9s / 폰 11s, 해제 1.2s 복귀 (기존 값 그대로) */
-const scrollClass = (ms: 9000 | 11000) =>
-  cn(
-    "mockup-scroll object-cover [object-position:50%_0%]",
-    "transition-[object-position] duration-[1200ms] ease-out",
-    ms === 9000
-      ? "group-hover/link:[object-position:50%_100%] group-hover/link:duration-[9000ms] group-hover/link:ease-linear group-focus-visible/link:[object-position:50%_100%] group-focus-visible/link:duration-[9000ms] group-focus-visible/link:ease-linear"
-      : "group-hover/link:[object-position:50%_100%] group-hover/link:duration-[11000ms] group-hover/link:ease-linear group-focus-visible/link:[object-position:50%_100%] group-focus-visible/link:duration-[11000ms] group-focus-visible/link:ease-linear",
-  );
+/** 호버 중 화면이 훑고 내려가는 규칙 — 해제 1.2s 복귀.
+ *  🆕 2026-08-26 "올라가는 속도 다 똑같게": 지속시간이 고정 9s 면 캡처가 긴 프로젝트일수록
+ *  빨리 흐른다 → 지속시간을 CSS 변수 `--mockup-scroll-ms` 로 빼고, 모니터는 아래
+ *  `monitorScrollMs()` 가 **훑는 거리(렌더 높이 − 창 높이)에 비례**한 값을 인라인으로 내려보낸다. */
+const scrollClass = cn(
+  "mockup-scroll object-cover [object-position:50%_0%]",
+  "transition-[object-position] duration-[1200ms] ease-out",
+  "group-hover/link:[object-position:50%_100%] group-hover/link:duration-[var(--mockup-scroll-ms,9000ms)] group-hover/link:ease-linear group-focus-visible/link:[object-position:50%_100%] group-focus-visible/link:duration-[var(--mockup-scroll-ms,9000ms)] group-focus-visible/link:ease-linear",
+);
+
+/** 훑는 거리에 비례한 모니터 지속시간 — 픽셀 속도가 네 칸 모두 같아진다.
+ *  기준: 문결 풀페이지(1440×5953)가 16:10 창에서 **기존 9초 그대로**인 속도.
+ *  (폰은 네 프로젝트 모두 1560×8400 동일 비율이라 고정 11s 로 이미 같은 속도) */
+const MONITOR_SCROLL_BASE_MS = 9000;
+const MONITOR_SCROLL_REF = 5953 / 1440 - 10 / 16; // 문결의 거리(폭 배수) = 3.509
+function monitorScrollMs(
+  img: { width: number; height: number } | undefined,
+  containerHperW: number,
+): number {
+  if (!img) return MONITOR_SCROLL_BASE_MS;
+  const dist = img.height / img.width - containerHperW;
+  if (dist <= 0) return MONITOR_SCROLL_BASE_MS;
+  return Math.round((MONITOR_SCROLL_BASE_MS * dist) / MONITOR_SCROLL_REF);
+}
 
 /** 칸 공통 껍데기 — 격자 안의 한 칸(면은 흰색, 경계선은 그리드의 `gap-px` 가 만든다) */
 const CELL = "flex h-full flex-col bg-canvas p-4 sm:p-5 lg:p-6";
@@ -262,7 +277,16 @@ function FlatCell({ project }: { project: Project }) {
   return (
     <div className={CELL_FLAT}>
       {scrollSrc ? (
-        <Image src={scrollSrc} alt="" fill sizes={SIZES} quality={50} className={scrollClass(9000)} />
+        <Image
+          src={scrollSrc}
+          alt=""
+          fill
+          sizes={SIZES}
+          quality={50}
+          className={scrollClass}
+          /* flat 칸은 4:3 (h/w = 0.75) */
+          style={{ "--mockup-scroll-ms": `${monitorScrollMs(project.fullImage, 0.75)}ms` } as React.CSSProperties}
+        />
       ) : null}
       <Image
         src={project.coverImage}
@@ -313,7 +337,11 @@ function DeviceCell({ project }: { project: Project }) {
                 fill
                 sizes={SIZES}
                 quality={50}
-                className={scrollClass(9000)}
+                className={scrollClass}
+                /* 모니터 창 16:10 (h/w = 0.625) — 캡처 길이에 비례한 지속시간으로 속도 통일 */
+                style={
+                  { "--mockup-scroll-ms": `${monitorScrollMs(project.fullImage, 0.625)}ms` } as React.CSSProperties
+                }
               />
             ) : null}
             <Image
@@ -343,6 +371,9 @@ function DeviceCell({ project }: { project: Project }) {
             "absolute bottom-0 w-[21%] [filter:drop-shadow(0_8px_14px_rgba(0,0,0,0.35))]",
             QUAD_PHONE_SIDE === "right" ? "right-[5%]" : "left-[5%]",
           )}
+          /* 폰 스크롤 11s — 네 프로젝트 모바일 캡처가 전부 1560×8400 동일 비율이라 고정값으로 이미 같은 속도.
+             CSS 변수는 상속되므로 이 래퍼에 두면 PNG 프레임/CSS 폰 두 분기의 이미지가 함께 받는다. */
+          style={{ "--mockup-scroll-ms": "11000ms" } as React.CSSProperties}
         >
           {deviceFrame === "png" ? (
             <PhoneFrame
@@ -350,7 +381,7 @@ function DeviceCell({ project }: { project: Project }) {
               alt=""
               sizes="120px"
               className="w-full"
-              imageClassName={scrollClass(11000)}
+              imageClassName={scrollClass}
             >
               <ScreenOverlay logoSrc={project.logo} name={project.name} />
             </PhoneFrame>
@@ -363,7 +394,7 @@ function DeviceCell({ project }: { project: Project }) {
                   fill
                   sizes="120px"
                   quality={55}
-                  className={scrollClass(11000)}
+                  className={scrollClass}
                 />
                 <ScreenOverlay logoSrc={project.logo} name={project.name} />
               </div>
