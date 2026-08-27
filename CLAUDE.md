@@ -2253,7 +2253,7 @@ const TICKER_SIZE:  "base"  | "small"     = "base";   // 현재
 7. 🆕 **검색 노출 세팅 (2026-08-27)** — 기준 문서: `바탕 화면\# 🔍 검색 노출 세팅 가이드 (네이버·구글).txt`(스밈 내부 매뉴얼 — **앞으로 모든 납품 건에 적용**).
    - ✅ **구글 서치콘솔 완료**(계정 skrxk0117@gmail.com): URL 접두어 속성 `https://sumimstudio.co.kr` · 소유권 = **HTML 파일**(`public/google407f34f497d4dbcd.html` — 🚨 지우면 인증 풀림) · **사이트맵 제출** `/sitemap.xml` · **메인 색인 생성 요청**("우선순위 크롤링 대기열에 추가" 확인). ⚠️ 제출 직후 사이트맵 상태가 "가져올 수 없음"으로 보이는 건 흔한 일시 상태 — 하루 뒤 재확인
    - ✅ robots.txt(전체 허용 + `/thanks` 차단)·sitemap.xml(4프로젝트 자동 포함) 라이브 정상 · 페이지별 title·description 고유 확인 · **메인 타이틀에 지역 추가** "SUMIM Studio | 부산 홈페이지 제작 · 브랜드 전략"(가이드 §5 규칙)
-   - ⚠️ **네이버 서치어드바이저는 사용자 직접**(에이전트 브라우저가 naver.com 접근 불가): searchadvisor.naver.com → 웹마스터 도구 → `https://sumimstudio.co.kr` 등록 → 소유권 메타태그를 받아 전달하면 코드 반영(또는 HTML 파일 업로드 방식이면 파일명·내용 전달) → 사이트맵 `/sitemap.xml` 제출 → 웹 페이지 수집 요청
+   - 🔄 **네이버 서치어드바이저 — 메타태그 반영 완료, 사용자 클릭 대기**(에이전트 브라우저가 naver.com 접근 불가): 소유권 메타태그 `naver-site-verification: 2defde7cdb…`가 `layout.tsx` `metadata.verification.other` 로 라이브 반영됨(실측 확인). 남은 것 = 서치어드바이저에서 **[소유확인] 클릭** → **요청 → 사이트맵 제출** `sitemap.xml` → **요청 → 웹 페이지 수집** 메인 URL
    - ⚠️ 남은 것: GA4(또는 네이버 애널리틱스) + 전화 클릭·폼 제출 추적(`NEXT_PUBLIC_GA_ID` 자리 있음) · 네이버 플레이스에 홈페이지 URL 등록 · 반영 소요 안내(네이버 1~4주 · 구글 며칠~2주)
 8. **히어로 선언문 3줄 + 메타의 새 자리** — 2026-08-22 히어로에서 뺐고 문구는 `site.ts` `hero.wordmark.statement`·`meta` 에 보존 중입니다. **선언문을 대문(인트로 화면)으로 빼는 안 — 미라 재검토 중, 미확정**
 
