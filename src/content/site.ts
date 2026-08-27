@@ -132,16 +132,21 @@ export const offer = {
   navCta: "상담하기",
   navCtaOriginal: "프로젝트 문의",
 
-  /** 브릿지 밴드 안쪽 인라인 CTA */
+  // 🚨 2026-08-26 사용자 확정 — **"무료 진단(진단받기)" 문구는 두 자리에만 남긴다**:
+  //    ① 페인포인트 섹션(Q&A — `clientProblems.checkSummarySome` 의 "무료 진단")
+  //    ② 브릿지 "말로 설명하지 않습니다" 인라인 CTA(아래 `bridgeCta`)
+  //    Process 패널·폼 제출 버튼은 **"상담받기"** 로 교체(원래 문구는 …Original 보존).
+
+  /** 브릿지 밴드 안쪽 인라인 CTA — "진단" 문구 유지 자리 ② */
   bridgeCta: "홈페이지 무료 진단 받기",
   bridgeCtaOriginal: "우리 홈페이지 문제 진단받기",
 
   /** Process 스티키 패널 CTA */
-  processCta: "홈페이지 무료 진단 받기",
+  processCta: "상담받기",
   processCtaOriginal: "상담 예약하기",
 
   /** 상담 폼 제출 버튼 */
-  formSubmit: "무료 진단 신청하기",
+  formSubmit: "상담받기",
   formSubmitOriginal: "프로젝트 문의하기",
 } as const;
 
