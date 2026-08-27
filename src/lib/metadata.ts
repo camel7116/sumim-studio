@@ -10,7 +10,9 @@ import { site } from "@/content/site";
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://sumimstudio.co.kr";
 
-export const defaultTitle = "SUMIM Studio | 브랜드 전략과 홈페이지 제작";
+// 2026-08-27 검색 노출 가이드 §5 적용 — 타이틀 규칙 "지역 + 업종 + 핵심 서비스"에 맞춰 "부산" 추가.
+// (이전 값: "SUMIM Studio | 브랜드 전략과 홈페이지 제작")
+export const defaultTitle = "SUMIM Studio | 부산 홈페이지 제작 · 브랜드 전략";
 
 export const defaultDescription = site.description;
 
