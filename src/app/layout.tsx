@@ -41,6 +41,13 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: ["/images/brand/sumim-logo.jpeg"],
   },
+  // 2026-08-27 검색 노출 세팅 — 네이버 서치어드바이저 소유권 확인 메타태그.
+  // (구글은 HTML 파일 방식: public/google407f34f497d4dbcd.html — 지우면 인증 풀림)
+  verification: {
+    other: {
+      "naver-site-verification": "2defde7cdb3980cd830c90a83588abd40ab1b3c8",
+    },
+  },
 };
 
 export default function RootLayout({
