@@ -1,7 +1,9 @@
 import { processSection, processSteps } from "@/content/process";
+import { giantSectionLabels } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionHeader } from "@/components/ui/section-header";
+import { glyphForIndex } from "@/components/ui/brand-glyphs";
 import { Reveal } from "@/components/ui/reveal";
 import { ProcessFlow } from "@/components/sections/process-flow";
 
@@ -41,6 +43,10 @@ export function Process() {
                 /* 2026-08-23 중복 제거: description 이 null 이면 설명 줄을 아예 렌더하지 않는다 */
                 description={processSection.description ?? undefined}
                 headingId="process-heading"
+                /* 🆕 거대 영문 타이포 + 도형 순환 index 4 → 애스터리스크 (2026-08-31).
+                   검정 밴드라 글자색은 밴드 토큰이 흰색으로 알아서 뒤집는다 */
+                giant={giantSectionLabels.process}
+                glyph={glyphForIndex(4)}
               />
             </Reveal>
           }

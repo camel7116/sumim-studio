@@ -1,9 +1,10 @@
 import { axisTagline, serviceAxes, serviceSystem } from "@/content/services";
 // 2026-08-23 중복 제거: `promiseSection` 은 약속 컬럼과 함께 빠졌습니다(site.ts 에 필드는 보존).
-import { trustProof } from "@/content/site";
+import { giantHeadings, giantSectionLabels, trustProof } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { EyebrowLabel } from "@/components/ui/section-header";
+import { EyebrowLabel, GiantHeading } from "@/components/ui/section-header";
+import { BrandGlyph, glyphForIndex } from "@/components/ui/brand-glyphs";
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
 
@@ -152,7 +153,25 @@ function AxisIcon({ slug }: { slug: string }) {
  * 🚨 **lg 미만은 스위치와 무관하게 항상 좌우 2단**이다 — 모바일 1열(카드 폭 350px)에서
  *    상/하 구성은 카드 하나가 355px 나 되어 섹션이 세로로 길어진다(실측).
  */
-const DESKTOP_CARDS: "4col" | "2col-wide" = "4col";
+/**
+ * 🆕 **`"rows"` 추가 (2026-08-31 · 미디어팔레트 방향 ④)** — 새 기본값.
+ *
+ * - `"rows"` — 헤어라인으로 구분된 **세로 행 리스트**. 각 행은
+ *   `[라임 pill 배지(titleKo)] [60px급 영문명] [tagline 한 줄] [브랜드 도형]` 이다.
+ * - `"4col"` — **되돌릴 값**. 2026-08-22~30 의 4열 카드가 그대로 돌아온다.
+ * - `"2col-wide"` — 2026-08-22 비교안(2열 와이드 카드 × 좌우 2단). 보존.
+ *
+ * 🚨 `"4col"`·`"2col-wide"` 쪽 코드는 **한 줄도 지우지 않았다**(`ServiceCards()`).
+ *    값만 바꾸면 즉시 뒤집힌다.
+ * 🚨 `"rows"` 에서는 카드의 체크 4항목(`cardItems`)을 **화면에 내지 않는다** —
+ *    행마다 4줄이 붙으면 행 높이가 카드보다 커져 "행 리스트"가 아니게 된다.
+ *    **데이터는 그대로 보존**되고 `"4col"` 로 돌리면 다시 나온다(`/services` 는 `includes`).
+ *    다시 보고 싶으면 아래 `ROWS_SHOW_ITEMS` 를 `true` 로 올리면 행 아래 작게 붙는다.
+ */
+const DESKTOP_CARDS: "rows" | "4col" | "2col-wide" = "rows";
+
+/** `"rows"` 에서 체크 4항목을 행 아래 작게 붙일지 (기본 false — 위 주석 참고) */
+const ROWS_SHOW_ITEMS = false;
 
 /**
  * 서비스 카드 — 내용은 `services.ts` 의 **`serviceAxes` 4종을 그대로** 쓴다.
@@ -168,6 +187,76 @@ const DESKTOP_CARDS: "4col" | "2col-wide" = "4col";
  *    `grow-[45]` 로 **남는 폭을 55:45 로 나눕니다** — 퍼센트 basis 는 gap 을 못 빼서 넘칩니다.
  *    두 컬럼 다 `min-w-0` 이라야 긴 한글 라벨이 카드를 밀지 않습니다.
  */
+/**
+ * 서비스 **행 리스트** (2026-08-31 · 미디어팔레트 방향 ④)
+ *
+ * 카드 4장 대신 **헤어라인으로 구분된 세로 4행**이다. 한 행에
+ * `[라임 pill 배지] [거대 영문명] [tagline] [브랜드 도형]` 이 한 줄로 선다.
+ *
+ * 🚨 **새 카피 0줄** — 배지는 `titleKo`, 영문명은 `services.ts` 의 `title`(대문자 변환),
+ *    설명은 `axisTagline()`(= `copyMode` 가 고르는 기존 문장) 그대로다.
+ * 🚨 **라임 pill 은 hex 를 박지 않는다** — 중첩 `data-band="mist"` 라 팔레트(`team`↔
+ *    `lavender`↔`navy`)와 colorLab 실험 조합을 **그대로 따라간다**(Q&A 시안이 쓰던 방식).
+ *    ⚠️ 네비 밴드 감지가 `[data-band]` 를 전수 훑지만, 이 배지는 `mist` = "light" 라
+ *       바깥 paper 밴드와 판정이 같다 → 네비가 깜빡이지 않는다.
+ * 🚨 pill 은 **직각화 대상이 아니다** — 2026-08-21 "박스들 라운드 전부 제거"는 카드 박스
+ *    한정이고 안쪽 pill 배지·체크 원형 아이콘은 유지가 확정이다.
+ * 🚨 영문명은 대문자 전용이라 `leading-[0.9]` 로 눌러도 디센더가 잘리지 않는다.
+ *
+ * 모바일은 `flex-col` 로 자연 스택된다(배지 → 영문명 → 설명).
+ */
+function ServiceRows() {
+  return (
+    <ul className="mt-8 border-t border-line lg:mt-10">
+      {serviceAxes.map((axis, index) => (
+        <li key={axis.slug} className="border-b border-line py-7 lg:py-9">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-8">
+            {/* 라임 pill 배지 — 한국어 서비스명 */}
+            <span
+              data-band="mist"
+              className="w-fit shrink-0 rounded-full px-4 py-1.5 text-[13px] leading-none font-semibold whitespace-nowrap text-ink"
+            >
+              {axis.titleKo}
+            </span>
+
+            {/* 60px급 영문명 — 기존 `title` 을 대문자로만 바꿔 쓴다 */}
+            <h3 className="text-[length:clamp(1.75rem,0.7rem+3.4vw,3.75rem)] leading-[0.9] font-extrabold tracking-[-0.02em] whitespace-nowrap text-ink uppercase">
+              {axis.title}
+            </h3>
+
+            {/* tagline 한 줄 — 데스크톱에서는 오른쪽으로 밀어 붙인다 */}
+            <p className="text-body-m break-keep text-ink-secondary lg:ml-auto lg:max-w-[320px] lg:text-right">
+              {axisTagline(axis)}
+            </p>
+
+            {/* 행 맨 오른쪽 도형 — 4행이 3종을 순환한다(brandGlyphs 가 꺼지면 사라진다) */}
+            <BrandGlyph
+              name={glyphForIndex(index)}
+              size={30}
+              className="hidden text-cta lg:block"
+            />
+          </div>
+
+          {/* 🔀 체크 4항목 — 기본은 숨김(위 `ROWS_SHOW_ITEMS` 주석 참고). 데이터는 보존된다 */}
+          {ROWS_SHOW_ITEMS ? (
+            <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 lg:pl-[7.5rem]">
+              {axis.cardItems.map((item) => (
+                <li
+                  key={item}
+                  className="text-caption flex items-center gap-1.5 text-ink-secondary"
+                >
+                  <span aria-hidden="true" className="block h-[3px] w-[8px] bg-cta" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function ServiceCards() {
   const wide = DESKTOP_CARDS === "2col-wide";
 
@@ -315,10 +404,20 @@ export function ServiceSystem() {
           </Reveal>
         </div>
 
-        {/* 하단 — 서비스 카드 전체 폭 */}
+        {/* 하단 — 서비스 카드/행 리스트 전체 폭 */}
         <Reveal delay={140} className="mt-16 md:mt-20">
-          <EyebrowLabel>{serviceSystem.eyebrow}</EyebrowLabel>
-          <ServiceCards />
+          {/*
+            🆕 거대 영문 타이포(2026-08-31). 켜지면 아래 `SERVICE SYSTEM` eyebrow 는
+            같은 말이 두 번 나므로 숨긴다 — `giantHeadings` 를 끄면 eyebrow 가 그대로 복귀한다.
+            브랜드 도형은 섹션 순환 index 1(애스터리스크).
+          */}
+          <GiantHeading glyph={glyphForIndex(1)} className="mb-5">
+            {giantSectionLabels.services}
+          </GiantHeading>
+          {giantHeadings ? null : (
+            <EyebrowLabel glyph={glyphForIndex(1)}>{serviceSystem.eyebrow}</EyebrowLabel>
+          )}
+          {DESKTOP_CARDS === "rows" ? <ServiceRows /> : <ServiceCards />}
         </Reveal>
       </Container>
     </Section>

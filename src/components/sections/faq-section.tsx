@@ -1,7 +1,9 @@
 import { faqItems, faqSection } from "@/content/faq";
+import { giantSectionLabels } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionHeader } from "@/components/ui/section-header";
+import { glyphForIndex } from "@/components/ui/brand-glyphs";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -29,6 +31,11 @@ export function FaqSection() {
               heading={faqSection.heading}
               headingId="faq-heading"
               align="center"
+              /* 🆕 거대 영문 타이포 + 도형 순환 index 5 → 도넛 (2026-08-31).
+                 ⚠️ 이 섹션은 eyebrow 도 "FAQ" 라 거대 타이포와 **같은 말**이다 —
+                    스위치가 켜지면 eyebrow 가 자동으로 숨어 중복이 생기지 않는다 */
+              giant={giantSectionLabels.faq}
+              glyph={glyphForIndex(5)}
               className="mx-auto mb-12 text-center md:mb-14"
             />
           </Reveal>

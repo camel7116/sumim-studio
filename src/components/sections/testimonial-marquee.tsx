@@ -1,10 +1,11 @@
 "use client";
 
-import { reviewBand, trustProof } from "@/content/site";
+import { giantHeadings, giantSectionLabels, reviewBand, trustProof } from "@/content/site";
 import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
-import { EyebrowLabel, MaskLines } from "@/components/ui/section-header";
+import { EyebrowLabel, GiantHeading, MaskLines } from "@/components/ui/section-header";
+import { glyphForIndex } from "@/components/ui/brand-glyphs";
 import { CountUp } from "@/components/ui/count-up";
 import { useMarquee } from "@/components/ui/marquee";
 import { cn } from "@/lib/utils";
@@ -126,9 +127,27 @@ export function TestimonialMarquee() {
               eyebrow 를 `OUR PROMISE` 로 바꿔 답니다(병합 섹션에서 뺀 라벨이 이 자리로 옮겨온 셈).
               실후기가 들어와 `testimonialsArePlaceholder` 가 false 가 되면 자동으로 `REVIEWS` 복귀.
             */}
-            <EyebrowLabel className="mb-6 justify-center lg:justify-start">
-              {hideMarquee ? reviewBand.eyebrowWhilePlaceholder : reviewBand.eyebrow}
-            </EyebrowLabel>
+            {/*
+              🆕 거대 영문 타이포(2026-08-31). 켜지면 아래 eyebrow 는 숨는다.
+              🚨 **자리표시 동안 `OUR PROMISE` 로 바뀌는 08-23 규칙을 그대로 유지**한다 —
+                 두 문자열 다 `site.ts` 에서 온다(giant 라인만 `giantSectionLabels.reviews`).
+            */}
+            <GiantHeading
+              glyph={glyphForIndex(2)}
+              className="mb-5 justify-center lg:justify-start"
+            >
+              {hideMarquee
+                ? reviewBand.eyebrowWhilePlaceholder
+                : giantSectionLabels.reviews}
+            </GiantHeading>
+            {giantHeadings ? null : (
+              <EyebrowLabel
+                className="mb-6 justify-center lg:justify-start"
+                glyph={glyphForIndex(2)}
+              >
+                {hideMarquee ? reviewBand.eyebrowWhilePlaceholder : reviewBand.eyebrow}
+              </EyebrowLabel>
+            )}
             {/*
               🚨 **모바일 미세 조정** (2026-08-22 사용자 "'견적,' '퀄리티.' 옆의 쉼표·마침표
               없애자, 폰트 사이즈 좀 줄이고").

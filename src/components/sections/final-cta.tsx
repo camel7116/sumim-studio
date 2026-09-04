@@ -1,9 +1,10 @@
-import { contactPage, finalCta, site } from "@/content/site";
+import { contactPage, finalCta, giantSectionLabels, site } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { ContactForm } from "@/components/ui/contact-form";
 import { Reveal } from "@/components/ui/reveal";
-import { MaskLines } from "@/components/ui/section-header";
+import { GiantHeading, MaskLines } from "@/components/ui/section-header";
+import { BrandGlyph, glyphForIndex } from "@/components/ui/brand-glyphs";
 
 /**
  * Final CTA + 상담 폼 (문서 §8.13, §7.8)
@@ -81,11 +82,23 @@ export function FinalCta() {
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
           <div className="relative isolate lg:col-span-5">
             <Reveal>
+              {/* 🆕 거대 영문 타이포 (2026-08-31). 이 섹션에는 원래 eyebrow 가 없어
+                  숨길 것이 없고, 검정 밴드라 글자색은 밴드 토큰이 흰색으로 뒤집는다 */}
+              <GiantHeading className="mb-5">{giantSectionLabels.contact}</GiantHeading>
               {/* 줄 단위 마스크 리빌 — 다크 섹션 진입을 또렷하게 (문서 §11.3) */}
               {/* 2026-08-19: 뒤에 건물 스카이라인이 서면서 두 번째 줄이 겹친다 → 후광 */}
-              <h2 id="contact-heading" className="text-h1 mask-reveal">
-                <MaskLines text={finalCta.heading} />
-              </h2>
+              {/* 🆕 헤딩 옆 브랜드 도형 — 섹션 순환 index 6 → 파도.
+                  `items-start` 라 여러 줄 헤딩의 **첫 줄 옆**에 선다 */}
+              <div className="flex items-start gap-4">
+                <h2 id="contact-heading" className="text-h1 mask-reveal">
+                  <MaskLines text={finalCta.heading} />
+                </h2>
+                <BrandGlyph
+                  name={glyphForIndex(6)}
+                  size={34}
+                  className="mt-2 text-cta"
+                />
+              </div>
             </Reveal>
             <Reveal delay={120}>
               <p className="text-body-l mt-8 max-w-[480px] whitespace-pre-line text-white/70">

@@ -20,7 +20,22 @@ import { useEffect, useRef } from "react";
  */
 const MARQUEE_CYCLE_SEC = 46;
 
-export function useMarquee() {
+/**
+ * 🆕 **속도 지정 옵션** (2026-08-31 — 그래픽 마퀴 띠가 같은 훅을 쓰려고 열었다).
+ *
+ * 후기 마키는 "트랙 절반을 46초"라 **트랙이 길어지면 빨라지는** 구조다(카드 수에 종속).
+ * 그래픽 띠는 Q&A 티커와 같은 **≈31px/s 대역**에 고정해야 해서 초당 픽셀을 직접 준다.
+ *
+ * 🚨 인자를 **안 주면 계산이 예전과 한 글자도 다르지 않다** — 기존 호출부
+ *    (`testimonial-marquee.tsx`)의 동작·속도가 그대로다.
+ */
+type MarqueeOptions = {
+  /** 초당 픽셀. 주면 트랙 길이와 무관하게 이 속도로 흐른다 */
+  pxPerSec?: number;
+};
+
+export function useMarquee(options?: MarqueeOptions) {
+  const pxPerSec = options?.pxPerSec;
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -55,7 +70,7 @@ export function useMarquee() {
       if (!running) return;
       if (last > 0 && !dragging) {
         const dt = Math.min(0.05, (ts - last) / 1000);
-        offset -= (half / MARQUEE_CYCLE_SEC) * dt;
+        offset -= (pxPerSec ?? half / MARQUEE_CYCLE_SEC) * dt;
         wrap();
         apply();
       }
@@ -135,7 +150,8 @@ export function useMarquee() {
       viewport.classList.remove("marquee-drag", "is-dragging");
       track.style.transform = "";
     };
-  }, []);
+    // pxPerSec 은 상수로 넘어오므로 실제로는 다시 걸리지 않는다(기존 호출부는 undefined)
+  }, [pxPerSec]);
 
   return { viewportRef, trackRef };
 }

@@ -3,7 +3,13 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
-import { bridgePhoneScreens, bridgeStatement, deviceFrame, inlineCta } from "@/content/site";
+import {
+  bridgePhoneScreens,
+  bridgeStatement,
+  bridgeTextHighlight,
+  deviceFrame,
+  inlineCta,
+} from "@/content/site";
 import { projects } from "@/content/projects";
 import { Container } from "@/components/ui/container";
 import { buttonClasses } from "@/components/ui/button";
@@ -167,6 +173,8 @@ export function StatementBand() {
   /** 등장 애니메이션을 맡는 바깥 래퍼 (폰 자신의 transform 은 틸트가 쓴다) */
   const frontWrapRef = useRef<HTMLDivElement>(null);
   const backWrapRef = useRef<HTMLDivElement>(null);
+  /** 🆕 스크롤 하이라이트가 `--bridge-fill` 을 쓰는 헤딩 (2026-08-31) */
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   /**
    * 폰 **등장 애니메이션** (2026-08-21 사용자: "휴대폰 두 대도 처음 화면에 나타날 때
@@ -207,7 +215,9 @@ export function StatementBand() {
   useEffect(() => {
     const section = sectionRef.current;
     const group = groupRef.current;
-    if (!section || !group) return;
+    /* 🆕 폰이 렌더되지 않는 상황(스크린 2장 미만)에서도 헤딩 하이라이트는 살아야 하므로
+       group 은 여기서 막지 않고 아래 update() 안에서 null 을 확인한다 */
+    if (!section) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let frame = 0;
@@ -281,15 +291,39 @@ export function StatementBand() {
 
     const update = () => {
       frame = 0;
+      const rect = section.getBoundingClientRect();
+      const span = window.innerHeight + rect.height;
+      // 0 = 섹션이 화면 아래에서 막 들어옴 / 1 = 위로 완전히 빠져나감
+      const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / span));
+
+      /*
+        🆕 **헤딩 스크롤 하이라이트** (2026-08-31) — `--bridge-fill`(0~100%)을 넘긴다.
+        새 리스너·새 rAF 루프가 아니라 **이미 돌고 있던 패럴랙스 프레임에 얹은 몇 줄**이다.
+
+        🚨 기준은 섹션이 아니라 **헤딩 자신의 위치**다. 섹션 진행도(위 `progress`)로 재면
+           브릿지 섹션 높이(≈500px)가 뷰포트보다 작아 **섹션 상단이 화면 top 에 닿기도 전에
+           이미 100%** 가 찬다(실측). 헤딩 rect 를 쓰면 섹션 높이와 무관하게 항상 같은
+           "읽는 자리"에서 차오르기가 끝난다.
+             시작 : 헤딩 윗변이 뷰포트 **95%** 지점에 올라올 때 (막 보이기 시작)
+             완료 : 헤딩 윗변이 뷰포트 **35%** 지점에 닿을 때 (읽기 좋은 자리)
+           둘 사이가 0.6vh(900px 화면에서 540px)라 스크롤 한두 번에 차오른다.
+        🚨 폭 게이트(`desktopMq`)를 **타지 않는다** — 모바일에서도 같은 효과가 돈다
+           (폰 패럴랙스만 lg 이상 전용이다).
+      */
+      const heading = headingRef.current;
+      if (heading) {
+        const vh = window.innerHeight;
+        const top = heading.getBoundingClientRect().top;
+        const fill = Math.min(1, Math.max(0, (vh * 0.95 - top) / (vh * 0.6)));
+        heading.style.setProperty("--bridge-fill", `${(fill * 100).toFixed(1)}%`);
+      }
+
+      if (!group) return;
       if (!desktopMq.matches) {
         // lg 미만은 정적 — 창을 줄여 들어온 경우 남아 있던 이동값을 지운다
         group.style.transform = "";
         return;
       }
-      const rect = section.getBoundingClientRect();
-      const span = window.innerHeight + rect.height;
-      // 0 = 섹션이 화면 아래에서 막 들어옴 / 1 = 위로 완전히 빠져나감
-      const progress = Math.min(1, Math.max(0, (window.innerHeight - rect.top) / span));
       group.style.transform = `translate3d(0, ${((0.5 - progress) * 56).toFixed(1)}px, 0)`;
     };
     const schedule = () => {
@@ -371,7 +405,20 @@ export function StatementBand() {
             h2 굵기·자간은 globals 의 banded [data-band] h2 규칙(700 / -0.02em)을 따르고,
             크기만 여기서 한 단계 키운다(섹션 헤딩보다 크게 = 선언).
           */}
-          <h2 className="mask-reveal max-w-[900px] text-[length:clamp(1.75rem,0.9rem+2.9vw,3rem)] leading-[1.35] break-keep whitespace-pre-line text-ink">
+          {/*
+            🆕 **스크롤 하이라이트** (2026-08-31 · 미디어팔레트 방향 ⑤) —
+            `bridge-fill` 클래스가 붙으면 globals 의 규칙이 글자를 `background-clip: text`
+            로 칠하고, 위 effect 가 넘기는 `--bridge-fill` 만큼 **흰 25% → 흰색**으로 찬다.
+            🚨 스위치를 끄면 클래스 자체가 안 붙어 **예전 정적 흰 글자 그대로**다.
+            🚨 히어로 워드마크에는 손대지 않는다(글자 변형은 §7 반려) — 이 헤딩 하나뿐이다.
+          */}
+          <h2
+            ref={headingRef}
+            className={cn(
+              "mask-reveal max-w-[900px] text-[length:clamp(1.75rem,0.9rem+2.9vw,3rem)] leading-[1.35] break-keep whitespace-pre-line text-ink",
+              bridgeTextHighlight && "bridge-fill",
+            )}
+          >
             <MaskLines text={bridgeStatement.text} step={110} />
           </h2>
 

@@ -1,7 +1,10 @@
 import { projects, selectedWork } from "@/content/projects";
+import { giantSectionLabels, graphicTicker } from "@/content/site";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { SectionHeader } from "@/components/ui/section-header";
+import { glyphForIndex } from "@/components/ui/brand-glyphs";
+import { GraphicTicker } from "@/components/ui/graphic-ticker";
 import { ProjectCard } from "@/components/ui/project-card";
 import { ProjectQuadCard, WorkQuadPlaceholder } from "@/components/ui/project-quad-card";
 import { ProjectModal } from "@/components/ui/project-modal";
@@ -57,6 +60,20 @@ export function SelectedWork() {
       className="relative"
       aria-labelledby="work-heading"
     >
+      {/*
+        🆕 **그래픽 마퀴 띠** (2026-08-31 · 미디어팔레트 방향 ②).
+        🚨 흰 밴드 **최상단 안쪽**이라 밴드 리듬(Hero 검정 → Work 흰)이 그대로다.
+           새 섹션을 만들지 않았고, `graphicTicker` 를 끄면 이 자리가 통째로 비어
+           2026-08-31 이전 간격으로 돌아간다.
+        🚨 `Container` **밖**이라 뷰포트 전폭으로 흐른다(섹션에 좌우 패딩이 없다).
+      */}
+      {/* 🚨 래퍼째 조건부다 — 스위치를 끄면 음수 마진까지 사라져 여백이 예전 그대로 남는다 */}
+      {graphicTicker ? (
+        <div className="-mt-8 mb-14 md:-mt-14 lg:-mt-24 lg:mb-16">
+          <GraphicTicker />
+        </div>
+      ) : null}
+
       <Container className="relative">
         <Reveal>
           <SectionHeader
@@ -64,6 +81,10 @@ export function SelectedWork() {
             heading={selectedWork.heading}
             headingId="work-heading"
             align="center"
+            /* 🆕 거대 영문 타이포 — 켜지면 위 eyebrow 는 자동으로 숨는다 */
+            giant={giantSectionLabels.work}
+            /* 🆕 브랜드 도형 순환 — Work 가 첫 섹션이라 index 0(파도) */
+            glyph={glyphForIndex(0)}
             className="mx-auto text-center"
           />
         </Reveal>

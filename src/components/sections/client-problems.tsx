@@ -1,10 +1,17 @@
 import { Fragment } from "react";
-import { clientProblems, copyMode, inlineCta } from "@/content/site";
+import {
+  clientProblems,
+  copyMode,
+  giantHeadings,
+  giantSectionLabels,
+  inlineCta,
+} from "@/content/site";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Reveal } from "@/components/ui/reveal";
-import { EyebrowLabel, MaskLines } from "@/components/ui/section-header";
+import { EyebrowLabel, GiantHeading, MaskLines } from "@/components/ui/section-header";
+import { glyphForIndex } from "@/components/ui/brand-glyphs";
 import { ProblemChecklist, SelfCheck } from "@/components/sections/client-problems-check";
 import { cn } from "@/lib/utils";
 
@@ -677,7 +684,16 @@ function ComboHeader() {
   return (
     <div className="max-w-[720px]">
       <Reveal>
-        <EyebrowLabel>{checkEyebrow}</EyebrowLabel>
+        {/*
+          🆕 거대 영문 타이포(2026-08-31 · 미디어팔레트 방향 ③). 켜지면 eyebrow 는 숨는다 —
+          `giantHeadings` 를 끄면 `checkEyebrow` 가 그대로 복귀한다.
+          ⚠️ 이 안(combo)은 **1440×900 한 화면 예산**이 설계 제약이다. 거대 타이포가
+             들어가면 세로가 늘어나므로, 예산을 넘기면 이 스위치를 먼저 의심할 것.
+        */}
+        <GiantHeading glyph={glyphForIndex(3)}>{giantSectionLabels.qna}</GiantHeading>
+        {giantHeadings ? null : (
+          <EyebrowLabel glyph={glyphForIndex(3)}>{checkEyebrow}</EyebrowLabel>
+        )}
       </Reveal>
       <Reveal delay={80}>
         {/* 안내 한 줄(`checkHint`)은 넣지 않는다 — 세로를 벌면 한 화면을 넘긴다 */}

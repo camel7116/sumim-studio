@@ -1188,6 +1188,87 @@
     }
   }
 
+  /* =======================================================================
+     그래픽 마퀴 띠 (2026-08-31 · 미디어팔레트 방향 ②)
+
+     기계는 **후기 마키(.marquee)를 그대로** 쓴다 — overflow hidden · no-JS CSS
+     폴백 애니메이션 · reduced-motion 정지가 전부 따라온다. 다른 점은 하나뿐이다:
+     좌우 끝 mask 페이드를 **끈다**(띠는 뷰포트 끝까지 꽉 차야 한다 — Q&A 티커와 같은 판단).
+     구동은 `components/ui/graphic-ticker.tsx` 가 `useMarquee({ pxPerSec })` 로 맡는다.
+     ======================================================================= */
+  .gticker {
+    mask-image: none;
+  }
+
+  /* =======================================================================
+     거대 영문 섹션 타이포 (2026-08-31 · 미디어팔레트 방향 ③)
+
+     데스크톱 ~90px / 모바일 ~44px. clamp 는 **두 실측점을 잇는 직선**이다 —
+       390px → 28.36 + 4.01 × 3.90 = 44.0px (하한 2.75rem 과 만난다)
+       1536px → 28.36 + 4.01 × 15.36 = 89.9px (상한 5.625rem 과 만난다)
+     색은 밴드 토큰(`--color-ink`)이라 밝은 밴드=잉크 / 검정 밴드=흰색으로 알아서 뒤집힌다.
+     🚨 `line-height: 0.9` 는 대문자 전용이라 디센더가 없어 안전하다
+        (한글이 들어오면 잘린다 — 라벨은 `giantSectionLabels` 의 영문뿐이다).
+     ======================================================================= */
+  .giant-heading {
+    font-size: clamp(2.75rem, 1.7725rem + 4.01vw, 5.625rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    /* 대문자만이라 상자 위쪽에 남는 여백을 살짝 걷어 다음 줄과의 리듬을 맞춘다 */
+    padding-bottom: 0.04em;
+  }
+
+  /* =======================================================================
+     브릿지 헤딩 스크롤 하이라이트 (2026-08-31 · 미디어팔레트 방향 ⑤)
+
+     헤딩("말로 설명하지 않습니다 / 만든 것으로 보여드립니다")이 스크롤 진행에 따라
+     **흰 25% → 흰색**으로 왼쪽부터 글자 단위로 차오른다.
+
+     진행도는 `--bridge-fill`(0~100%) 한 변수로 들어온다 — **`statement-band.tsx` 의
+     기존 패럴랙스 effect**(IntersectionObserver + rAF + passive scroll)가 이미 재고 있던
+     섹션 진행도를 그대로 쓴다. 새 구동 코드도, 새 리스너도 없다.
+
+     🚨 **CSS scroll-driven animation(`animation-timeline: view()`)은 쓸 수 없다** —
+        브릿지 `<section>` 이 `overflow-hidden`(회전한 폰이 밴드 밖으로 새지 않게)이라
+        그 자체가 **스크롤 컨테이너**가 되고, `view()` 는 그 스크롤포트를 기준으로 잡아
+        진행도가 움직이지 않는다. `.mask-line` 도 `overflow:hidden` 이라 같은 문제가 겹친다.
+     🚨 배경을 거는 대상은 **`.mask-inner`(줄 안쪽 요소) 자신**이다. 조상(h2)에 걸면
+        `.mask-inner` 의 리빌 transform 이 그 층을 따로 합성해 `background-clip: text`
+        가 글자를 못 잡는다(2026-08-24 히어로 "SUM M" 사건과 같은 함정).
+     🚨 색은 `--color-ink`(밴드 토큰)에서 파생한다 — 검정 밴드에서 흰색이고,
+        colorLab·팔레트 전환을 그대로 따라간다(하드코딩 없음).
+     🚨 **기본값이 100%** 라 JS 가 안 붙거나 `prefers-reduced-motion` 이면
+        **처음부터 끝까지 흰색**이다 — 글자가 사라질 경로가 없다.
+     🚨 이 효과는 **차오르는 하이라이트**라 스크롤이 중간에 멈춰도 "여기까지 찼다"는
+        완결된 형태로 선다 — §7 반려 목록의 "반쯤 변한 채 서는 모핑"과 다르다.
+     ======================================================================= */
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    .bridge-fill .mask-inner {
+      /* 전선(--bridge-fill) 앞뒤 4%p 만 섞어 경계를 부드럽게 — 딱딱한 세로선 방지 */
+      background-image: linear-gradient(
+        90deg,
+        var(--color-ink) 0%,
+        var(--color-ink) calc(var(--bridge-fill, 100%) - 4%),
+        color-mix(in srgb, var(--color-ink) 25%, transparent)
+          calc(var(--bridge-fill, 100%) + 4%),
+        color-mix(in srgb, var(--color-ink) 25%, transparent) 100%
+      );
+      background-repeat: no-repeat;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* 정적 흰색으로 되돌린다 — 문서 §4 "모션은 전부 reduced-motion 대응" */
+    @media (prefers-reduced-motion: reduce) {
+      .bridge-fill .mask-inner {
+        background-image: none;
+        -webkit-text-fill-color: currentColor;
+      }
+    }
+  }
+
 
   
 
