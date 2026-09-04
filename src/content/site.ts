@@ -64,7 +64,7 @@ export const site = {
  * | `colorLab` | true | 좌하단 "색상 조합" 실험 버튼·패널 |
  * | `bridgePhoneScreens` | 데모 2종 | 브릿지 폰 화면(null 이면 실제 포트폴리오로 복귀) |
  * | `deviceFrame` | "png" | 폰 목업을 실사 프레임 PNG 로 ↔ "css"(자작 CSS 폰) |
- * | `availability` | 8월·2건 | 티오 수치 단일 소스(스탯 + 하단 상담 바) |
+ * | `availability` | 9월·2건 | 티오 수치 단일 소스(스탯 + 하단 상담 바) |
  */
 
 /**
@@ -695,8 +695,8 @@ export const clientProblems = {
  * 🚨 검증된 값만 넣는다. 지어낸 수치 금지 (START_HERE §6).
  */
 export const availability = {
-  /** 남은 티오를 세는 기준 월 */
-  month: 8,
+  /** 남은 티오를 세는 기준 월 — 2026-09-01 사용자 지시로 8 → 9 */
+  month: 9,
   /** 남은 신규 프로젝트 티오 (검증된 값) */
   remainingSlots: 2,
 } as const;
