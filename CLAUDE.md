@@ -12,6 +12,16 @@
 - **main(라이브)은 기존 디자인 그대로**이고 `availability.month` 만 **8 → 9** 로 바꿔 배포했다(스탯 "9월 남은 티오" · 배지 "9월 예약" · 상담 바 문구가 단일 소스로 함께 갱신, 커밋 134ab12).
 - ⚠️ 월이 바뀔 때마다 `src/content/site.ts` 의 `availability` 한 곳만 고쳐 push 하면 된다(GitHub push = Vercel 자동 배포).
 
+## 🆕 2026-09-10 — 문의 폼 **연락처 필수 · 이메일 선택**
+
+사용자 결정(외부 추천 수용): 타깃이 전화·카톡 회신을 기대하는 지역 사장님이라 **이메일 필수는 이탈만 만든다** + 개인정보 최소 수집 원칙.
+- `lib/validation.ts` `contactSchema` — phone `min(1)`+형식 필수, email `""|이메일형식` 선택. `contactSchemaCompact` 는 **같은 스키마의 별칭**이 됐다(두 모드 규칙 통일).
+- `contact-form.tsx` full 폼 — 연락처 라벨 `*` + `required`, 이메일 `*`·`required` 제거. compact 폼은 원래부터 이 규칙.
+- `app/actions/contact.ts` 메일 본문 — 이메일 줄을 값 있을 때만.
+- `/privacy` §2 — 필수: 이름·연락처·설명 / 선택: 회사·이메일·서비스·예산·일정 으로 문구 일치.
+- 검증: 스키마 케이스 6종(연락처만 통과 · 이메일만 차단 · 형식 오류 차단) · DOM `phone.required=true / email.required=false` 실측 · tsc·eslint 통과.
+- 되돌리려면 `validation.ts` 의 phone/email 블록을 맞바꾸고 폼의 `required` 두 곳·privacy 문구를 함께 되돌릴 것(🚨 연락처·이메일 둘 다 선택으로 두면 연락 방법 없는 문의가 들어온다).
+
 ---
 
 ## 0. 이 폴더에 뭐가 들었나
