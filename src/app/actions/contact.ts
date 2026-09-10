@@ -60,7 +60,7 @@ export async function submitContact(
       `이름/담당자: ${d.name}`,
       d.company ? `회사/브랜드: ${d.company}` : null,
       d.phone ? `연락처: ${d.phone}` : null,
-      `이메일: ${d.email}`,
+      d.email ? `이메일: ${d.email}` : null,
       d.service ? `필요한 서비스: ${d.service}` : null,
       d.budget ? `예상 예산: ${d.budget}` : null,
       d.timeline ? `희망 일정: ${d.timeline}` : null,

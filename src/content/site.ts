@@ -164,8 +164,8 @@ const pickOffer = (unifiedLabel: string, originalLabel: string) =>
  * 🚨 전송 페이로드 모양은 **두 모드가 같다** — compact 에서 빠진 칸은 **빈 문자열**로 보낸다
  *    (`<input type="hidden" value="">`). 그래서 `app/actions/contact.ts` 와 Web3Forms 본문
  *    조립이 손댈 것 없이 그대로 동작한다.
- * 🚨 compact 에서는 **이메일이 선택**이라 검증 스키마도 갈라진다
- *    (`lib/validation.ts` 의 `contactSchemaCompact` — 대신 **연락처가 필수**다).
+ * 🚨 2026-09-10 부터 **두 모드 모두 이메일 선택 · 연락처 필수**(사용자 결정 — 타깃이 전화·카톡
+ *    회신을 기대). `lib/validation.ts` 의 `contactSchema` 하나로 통일됐다(`contactSchemaCompact` 는 별칭).
  */
 export const contactForm = {
   // 2026-08-24 사용자 지시 "문의쪽 줄어든 입력항목들 다시 원래대로 늘려주고" → `"full"` 로 복귀.

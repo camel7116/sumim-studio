@@ -2,7 +2,11 @@ import { z } from "zod";
 
 /**
  * 상담 폼 검증 스키마 (문서 §7.8)
- * 필수 필드는 최소화한다: 이름, 이메일, 프로젝트 설명, 개인정보 동의.
+ * 필수 필드는 최소화한다: 이름, 연락처, 프로젝트 설명, 개인정보 동의.
+ *
+ * 2026-09-10 사용자 결정 — **이메일 선택 · 연락처 필수**(타깃이 전화·카톡 회신을 기대하는
+ * 지역 사장님이라 이메일 필수가 이탈만 만든다. 개인정보 최소 수집 원칙에도 부합).
+ * 이전(이메일 필수 · 연락처 선택)으로 되돌리려면 아래 phone/email 두 블록만 맞바꾸면 된다.
  */
 export const contactSchema = z.object({
   name: z
@@ -14,14 +18,13 @@ export const contactSchema = z.object({
   phone: z
     .string()
     .trim()
+    .min(1, "연락처를 입력해 주세요.")
     .max(20, "연락처 형식을 확인해 주세요.")
-    .regex(/^$|^[0-9+\-() ]{8,20}$/, "연락처 형식을 확인해 주세요.")
-    .optional(),
+    .regex(/^[0-9+\-() ]{8,20}$/, "연락처 형식을 확인해 주세요."),
+  // 빈 문자열(미입력)이거나, 값이 있으면 이메일 형식이어야 한다
   email: z
-    .string()
-    .trim()
-    .min(1, "이메일을 입력해 주세요.")
-    .email("이메일 형식을 확인해 주세요."),
+    .union([z.literal(""), z.string().trim().email("이메일 형식을 확인해 주세요.")])
+    .optional(),
   service: z.string().trim().max(60).optional(),
   budget: z.string().trim().max(60, "60자 이내로 입력해 주세요.").optional(),
   timeline: z.string().trim().max(60, "60자 이내로 입력해 주세요.").optional(),
@@ -44,21 +47,10 @@ export type ContactInput = z.infer<typeof contactSchema>;
  * (전화 한 통이 가능하면 상담이 시작된다 — §1 타깃).
  * 🚨 **전송 페이로드 모양은 그대로다** — 빠진 칸은 빈 문자열로 실려 오므로
  *    `app/actions/contact.ts` 와 Web3Forms 본문 조립은 손댈 것이 없다.
- * 🚨 `contactSchema`(전체 폼)는 **한 줄도 바꾸지 않았다** — `mode: "full"` 이면 이메일이
- *    다시 필수가 되고 2026-08-23 오전 검증 그대로다.
+ * 2026-09-10 부터 전체 폼(`contactSchema`)도 같은 규칙(이메일 선택 · 연락처 필수)이 됐으므로
+ * 두 스키마는 **동일**하다. 호출부 호환을 위해 이름만 남긴다.
  */
-export const contactSchemaCompact = contactSchema.extend({
-  // 빈 문자열(칸 없음)이거나, 값이 있으면 이메일 형식이어야 한다
-  email: z
-    .union([z.literal(""), z.string().trim().email("이메일 형식을 확인해 주세요.")])
-    .optional(),
-  phone: z
-    .string()
-    .trim()
-    .min(1, "연락처를 입력해 주세요.")
-    .max(20, "연락처 형식을 확인해 주세요.")
-    .regex(/^[0-9+\-() ]{8,20}$/, "연락처 형식을 확인해 주세요."),
-});
+export const contactSchemaCompact = contactSchema;
 
 // 2026-08-08 사용자 확정: 고객이 "구매 단위"로 인식하는 항목만 노출
 // (브랜드 전략·SEO는 별도 상품이 아니라 모든 프로젝트에 녹이는 스밈의 방식이므로 제외)

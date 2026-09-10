@@ -103,7 +103,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 
 /**
  * 상담 폼 (문서 §7.8)
- * - 필수: 이름, 이메일, 프로젝트 설명, 개인정보 동의
+ * - 필수: 이름, 연락처, 프로젝트 설명, 개인정보 동의 (이메일은 선택 — 2026-09-10)
  * - 오류는 필드 바로 아래 표시, 제출 중 상태 명시
  * - 성공 시 서버 액션이 /thanks로 이동시킨다.
  */
@@ -377,9 +377,10 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="contact-phone" className={labelClass}>
-            연락처
+            연락처 <span aria-hidden="true" className="text-terracotta">*</span>
           </label>
           {/* 입력과 동시에 하이픈 자동 삽입 (2026-08-08 사용자 요청) */}
+          {/* 2026-09-10 사용자 결정: 연락처 필수 · 이메일 선택 (lib/validation.ts 와 한 쌍) */}
           <input
             id="contact-phone"
             name="phone"
@@ -390,6 +391,8 @@ export function ContactForm() {
             onInput={(event) => {
               event.currentTarget.value = formatPhone(event.currentTarget.value);
             }}
+            required
+            aria-required="true"
             aria-invalid={Boolean(errors.phone)}
             aria-describedby={errors.phone ? "contact-phone-error" : undefined}
             className={cn(inputClass, errors.phone && "border-error")}
@@ -399,7 +402,7 @@ export function ContactForm() {
 
         <div>
           <label htmlFor="contact-email" className={labelClass}>
-            이메일 <span aria-hidden="true" className="text-terracotta">*</span>
+            이메일
           </label>
           {/* @ 뒤 도메인(네이버·지메일 등) 자동 제안 — 입력창 바로 아래 커스텀 목록 (2026-08-08) */}
           <div className="relative">
@@ -423,8 +426,6 @@ export function ContactForm() {
                 setEmailOpen(false);
                 setEmailActive(-1);
               }}
-              required
-              aria-required="true"
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? "contact-email-error" : undefined}
               className={cn(inputClass, errors.email && "border-error")}
