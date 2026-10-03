@@ -429,7 +429,30 @@ function DeviceCell({ project }: { project: Project }) {
  * 사용자 지시대로 **호버 오버레이도 모달도 없고**, 화면 이미지도 넣지 않습니다
  * (`projects.ts` 에 4번째 프로젝트가 없습니다 — 없는 실적을 그림으로 만들지 않습니다).
  */
-export function WorkQuadPlaceholder({ title, note }: { title: string; note: string }) {
+export function WorkQuadPlaceholder({
+  title,
+  note,
+  image,
+  badge,
+}: {
+  title: string;
+  note: string;
+  /** 진행 중 칸 전용 — **미리 흐리게 구운** 화면(선명한 원본을 넣지 말 것) */
+  image?: string | null;
+  /** 상자 가운데 "+" 대신 놓을 라벨(예: COMING SOON) */
+  badge?: string;
+}) {
+  // ponytail: QUAD_FRAME "none" 분기는 badge 만 받고 image 는 안 그린다 — 그 모드를 다시 켤 때 추가.
+  const mark = badge ? (
+    <span className="relative rounded-full bg-canvas/85 px-3 py-1.5 text-[11.5px] font-bold tracking-[0.14em] text-ink-secondary uppercase">
+      {badge}
+    </span>
+  ) : (
+    <span aria-hidden="true" className="text-[26px] leading-none text-line-strong">
+      +
+    </span>
+  );
+
   if (QUAD_FRAME === "none") {
     /*
       프레임이 없어졌으니 점선 "상자"를 흉내 낼 대상도 없습니다. 세 칸이 **가장자리까지 찬 면**이라
@@ -448,9 +471,7 @@ export function WorkQuadPlaceholder({ title, note }: { title: string; note: stri
               : "flex flex-1 flex-col items-center justify-center px-4 text-center"
           }
         >
-          <span aria-hidden="true" className="text-[26px] leading-none text-line-strong">
-            +
-          </span>
+          {mark}
           <h3 className="text-h3 mt-3 font-bold! text-ink-muted">{title}</h3>
           <p className="text-caption mt-1 text-ink-muted">{note}</p>
         </div>
@@ -470,10 +491,11 @@ export function WorkQuadPlaceholder({ title, note }: { title: string; note: stri
           <div className="flex items-center pb-1.5">
             <span className="h-2 flex-1 rounded-full bg-line/70" />
           </div>
-          <div className="flex aspect-[16/10] items-center justify-center rounded-[5px] bg-canvas">
-            <span aria-hidden="true" className="text-[26px] leading-none text-line-strong">
-              +
-            </span>
+          <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden rounded-[5px] bg-canvas">
+            {image ? (
+              <Image src={image} alt="" fill sizes={SIZES} quality={50} className="object-cover opacity-60" />
+            ) : null}
+            {mark}
           </div>
         </div>
       </div>

@@ -250,6 +250,19 @@ export const selectedWork = {
     title: "다음 프로젝트",
     note: "준비 중입니다.",
   },
+  /**
+   * **진행 중 프로젝트 칸** (2026-10-03 사용자 지시 "진행 중인 홈페이지를 coming soon 으로 희미하게").
+   * 🚨 사용자 결정: **업체명 비공개 — 업종만** 적는다(오픈 전 고객사 이름·디자인을 먼저 내보내지 않는다).
+   * 🚨 `image` 는 **파일 자체를 흐리게 구운 것**이다(sharp blur 14). CSS 블러로 하면 원본 시안이
+   *    이미지 URL 로 그대로 열린다. 파일명에도 업체명을 넣지 않는다.
+   * 오픈하면 이 줄을 지우고 위 `projects` 에 정식 항목으로 올린다. `projects` 에 넣지 않는 이유 —
+   * 거기 넣으면 /work/[slug] · 사이트맵 · 모달에 업체가 노출된다.
+   */
+  comingSoon: [
+    { key: "a", industry: "공연 티켓 대행", image: "/images/projects/coming-soon-a.jpg" },
+    { key: "b", industry: "한의원", image: null },
+  ] as { key: string; industry: string; image: string | null }[],
+  comingSoonLabel: "Coming soon",
 } as const;
 
 /** /work 목록 페이지 (Phase 2) */

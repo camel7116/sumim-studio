@@ -87,7 +87,18 @@ export function SelectedWork() {
               {items.map((project) => (
                 <ProjectQuadCard key={project.slug} project={project} />
               ))}
-              {items.length % 2 === 1 && (
+              {/* 진행 중 프로젝트 — 업종만 적고 화면은 흐리게(2026-10-03). 클릭·모달 없음 */}
+              {WORK_LAYOUT === "quad" &&
+                selectedWork.comingSoon.map((c) => (
+                  <WorkQuadPlaceholder
+                    key={c.key}
+                    title={c.industry}
+                    note={selectedWork.comingSoonLabel}
+                    image={c.image}
+                    badge={selectedWork.comingSoonLabel}
+                  />
+                ))}
+              {(items.length + selectedWork.comingSoon.length) % 2 === 1 && (
                 <WorkQuadPlaceholder
                   title={selectedWork.placeholderCell.title}
                   note={selectedWork.placeholderCell.note}
