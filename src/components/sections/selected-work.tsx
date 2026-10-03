@@ -46,7 +46,9 @@ export function SelectedWork() {
   // quad 는 4칸이라 4건까지, cards3 는 3열 리듬 유지를 위해 3건까지(2026-08-19 결정 그대로).
   // 2026-08-26 경희정원한의원이 4번째로 들어오며 quad 의 "준비 중" 자리표시가 밀려났다 —
   // 프로젝트가 4건 미만일 때만 placeholder 가 남은 칸을 채운다.
-  const items = projects.slice(0, WORK_LAYOUT === "quad" ? 4 : 3);
+  // 2026-10-03 DM종합설비가 5번째로 추가 — quad 는 **전부** 보여 주고(2열이라 행만 늘어난다),
+  // 건수가 홀수면 placeholder 가 마지막 빈 칸을 채운다.
+  const items = WORK_LAYOUT === "quad" ? projects : projects.slice(0, 3);
 
   return (
     <Section
@@ -85,7 +87,7 @@ export function SelectedWork() {
               {items.map((project) => (
                 <ProjectQuadCard key={project.slug} project={project} />
               ))}
-              {items.length < 4 && (
+              {items.length % 2 === 1 && (
                 <WorkQuadPlaceholder
                   title={selectedWork.placeholderCell.title}
                   note={selectedWork.placeholderCell.note}

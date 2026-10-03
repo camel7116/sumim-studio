@@ -202,6 +202,39 @@ export const projects: Project[] = [
     resultVerified: false,
     isPlaceholder: false,
   },
+  {
+    // 2026-10-03 사용자 지시 "제작완료된 홈페이지 목업 추가". 실제 운영 사이트(https://sulbi24.co.kr,
+    // 2026-09-28 오픈)를 직접 캡처했다 — 재캡처는 scratchpad `cap-portfolio.mjs`(리빌 강제 + scrollY 가드).
+    // 견적서에 포트폴리오 공개 조건 포함. 임베드 없음(라이브 사이트라 캡처만 사용).
+    slug: "dm-seolbi",
+    name: "DM종합설비",
+    category: "Web + Search",
+    industry: "설비 · 생활 서비스",
+    // 초안(팀 검토) — 근거: 프로젝트 목표 "전화 걸게 하기"(첫 화면 대표번호 + 전화 버튼 구성)
+    perspective: "급한 순간, 전화가 먼저 눌리도록",
+    summary:
+      "서울·경기·인천 24시간 출동 설비 업체. 메인과 펌프 서비스 3페이지, 시공사례 게시판으로 구성한 홈페이지를 제작해 운영하고 있습니다.",
+    services: ["Web Experience", "Search Foundation", "Imweb Custom"],
+    coverImage: "/images/projects/dmseolbi.jpg",
+    // logo 없음 — 호버 오버레이는 이름 텍스트로 폴백
+    fullImage: { src: "/images/projects/dmseolbi-full.jpg", width: 1440, height: 14999 },
+    mobileImage: { src: "/images/projects/dmseolbi-mobile.jpg", width: 1560, height: 8400 },
+    year: "2026",
+    overview:
+      "DM종합설비는 집수정·정화조·싱크대 펌프 교체와 막힘·누수를 다루는 24시간 출동 설비 업체입니다. 급하게 검색해 들어온 손님이 하는 일을 바로 알아보고 전화할 수 있도록 화면을 설계했습니다.",
+    problem:
+      "블로그만으로 운영해 와서, 검색으로 들어온 손님이 어떤 작업을 하는 곳인지 한눈에 확인하고 바로 연락할 창구가 없었습니다.",
+    solution:
+      "첫 화면에 작업 종류와 대표번호·전화 버튼을 두고, 손님이 검색하는 문장을 소제목으로 삼은 서비스 페이지와 현장 기록 중심의 시공사례 게시판으로 구성했습니다.",
+    scope: [
+      "메인 + 펌프 서비스 3페이지 화면 설계",
+      "시공사례 게시판 구성과 글 양식 설계",
+      "모바일 전화 버튼 동선 설계",
+      "아임웹 구축, 검색 등록(네이버·구글)",
+    ],
+    resultVerified: false,
+    isPlaceholder: false,
+  },
 ];
 
 export const selectedWork = {
