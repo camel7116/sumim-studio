@@ -235,6 +235,38 @@ export const projects: Project[] = [
     resultVerified: false,
     isPlaceholder: false,
   },
+  {
+    // 2026-10-26 사용자 지시("프로젝트 정리" — 포트폴리오에 노스타노바만 정식으로 올림)
+    // 캡처: 라이브 https://nostanova.com 2026-10-26 (커버 1440×900 · 풀페이지 1440×7208 · 모바일 390×844 DSF2 상단 2100px)
+    slug: "nostanova",
+    name: "노스타노바",
+    category: "Web + Commerce",
+    industry: "스테이 · 인테리어",
+    // 초안(팀 검토) — 근거: 브랜드 핵심 단어 '환대'(통화·브리프), 사이트 첫 섹션 "Our way of welcome"
+    perspective: "첫 화면부터 환대가 느껴지도록",
+    summary:
+      "숙소·공간 인테리어·오브제를 함께 운영하는 서울의 호스피탈리티 브랜드. 스테이·인테리어·오브제 쇼핑·저널 페이지와 결제·공간 문의까지 갖춘 홈페이지를 제작했습니다.",
+    services: ["Web Experience", "Content Structure", "Imweb Custom"],
+    coverImage: "/images/projects/nostanova.jpg",
+    // logo 없음 — 호버 오버레이는 이름 텍스트로 폴백
+    fullImage: { src: "/images/projects/nostanova-full.jpg", width: 1440, height: 7208 },
+    mobileImage: { src: "/images/projects/nostanova-mobile.jpg", width: 1560, height: 8400 },
+    year: "2026",
+    overview:
+      "노스타노바는 골목 전체를 하나의 호텔처럼 운영한다는 생각에서 출발한 호스피탈리티 브랜드입니다. 숙소와 공간 인테리어, 오브제를 한 사이트에서 소개하면서 첫 화면부터 브랜드의 분위기가 전해지도록 설계했습니다.",
+    problem:
+      "숙소·인테리어·오브제 판매가 한 브랜드 안에 있어, 처음 들어온 손님이 무엇을 하는 곳인지와 브랜드의 분위기를 함께 알아볼 수 있어야 했습니다.",
+    solution:
+      "영상으로 여는 첫 화면 아래에 스테이·인테리어·오브제·저널을 차례로 두고, 상품 결제와 공간 문의 양식까지 같은 디자인으로 이었습니다.",
+    scope: [
+      "메인·스테이·인테리어·저널 화면 설계",
+      "오브제 쇼핑(카테고리·상품 상세·장바구니) 디자인",
+      "결제(PG) 연동과 공간 문의 양식",
+      "아임웹 구축, 대표 도메인 연결",
+    ],
+    resultVerified: false,
+    isPlaceholder: false,
+  },
 ];
 
 export const selectedWork = {
@@ -261,6 +293,8 @@ export const selectedWork = {
   comingSoon: [
     { key: "a", industry: "공연 티켓 대행", image: "/images/projects/coming-soon-a.jpg" },
     { key: "b", industry: "한의원", image: null },
+    // 2026-10-26 추가 — 진행 중(업체명 비공개). 이미지는 라이브 첫 화면을 흐리게 구운 것
+    { key: "c", industry: "비누 공방", image: "/images/projects/coming-soon-c.jpg" },
   ] as { key: string; industry: string; image: string | null }[],
   comingSoonLabel: "Coming soon",
 } as const;
