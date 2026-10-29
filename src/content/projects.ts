@@ -58,34 +58,35 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  // 순서 = 완성도 높은 순(2026-10-29 사용자 지시 "완성도가 높은 순으로") — 클로드 판단: 실서비스·디자인 완성도 기준
   {
-    slug: "moongyul-pilates",
-    name: "문결 필라테스",
-    category: "Brand + Web",
-    industry: "필라테스 · 피트니스",
-    // 초안(팀 검토) — 근거: 브랜드 메시지 "움직임의 결을 찾아드립니다" (아래 overview)
-    perspective: "움직임의 결이 첫 화면에서 느껴지도록",
+    // 2026-10-26 사용자 지시("프로젝트 정리" — 포트폴리오에 노스타노바만 정식으로 올림)
+    // 캡처: 라이브 https://nostanova.com 2026-10-26 (커버 1440×900 · 풀페이지 1440×7208 · 모바일 390×844 DSF2 상단 2100px)
+    slug: "nostanova",
+    name: "노스타노바",
+    category: "Web + Commerce",
+    industry: "스테이 · 인테리어",
+    // 초안(팀 검토) — 근거: 브랜드 핵심 단어 '환대'(통화·브리프), 사이트 첫 섹션 "Our way of welcome"
+    perspective: "첫 화면부터 환대가 느껴지도록",
     summary:
-      "필라테스의 섬세함과 웨이트의 강함을 하나로 다루는 부산 사상의 1:1 프라이빗 스튜디오. 시안 설계부터 아임웹 적용까지 진행했습니다.",
-    services: ["Brand Strategy", "Web Experience", "Imweb Custom"],
-    coverImage: "/images/projects/moongyul.jpg",
-    logo: "/images/projects/logo-moongyul.png",
-    embedSrc: "/embeds/moongyul.html",
-    fullImage: { src: "/images/projects/moongyul-full.jpg", width: 1440, height: 5953 },
-    mobileImage: { src: "/images/projects/moongyul-mobile.jpg", width: 1560, height: 8400 },
+      "숙소·공간 인테리어·오브제를 함께 운영하는 서울의 호스피탈리티 브랜드. 스테이·인테리어·오브제 쇼핑·저널 페이지와 결제·공간 문의까지 갖춘 홈페이지를 제작했습니다.",
+    services: ["Web Experience", "Content Structure", "Imweb Custom"],
+    coverImage: "/images/projects/nostanova.jpg",
+    // logo 없음 — 호버 오버레이는 이름 텍스트로 폴백
+    fullImage: { src: "/images/projects/nostanova-full.jpg", width: 1440, height: 7208 },
+    mobileImage: { src: "/images/projects/nostanova-mobile.jpg", width: 1560, height: 8400 },
     year: "2026",
     overview:
-      "문결 필라테스는 통증·재활에 특화된 원장 직강 스튜디오입니다. '움직임의 결을 찾아드립니다'라는 브랜드 메시지를 중심으로, 상담부터 체험 레슨 신청까지 이어지는 화면을 설계하고 아임웹 위에 그대로 옮겼습니다.",
+      "노스타노바는 골목 전체를 하나의 호텔처럼 운영한다는 생각에서 출발한 호스피탈리티 브랜드입니다. 숙소와 공간 인테리어, 오브제를 한 사이트에서 소개하면서 첫 화면부터 브랜드의 분위기가 전해지도록 설계했습니다.",
     problem:
-      "운영 중인 아임웹 사이트의 기본 기능만으로는 스튜디오가 원하는 차분하고 프리미엄한 무드를 내기 어려웠습니다. 플랫폼을 바꾸지 않고 화면 수준을 올리는 방법이 필요했습니다.",
+      "숙소·인테리어·오브제 판매가 한 브랜드 안에 있어, 처음 들어온 손님이 무엇을 하는 곳인지와 브랜드의 분위기를 함께 알아볼 수 있어야 했습니다.",
     solution:
-      "단일 시안을 먼저 확정한 뒤, 아임웹 코드 위젯으로 이식할 수 있게 적용 코드를 부분별로 제작했습니다. 헤더 색상 자동 전환, 약속 섹션 위젯, 모바일 화면 보정까지 아임웹 환경 제약 안에서 시안과 같은 화면을 재현했습니다.",
+      "영상으로 여는 첫 화면 아래에 스테이·인테리어·오브제·저널을 차례로 두고, 상품 결제와 공간 문의 양식까지 같은 디자인으로 이었습니다.",
     scope: [
-      "브랜드 메시지와 화면 구조 설계",
-      "홈페이지 시안 제작",
-      "아임웹 커스텀 코드 적용 (헤더 · 섹션 위젯 · 푸터)",
-      "모바일 화면 보정",
-      "지도 · 예약 · 카카오톡 채널 연결",
+      "메인·스테이·인테리어·저널 화면 설계",
+      "오브제 쇼핑(카테고리·상품 상세·장바구니) 디자인",
+      "결제(PG) 연동과 공간 문의 양식",
+      "아임웹 구축, 대표 도메인 연결",
     ],
     resultVerified: false,
     isPlaceholder: false,
@@ -131,40 +132,6 @@ export const projects: Project[] = [
       "라벨 기반 컬러 시스템과 한지 질감 구현",
       "제공 사진 정리 · 용량 최적화",
       "아임웹 이관 대응 코드 구조",
-    ],
-    resultVerified: false,
-    isPlaceholder: false,
-  },
-  {
-    slug: "jian-english",
-    // 2026-08-26 사용자 확정 — 표기 "지안영어" → "지안영어교습소" (slug·라우트는 유지)
-    name: "지안영어교습소",
-    category: "Web + Content",
-    industry: "영어 교습소 · 교육",
-    // 초안(팀 검토) — 근거: 핵심 메시지 "내신과 정시는 전혀 다르게 공부해야 합니다" +
-    // problem "수업 철학이 화면에서 한눈에 읽혀야 했다". 페이블 초안("고민하지 않게, 바로
-    // 상담하도록")은 로고스 레퍼런스의 상담 유도 문장이라 지안의 기록된 과제와 어긋나 조정했다.
-    perspective: "내신과 정시가 왜 다른지부터 읽히도록",
-    summary:
-      "해운대 좌동의 영어 교습소. '내신과 정시는 전혀 다르게 공부해야 합니다'라는 메시지를 중심으로 홈페이지를 설계했습니다.",
-    services: ["Web Experience", "Content Structure"],
-    coverImage: "/images/projects/jian.jpg",
-    logo: "/images/projects/logo-jian.png",
-    embedSrc: "/embeds/jian.html",
-    fullImage: { src: "/images/projects/jian-full.jpg", width: 1440, height: 7908 }, // 2026-08-19 갱신 시안 재캡처
-    mobileImage: { src: "/images/projects/jian-mobile.jpg", width: 1560, height: 8400 },
-    year: "2026",
-    overview:
-      "지안영어는 중3 예비고부터 고등 내신 · 수능 정시까지 다루는 온라인 강의 중심의 교습소입니다. 원장님의 초안 자료를 바탕으로 콘텐츠를 다듬고, 성적 사례가 가장 먼저 보이는 구조로 화면을 세웠습니다.",
-    problem:
-      "참고하던 다른 학원 사이트와 비슷해 보이지 않으면서, 초안 문서에 담긴 수업 철학이 화면에서 한눈에 읽혀야 했습니다.",
-    solution:
-      "히어로 헤드라인이 타이핑되듯 나타나고 핵심 문구에 연필로 긋는 듯한 밑줄이 그어지는 모션으로 메시지를 강조했습니다. 정렬 · 배지 · 박스 스타일을 참고 사이트와 반대 방향으로 잡아 다른 인상을 만들었습니다.",
-    scope: [
-      "화면 구조 설계와 카피 다듬기",
-      "히어로 타이핑 · 밑줄 모션 구현",
-      "수강 후기 무한 슬라이드 (드래그 조작 지원)",
-      "파일 하나로 전달 가능한 단일 파일 구성",
     ],
     resultVerified: false,
     isPlaceholder: false,
@@ -236,33 +203,99 @@ export const projects: Project[] = [
     isPlaceholder: false,
   },
   {
-    // 2026-10-26 사용자 지시("프로젝트 정리" — 포트폴리오에 노스타노바만 정식으로 올림)
-    // 캡처: 라이브 https://nostanova.com 2026-10-26 (커버 1440×900 · 풀페이지 1440×7208 · 모바일 390×844 DSF2 상단 2100px)
-    slug: "nostanova",
-    name: "노스타노바",
+    // 2026-10-29 사용자 지시 — 매형(한병선)이 진행한 곳, 정식 프로젝트로 올림
+    // 캡처: https://edoarch.cafe24.com/ 2026-10-29 (커버 1440×900 · 풀페이지 1440×2826 · 모바일 390×844 DSF2 상단 2100px)
+    slug: "edo-design-collection",
+    name: "이도 디자인 컬렉션",
     category: "Web + Commerce",
-    industry: "스테이 · 인테리어",
-    // 초안(팀 검토) — 근거: 브랜드 핵심 단어 '환대'(통화·브리프), 사이트 첫 섹션 "Our way of welcome"
-    perspective: "첫 화면부터 환대가 느껴지도록",
+    industry: "디자인 가구 · 편집숍",
+    // 초안(팀 검토) — 근거: 첫 화면이 브랜드를 하나씩 넘겨 소개하고, 추천 상품을 브랜드 색으로 나눈 구성
+    perspective: "브랜드마다 다른 얼굴이 먼저 보이도록",
     summary:
-      "숙소·공간 인테리어·오브제를 함께 운영하는 서울의 호스피탈리티 브랜드. 스테이·인테리어·오브제 쇼핑·저널 페이지와 결제·공간 문의까지 갖춘 홈페이지를 제작했습니다.",
-    services: ["Web Experience", "Content Structure", "Imweb Custom"],
-    coverImage: "/images/projects/nostanova.jpg",
+      "해외 디자인 가구·소품 브랜드를 모아 소개하는 편집숍. 브랜드별 첫 화면과 브랜드 색으로 나눈 추천 상품, 카테고리 쇼핑까지 갖춘 쇼핑몰을 제작했습니다.",
+    services: ["Web Experience", "Content Structure"],
+    coverImage: "/images/projects/edo.jpg",
     // logo 없음 — 호버 오버레이는 이름 텍스트로 폴백
-    fullImage: { src: "/images/projects/nostanova-full.jpg", width: 1440, height: 7208 },
-    mobileImage: { src: "/images/projects/nostanova-mobile.jpg", width: 1560, height: 8400 },
+    fullImage: { src: "/images/projects/edo-full.jpg", width: 1440, height: 2826 },
+    mobileImage: { src: "/images/projects/edo-mobile.jpg", width: 1560, height: 8400 },
     year: "2026",
     overview:
-      "노스타노바는 골목 전체를 하나의 호텔처럼 운영한다는 생각에서 출발한 호스피탈리티 브랜드입니다. 숙소와 공간 인테리어, 오브제를 한 사이트에서 소개하면서 첫 화면부터 브랜드의 분위기가 전해지도록 설계했습니다.",
+      "이도 디자인 컬렉션은 소재와 구조를 깊이 이해한 디자인 가구와 라이프스타일 오브제를 엄선해 소개하는 편집숍입니다. 브랜드를 골라 보는 즐거움이 쇼핑의 시작이 되도록 화면을 설계했습니다.",
     problem:
-      "숙소·인테리어·오브제 판매가 한 브랜드 안에 있어, 처음 들어온 손님이 무엇을 하는 곳인지와 브랜드의 분위기를 함께 알아볼 수 있어야 했습니다.",
+      "여러 해외 브랜드를 함께 다뤄, 방문자가 브랜드마다의 성격을 먼저 알아본 뒤 상품으로 넘어갈 수 있어야 했습니다.",
     solution:
-      "영상으로 여는 첫 화면 아래에 스테이·인테리어·오브제·저널을 차례로 두고, 상품 결제와 공간 문의 양식까지 같은 디자인으로 이었습니다.",
+      "첫 화면에서 브랜드를 하나씩 넘겨 보며 소개를 읽게 하고, 브랜드 색으로 나눈 추천 상품과 이번 주 큐레이션으로 상품까지 이어지게 했습니다.",
     scope: [
-      "메인·스테이·인테리어·저널 화면 설계",
-      "오브제 쇼핑(카테고리·상품 상세·장바구니) 디자인",
-      "결제(PG) 연동과 공간 문의 양식",
-      "아임웹 구축, 대표 도메인 연결",
+      "브랜드별 소개 첫 화면 설계",
+      "브랜드 색으로 나눈 추천 상품 구성",
+      "가구·소품 카테고리 구성",
+      "카페24 쇼핑몰 구축",
+    ],
+    resultVerified: false,
+    isPlaceholder: false,
+  },
+  {
+    slug: "moongyul-pilates",
+    name: "문결 필라테스",
+    category: "Brand + Web",
+    industry: "필라테스 · 피트니스",
+    // 초안(팀 검토) — 근거: 브랜드 메시지 "움직임의 결을 찾아드립니다" (아래 overview)
+    perspective: "움직임의 결이 첫 화면에서 느껴지도록",
+    summary:
+      "필라테스의 섬세함과 웨이트의 강함을 하나로 다루는 부산 사상의 1:1 프라이빗 스튜디오. 시안 설계부터 아임웹 적용까지 진행했습니다.",
+    services: ["Brand Strategy", "Web Experience", "Imweb Custom"],
+    coverImage: "/images/projects/moongyul.jpg",
+    logo: "/images/projects/logo-moongyul.png",
+    embedSrc: "/embeds/moongyul.html",
+    fullImage: { src: "/images/projects/moongyul-full.jpg", width: 1440, height: 5953 },
+    mobileImage: { src: "/images/projects/moongyul-mobile.jpg", width: 1560, height: 8400 },
+    year: "2026",
+    overview:
+      "문결 필라테스는 통증·재활에 특화된 원장 직강 스튜디오입니다. '움직임의 결을 찾아드립니다'라는 브랜드 메시지를 중심으로, 상담부터 체험 레슨 신청까지 이어지는 화면을 설계하고 아임웹 위에 그대로 옮겼습니다.",
+    problem:
+      "운영 중인 아임웹 사이트의 기본 기능만으로는 스튜디오가 원하는 차분하고 프리미엄한 무드를 내기 어려웠습니다. 플랫폼을 바꾸지 않고 화면 수준을 올리는 방법이 필요했습니다.",
+    solution:
+      "단일 시안을 먼저 확정한 뒤, 아임웹 코드 위젯으로 이식할 수 있게 적용 코드를 부분별로 제작했습니다. 헤더 색상 자동 전환, 약속 섹션 위젯, 모바일 화면 보정까지 아임웹 환경 제약 안에서 시안과 같은 화면을 재현했습니다.",
+    scope: [
+      "브랜드 메시지와 화면 구조 설계",
+      "홈페이지 시안 제작",
+      "아임웹 커스텀 코드 적용 (헤더 · 섹션 위젯 · 푸터)",
+      "모바일 화면 보정",
+      "지도 · 예약 · 카카오톡 채널 연결",
+    ],
+    resultVerified: false,
+    isPlaceholder: false,
+  },
+  {
+    slug: "jian-english",
+    // 2026-08-26 사용자 확정 — 표기 "지안영어" → "지안영어교습소" (slug·라우트는 유지)
+    name: "지안영어교습소",
+    category: "Web + Content",
+    industry: "영어 교습소 · 교육",
+    // 초안(팀 검토) — 근거: 핵심 메시지 "내신과 정시는 전혀 다르게 공부해야 합니다" +
+    // problem "수업 철학이 화면에서 한눈에 읽혀야 했다". 페이블 초안("고민하지 않게, 바로
+    // 상담하도록")은 로고스 레퍼런스의 상담 유도 문장이라 지안의 기록된 과제와 어긋나 조정했다.
+    perspective: "내신과 정시가 왜 다른지부터 읽히도록",
+    summary:
+      "해운대 좌동의 영어 교습소. '내신과 정시는 전혀 다르게 공부해야 합니다'라는 메시지를 중심으로 홈페이지를 설계했습니다.",
+    services: ["Web Experience", "Content Structure"],
+    coverImage: "/images/projects/jian.jpg",
+    logo: "/images/projects/logo-jian.png",
+    embedSrc: "/embeds/jian.html",
+    fullImage: { src: "/images/projects/jian-full.jpg", width: 1440, height: 7908 }, // 2026-08-19 갱신 시안 재캡처
+    mobileImage: { src: "/images/projects/jian-mobile.jpg", width: 1560, height: 8400 },
+    year: "2026",
+    overview:
+      "지안영어는 중3 예비고부터 고등 내신 · 수능 정시까지 다루는 온라인 강의 중심의 교습소입니다. 원장님의 초안 자료를 바탕으로 콘텐츠를 다듬고, 성적 사례가 가장 먼저 보이는 구조로 화면을 세웠습니다.",
+    problem:
+      "참고하던 다른 학원 사이트와 비슷해 보이지 않으면서, 초안 문서에 담긴 수업 철학이 화면에서 한눈에 읽혀야 했습니다.",
+    solution:
+      "히어로 헤드라인이 타이핑되듯 나타나고 핵심 문구에 연필로 긋는 듯한 밑줄이 그어지는 모션으로 메시지를 강조했습니다. 정렬 · 배지 · 박스 스타일을 참고 사이트와 반대 방향으로 잡아 다른 인상을 만들었습니다.",
+    scope: [
+      "화면 구조 설계와 카피 다듬기",
+      "히어로 타이핑 · 밑줄 모션 구현",
+      "수강 후기 무한 슬라이드 (드래그 조작 지원)",
+      "파일 하나로 전달 가능한 단일 파일 구성",
     ],
     resultVerified: false,
     isPlaceholder: false,
@@ -291,10 +324,13 @@ export const selectedWork = {
    * 거기 넣으면 /work/[slug] · 사이트맵 · 모달에 업체가 노출된다.
    */
   comingSoon: [
-    { key: "a", industry: "공연 티켓 대행", image: "/images/projects/coming-soon-a.jpg" },
-    { key: "b", industry: "한의원", image: null },
-    // 2026-10-26 추가 — 진행 중(업체명 비공개). 이미지는 라이브 첫 화면을 흐리게 구운 것
+    // 순서 = 완성도 높은 순(2026-10-29): 비누 공방(실서버·결제 개통) → 공연 티켓 대행 → 한의원(원장 3차 반영 전달 대기) → 꽃집(홈 시험판)
     { key: "c", industry: "비누 공방", image: "/images/projects/coming-soon-c.jpg" },
+    { key: "a", industry: "공연 티켓 대행", image: "/images/projects/coming-soon-a.jpg" },
+    // 2026-10-29 이미지 추가 — 10-27 전달본 첫 화면을 흐리게 구운 것
+    { key: "b", industry: "한의원", image: "/images/projects/coming-soon-b.jpg" },
+    // 2026-10-29 추가(사용자) — 홈 시험판 첫 화면을 blur 30 으로 구움(로고 글씨가 blur 14 로는 읽혀서)
+    { key: "d", industry: "꽃집", image: "/images/projects/coming-soon-d.jpg" },
   ] as { key: string; industry: string; image: string | null }[],
   comingSoonLabel: "Coming soon",
 } as const;
